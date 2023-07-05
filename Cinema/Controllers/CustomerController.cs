@@ -54,4 +54,10 @@ public class CustomerController
             Message = "用户名或密码错误"
         });
     }
+
+    [HttpPut]
+    public IActionResult register()
+    {
+        return new OkObjectResult("您正在尝试注册");
+    }
 }
