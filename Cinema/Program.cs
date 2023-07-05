@@ -21,9 +21,9 @@ builder.Services.AddCors(policy =>
 });
 
 // 配置数据库
-if (configuration.GetConnectionString("Oracle") == null)
+if (Environment.GetEnvironmentVariable("CINEMA_DATABASE") == null)
     throw new InvalidOperationException("请配置Oracle连接信息");
-var oracleConnectionString = configuration.GetConnectionString("Oracle")!;
+var oracleConnectionString = Environment.GetEnvironmentVariable("CINEMA_DATABASE")!;
 builder.Services.AddDbContext<CinemaDb>(options =>
     options.UseOracle(oracleConnectionString));
 
