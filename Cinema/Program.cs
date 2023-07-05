@@ -36,22 +36,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors("CorsPolicy");
 }
-else
+app.UseStaticFiles();
+app.UseStatusCodePages(options: new StatusCodePagesOptions
 {
-    app.UseStaticFiles("/wwwroot");
-    app.UseStatusCodePages(options: new StatusCodePagesOptions
+    HandleAsync = context =>
     {
-        HandleAsync = context =>
+        var response = context.HttpContext.Response;
+        if (response.StatusCode == 404)
         {
-            var response = context.HttpContext.Response;
-            if (response.StatusCode == 404)
-            {
-                response.Redirect("/index.html");
-            }
-            return Task.CompletedTask;
+            response.Redirect("/index.html");
         }
-    });
-}
+        return Task.CompletedTask;
+    }
+});
 
 app.UseHttpsRedirection();
 
