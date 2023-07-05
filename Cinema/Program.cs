@@ -34,10 +34,24 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-
-if(configuration["EnvType"]=="Development")
     app.UseCors("CorsPolicy");
+}
+else
+{
+    app.UseStaticFiles("/wwwroot");
+    app.UseStatusCodePages(options: new StatusCodePagesOptions
+    {
+        HandleAsync = context =>
+        {
+            var response = context.HttpContext.Response;
+            if (response.StatusCode == 404)
+            {
+                response.Redirect("/index.html");
+            }
+            return Task.CompletedTask;
+        }
+    });
+}
 
 app.UseHttpsRedirection();
 
@@ -45,6 +59,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
-System.Console.WriteLine("server start");
 app.Run();
