@@ -1,0 +1,13 @@
+[Unit]
+Description=TJU Practice Term Project. Cinema System.
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Restart=on-failure
+RestartSec=5s
+ExecStart=dotnet run -lp pro --project /root/server/Backend/Cinema
+
+[Install]
+WantedBy=multi-user.target
