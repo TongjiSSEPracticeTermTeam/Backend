@@ -7,7 +7,8 @@ Type=simple
 User=root
 Restart=on-failure
 RestartSec=5s
-ExecStart=dotnet run -lp pro --project /root/server/Backend/Cinema
+Environment="CINEMA_DATABASE='Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME XE)));User Id=CINEMA_DBA;Password=tjdb;'"
+ExecStart=dotnet run -lp pro --project /root/Backend/Cinema
 
 [Install]
 WantedBy=multi-user.target
