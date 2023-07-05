@@ -13,7 +13,7 @@ jobs:
         -   name: remote-build-and-deploy
             uses: garygrossgarten/github-action-ssh@release
             with:
-                command: cd /root/server/Backend/Cinema && git checkout main && git pull && systemctl restart cinema
+                command: cd /root/server/Backend/Cinema && git checkout master && git pull && systemctl restart cinema
                 host: ${{secrets.HOST}}
                 username: root
                 privateKey: ${{secrets.PK}}
