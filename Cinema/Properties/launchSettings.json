@@ -41,7 +41,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchUrl": "",
-      "applicationUrl": "http://0.0.0.0:80;http://cinema.cinea.com.cn:80",
+      "applicationUrl": "http://0.0.0.0:80",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
