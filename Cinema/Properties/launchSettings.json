@@ -37,11 +37,11 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https_production": {
+    "pro": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchUrl": "",
-      "applicationUrl": "http://localhost:80",
+      "applicationUrl": "http://0.0.0.0:80;http://cinema.cinea.com.cn:80",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
