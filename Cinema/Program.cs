@@ -33,4 +33,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+System.Console.WriteLine("server start");
 app.Run();
