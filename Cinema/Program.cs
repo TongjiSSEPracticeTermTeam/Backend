@@ -11,6 +11,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// 配置跨域
+builder.Services.AddCors(policy =>
+{
+    policy.AddPolicy("CorsPolicy", policyBuilder =>policyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 // 配置数据库
 if (configuration.GetConnectionString("Oracle") == null)
     throw new InvalidOperationException("请配置Oracle连接信息");
@@ -26,6 +35,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+if(configuration["EnvType"]=="Development")
+    app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

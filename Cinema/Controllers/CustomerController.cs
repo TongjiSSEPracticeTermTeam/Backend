@@ -26,13 +26,13 @@ public class CustomerController
     [HttpPost("login")]
     public async Task<IActionResult> CustomerLogin(LoginRequest request)
     {
-        if(request.Password=="" || request.UserName=="")
+        if (request.Password == "" || request.UserName == "")
             return new JsonResult(new LoginResponse
             {
                 Status = "4001",
                 Message = "用户名或密码为空"
             });
-        
+
         var customer = await _db.Customers.FindAsync(request.UserName);
         if (customer == null)
             return new JsonResult(new LoginResponse
