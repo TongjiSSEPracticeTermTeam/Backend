@@ -12,6 +12,7 @@ public class CinemaDb : DbContext
     }
 
     public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<Cinemas> Cinemas { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
