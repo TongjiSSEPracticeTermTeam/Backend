@@ -1,8 +1,8 @@
 using Cinema.DTO.CustomerService;
 using Cinema.Entities;
 using Cinema.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers;
 
@@ -11,16 +11,27 @@ namespace Cinema.Controllers;
 public class CustomerController
 {
     private readonly CinemaDb _db;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly JwtHelper _jwtHelper;
 
-    public CustomerController(CinemaDb db)
+    public CustomerController(CinemaDb db, IHttpContextAccessor httpContextAccessor, JwtHelper jwtHelper)
     {
         _db = db;
+        _httpContextAccessor = httpContextAccessor;
+        _jwtHelper = jwtHelper;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCustomers()
+    [Authorize(Policy = "RegUser")]
+    public async Task<IActionResult> GetSelfInfo()
     {
-        return new JsonResult(await _db.Customers.ToListAsync());
+        var name = JwtHelper.SolveName(_httpContextAccessor);
+        if (name == null)
+        {
+            return new UnauthorizedResult();
+        }
+
+        return new JsonResult(await _db.Customers.FindAsync(name));
     }
 
     [HttpPost("login")]
@@ -46,6 +57,7 @@ public class CustomerController
             {
                 Status = "10000",
                 Message = "登录成功",
+                Token = _jwtHelper.GenerateToken(customer.CustomerId, UserRole.User),
                 UserData = customer
             });
         return new JsonResult(new LoginResponse

@@ -26,13 +26,14 @@ public enum UserRole
 public class JwtHelper
 {
     private readonly IConfiguration _configuration;
+
     public JwtHelper(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
     /// <summary>
-    /// 创建一个JWT令牌
+    ///     创建一个JWT令牌
     /// </summary>
     /// <param name="userName">用户名</param>
     /// <param name="role">用户等级，参考上方注释</param>
@@ -43,20 +44,31 @@ public class JwtHelper
         {
             new Claim(ClaimTypes.Name, userName),
             new Claim(ClaimTypes.Role, role.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-        
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??"SampleKey"));
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? "SampleKey"));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"]));
         var token = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
             _configuration["Jwt:Audience"],
             claims,
-            notBefore: DateTime.Now,
-            expires: expires,
-            signingCredentials: credentials
+            DateTime.Now,
+            expires,
+            credentials
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    /// <summary>
+    ///     从HTTP上下文解析用户的用户名
+    /// </summary>
+    /// <param name="httpContextAccessor">HTTP上下文</param>
+    /// <returns>用户名</returns>
+    public static string? SolveName(IHttpContextAccessor httpContextAccessor)
+    {
+        var identity = httpContextAccessor.HttpContext?.User?.Identity as ClaimsIdentity;
+        return identity?.FindFirst(ClaimTypes.Name)?.Value;
     }
 }
