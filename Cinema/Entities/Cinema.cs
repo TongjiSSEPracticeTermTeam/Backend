@@ -1,8 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Cinema.Entities;
 
+[Table("Cinemas")]
 public class Cinemas
 {
     [Required] public string CinemaId { get; set; } = null!;
