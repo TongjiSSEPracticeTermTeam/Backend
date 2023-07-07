@@ -3,17 +3,17 @@ using System.Text.Json.Serialization;
 namespace Cinema.DTO;
 
 /// <summary>
-/// API接口返回的基类
+/// API锟接口凤拷锟截的伙拷锟斤拷
 /// </summary>
 public interface IAPIResponse 
 {
     /// <summary>
-    /// 为10000时表示成功，其余为失败
+    /// 为10000时锟斤拷示锟缴癸拷锟斤拷锟斤拷锟斤拷为失锟斤拷
     /// </summary>
     [JsonPropertyName("status")] public string Status { get; set; }
 
     /// <summary>
-    /// 返回给前端的消息
+    ///锟斤拷锟截革拷前锟剿碉拷锟斤拷息
     /// </summary>
     [JsonPropertyName("message")] public string Message { get; set; }
 }

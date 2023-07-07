@@ -8,6 +8,7 @@ namespace Cinema.Entities;
 /// <summary>
 ///     用户
 /// </summary>
+[Table("Customers")]
 public class Customer
 {
     /// <summary>
