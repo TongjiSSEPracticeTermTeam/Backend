@@ -16,7 +16,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5212",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CINEMA_DATABASE": "Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 43.153.181.44)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=CINEMA_DBA;Password=tjdb;"
       }
     },
     "https": {
