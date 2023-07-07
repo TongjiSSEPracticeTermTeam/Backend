@@ -56,6 +56,96 @@ public class CinemaController
         });
     }
 
+    /// <summary>
+    /// 根据管理员id获得指定电影院信息
+    /// </summary>
+    /// <param name="id">管理员id</param>
+    /// <returns>
+    /// 返回电影院json
+    /// </returns>
+    [HttpGet("getCinemaByManagerId/{id}")]
+    public async Task<IActionResult> GetCinemaByManagerId(string id)
+    {
+        var cinema = await _db.Cinemas.FirstOrDefaultAsync(c => c.ManagerId == id);
+        if (cinema == null)
+        {
+            return new JsonResult(new GetCinemaByManagerIdResponse
+            {
+                Status = "4001",
+                Message = "电影院不存在"
+            });
+        }
+
+        return new JsonResult(new GetCinemaByManagerIdResponse
+        {
+            Status = "10000",
+            Message = "查询成功",
+            Cinema = cinema
+        });
+    }
+
+    /// <summary>
+    /// 根据电影院名称获得指定电影院信息,模糊查询
+    /// </summary>
+    /// <param name="name">电影院名称</param>
+    /// <returns>
+    /// 返回电影院json
+    /// </returns>
+    [HttpGet("getCinemaByName/{name}")]
+    public async Task<IActionResult> GetCinemaByName(string name)
+    {
+        var cinemas = await _db.Cinemas.Where(c => c.Name.Contains(name)).ToListAsync();
+        if (cinemas.Count == 0)
+        {
+            return new JsonResult(new GetCinemaByNameResponse
+            {
+                Status = "4001",
+                Message = "电影院不存在"
+            });
+        }
+
+        var response = new GetCinemaByNameResponse
+        {
+            Status = "10000",
+            Message = "查询成功",
+            Cinemas = cinemas
+        };
+
+        return new JsonResult(response);
+
+    }
+
+
+    /// <summary>
+    /// 通过特点搜索到电影院列表
+    /// </summary>
+    /// <param name="feature"></param>
+    /// <returns></returns>
+    [HttpGet("getCinemaByFeature/{feature}")]
+    public async Task<IActionResult> GetCinemaByFeature(string feature)
+    {
+        var cinemas = await _db.Cinemas.Where(c => c.Feature != null && c.Feature.Contains(feature)).ToListAsync();
+
+        if (cinemas.Count == 0)
+        {
+            return new JsonResult(new GetCinemaByFeatureResponse
+            {
+                Status = "4001",
+                Message = "电影院不存在"
+            });
+        }
+
+        var response = new GetCinemaByFeatureResponse
+        {
+            Status = "10000",
+            Message = "查询成功",
+            Cinemas = cinemas
+        };
+
+        return new JsonResult(response);
+
+    }
+
 
     /// <summary>
     /// 添加电影院
