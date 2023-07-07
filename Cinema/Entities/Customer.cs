@@ -7,6 +7,7 @@ namespace Cinema.Entities;
 /// <summary>
 ///     用户
 /// </summary>
+[Table("Customers")]
 public class Customer
 {
     [Required] [Column("CUSTOMER_ID")] public string CustomerId { get; set; } = null!;

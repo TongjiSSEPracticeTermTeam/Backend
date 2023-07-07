@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cinema.Entities;
 
-[Table("Cinema")]
+[Table("Cinemas")]
 public class Cinemas
 {
     [Required] public string CinemaId { get; set; } = null!;
