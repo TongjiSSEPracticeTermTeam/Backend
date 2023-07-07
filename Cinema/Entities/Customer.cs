@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Entities;
@@ -8,15 +9,15 @@ namespace Cinema.Entities;
 /// </summary>
 public class Customer
 {
-    [Required] public string CustomerId { get; set; } = null!;
+    [Required] [Column("CUSTOMER_ID")] public string CustomerId { get; set; } = null!;
 
-    public string? Name { get; set; }
+    [Column("NAME")] public string? Name { get; set; }
 
-    public string? Password { get; set; }
+    [Column("PASSWORD")] public string? Password { get; set; }
 
-    public string? Email { get; set; }
+    [Column("EMAIL")] public string? Email { get; set; }
 
-    public string? AvatarUrl { get; set; }
+    [Column("AVATAR_URL")] public string? AvatarUrl { get; set; }
 
     public static void ConfigureDbContext(ModelBuilder modelBuilder)
     {
