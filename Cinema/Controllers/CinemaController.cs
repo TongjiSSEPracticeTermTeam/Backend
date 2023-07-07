@@ -5,12 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers;
 
+/// <summary>
+/// 电影院实体类控制器类
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class CinemaController
 {
     private readonly CinemaDb _db;
 
+    /// <summary>
+    /// 控制器构造函数
+    /// </summary>
+    /// <param name="db"></param>
     public CinemaController(CinemaDb db)
     {
         _db = db;
@@ -116,6 +123,8 @@ public class CinemaController
     }
 
 
+
+
     /// <summary>
     /// 通过特点搜索到电影院列表
     /// </summary>
@@ -139,13 +148,11 @@ public class CinemaController
         {
             Status = "10000",
             Message = "查询成功",
-            Cinemas = cinemas
+            Cinemas = cinemas.Select(c => c != null ? (Cinemas?)c : null).ToList()
         };
 
         return new JsonResult(response);
-
     }
-
 
     /// <summary>
     /// 添加电影院
