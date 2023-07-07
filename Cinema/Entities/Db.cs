@@ -19,6 +19,7 @@ public class CinemaDb : DbContext
     /// 客户数据表
     /// </summary>
     public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<Cinemas> Cinemas { get; set; } = null!;
 
     /// <summary>
     /// 初始化数据库
