@@ -4,6 +4,66 @@
         <name>Cinema</name>
     </assembly>
     <members>
+        <member name="T:Cinema.Controllers.CinemaController">
+            <summary>
+            电影院实体类控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.#ctor(Cinema.Entities.CinemaDb)">
+            <summary>
+            控制器构造函数
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemas">
+            <summary>
+            获得所有电影院信息
+            </summary>
+            <returns>
+            返回电影院json列表
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaById(System.String)">
+            <summary>
+            根据id获得指定电影院信息
+            </summary>
+            <param name="id">电影院id</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByManagerId(System.String)">
+            <summary>
+            根据管理员id获得指定电影院信息
+            </summary>
+            <param name="id">管理员id</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByName(System.String)">
+            <summary>
+            根据电影院名称获得指定电影院信息,模糊查询
+            </summary>
+            <param name="name">电影院名称</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByFeature(System.String)">
+            <summary>
+            通过特点搜索到电影院列表
+            </summary>
+            <param name="feature"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.AddCinema(Cinema.DTO.CinemaService.AddCinemaRequest)">
+            <summary>
+            添加电影院
+            </summary>
+            <param name="request"></param>
+            <returns>响应信息</returns>
+        </member>
         <member name="T:Cinema.Controllers.CustomerController">
             <summary>
             顾客相关接口
@@ -36,33 +96,209 @@
         </member>
         <member name="T:Cinema.DTO.IAPIResponse">
             <summary>
-            API接口返回的基类
+            API�ӿڷ��صĻ���
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Status">
             <summary>
-            为10000时表示成功，其余为失败
+            Ϊ10000ʱ��ʾ�ɹ�������Ϊʧ��
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Message">
+             <summary>
+            ���ظ�ǰ�˵���Ϣ
+             </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
             <summary>
-            返回给前端的消息
+            添加电影院的请求体定义
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaId">
+            <summary>
+            电影院id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Location">
+            <summary>
+            电影位置
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Name">
+            <summary>
+            电影名字
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
+            <summary>
+            电影封面外链地址
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
+            <summary>
+            电影特点
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.AddCinemaResponse">
+            <summary>
+            添加电影院响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByIdResponse">
+            <summary>
+            通过id查询电影院响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse">
+            <summary>
+            通过管理员Id查询电影院响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByNameResponse">
+            <summary>
+            通过电影院名查询电影院响应,支持模糊查找
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Cinemas">
+            <summary>
+            查询得到的电影院实体列表
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse">
+            <summary>
+            通过特点查询电影院响应,支持模糊查找
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Cinemas">
+            <summary>
+            查询得到的电影院实体列表
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Message">
+            <summary>
+            响应消息
             </summary>
         </member>
         <member name="T:Cinema.DTO.CustomerService.LoginRequest">
             <summary>
-            登录请求
+            ��¼����
             </summary>
         </member>
         <member name="P:Cinema.DTO.CustomerService.LoginRequest.UserName">
             <summary>
-            用户名
+            �û���
             </summary>
         </member>
         <member name="P:Cinema.DTO.CustomerService.LoginRequest.Password">
             <summary>
-            密码
+            ����
             </summary>
+        </member>
+        <member name="T:Cinema.Entities.Cinemas">
+            <summary>
+            电影院实体类
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.CinemaId">
+            <summary>
+            cinema_id 主键
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Location">
+            <summary>
+            位置
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Name">
+            <summary>
+            名字
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.CinemaImageUrl">
+            <summary>
+            电影封面Url
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Feature">
+            <summary>
+            电影特点字符串，不同特点用逗号分割
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Cinemas.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            注册主键
+            </summary>
+            <param name="modelBuilder"></param>
         </member>
         <member name="T:Cinema.Entities.Customer">
             <summary>
