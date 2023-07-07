@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Cinema.Helpers;
 
+/// <summary>
+/// MD5工具类
+/// </summary>
 public class Md5Helper
 {
     /// <summary>

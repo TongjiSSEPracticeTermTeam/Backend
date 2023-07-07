@@ -5,6 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Cinema.Helpers;
 
+/// <summary>
+/// 用户等级，鉴权系统用
+/// </summary>
 public enum UserRole
 {
     /// <summary>
@@ -23,10 +26,17 @@ public enum UserRole
     SysAdmin
 }
 
+/// <summary>
+/// JWT工具类
+/// </summary>
 public class JwtHelper
 {
     private readonly IConfiguration _configuration;
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="configuration"></param>
     public JwtHelper(IConfiguration configuration)
     {
         _configuration = configuration;

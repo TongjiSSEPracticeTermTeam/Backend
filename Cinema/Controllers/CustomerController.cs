@@ -3,9 +3,13 @@ using Cinema.Entities;
 using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Validations.Rules;
 
 namespace Cinema.Controllers;
 
+/// <summary>
+/// 顾客相关接口
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class CustomerController
@@ -14,6 +18,12 @@ public class CustomerController
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="jwtHelper"></param>
     public CustomerController(CinemaDb db, IHttpContextAccessor httpContextAccessor, JwtHelper jwtHelper)
     {
         _db = db;
@@ -21,6 +31,11 @@ public class CustomerController
         _jwtHelper = jwtHelper;
     }
 
+    /// <summary>
+    /// 获取已经登录的用户的信息（要求必须已经登录）。
+    /// 
+    /// 前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+    /// </summary>
     [HttpGet]
     [Authorize(Policy = "RegUser")]
     public async Task<IActionResult> GetSelfInfo()
@@ -34,6 +49,9 @@ public class CustomerController
         return new JsonResult(await _db.Customers.FindAsync(name));
     }
 
+    /// <summary>
+    /// 登录
+    /// </summary>
     [HttpPost("login")]
     public async Task<IActionResult> CustomerLogin(LoginRequest request)
     {
@@ -67,6 +85,9 @@ public class CustomerController
         });
     }
 
+    /// <summary>
+    /// 注册
+    /// </summary>
     [HttpPut]
     public IActionResult register()
     {
