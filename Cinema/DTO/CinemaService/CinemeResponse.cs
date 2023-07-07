@@ -10,3 +10,12 @@ public class AddCinemaResponse : IAPIResponse
     public string Status { get; set; } = null!;
     public string Message { get; set; } = null!;
 }
+
+public class GetCinemaByIdResponse : IAPIResponse
+{
+    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
+
+    public string Status { get; set; } = null!;
+    public string Message { get; set; } = null!;
+}
+

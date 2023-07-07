@@ -16,32 +16,82 @@ public class CinemaController
         _db = db;
     }
 
+    /// <summary>
+    /// 获得所有电影院信息
+    /// </summary>
+    /// <returns>
+    /// 返回电影院json列表
+    /// </returns>
     [HttpGet]
     public async Task<IActionResult> GetCinemas()
     {
         return new JsonResult(await _db.Cinemas.ToListAsync());
     }
 
-    [HttpPut]
-    public async Task<IActionResult> AddCinema(AddCinemaRequest request)
+    /// <summary>
+    /// 根据id获得指定电影院信息
+    /// </summary>
+    /// <param name="id">电影院id</param>
+    /// <returns>
+    /// 返回电影院json
+    /// </returns>
+    [HttpGet("getCinemaById/{id}")]
+    public async Task<IActionResult> GetCinemaById(string id)
     {
-        var cinema = new Cinemas
+        var cinema = await _db.Cinemas.FindAsync(id);
+        if (cinema == null)
         {
-            CinemaId = Guid.NewGuid().ToString(),
-            Location = request.Location,
-            Name = request.Name,
-            ManagerId = request.ManagerId,
-            CinemaImageUrl = request.CinemaImageUrl,
-            Feature = request.Feature
-        };
-        await _db.AddAsync((Cinemas)cinema);
-        await _db.SaveChangesAsync();
-        return new JsonResult(new AddCinemaResponse
+            return new JsonResult(new GetCinemaByIdResponse
+            {
+                Status = "4001",
+                Message = "电影院不存在"
+            });
+        }
+
+        return new JsonResult(new GetCinemaByIdResponse
         {
             Status = "10000",
-            Message = "添加成功",
+            Message = "查询成功",
             Cinema = cinema
         });
     }
 
+
+    /// <summary>
+    /// 添加电影院
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>响应信息</returns>
+    [HttpPut("add")]
+    public async Task<IActionResult> AddCinema(AddCinemaRequest request)
+    {
+        try
+        {
+            var cinema = new Cinemas
+            {
+                CinemaId = request.CinemaId,
+                Location = request.Location,
+                Name = request.Name,
+                ManagerId = request.ManagerId,
+                CinemaImageUrl = request.CinemaImageUrl,
+                Feature = request.Feature
+            };
+            await _db.AddAsync(cinema);
+            await _db.SaveChangesAsync();
+            return new JsonResult(new AddCinemaResponse
+            {
+                Status = "10000",
+                Message = "添加成功",
+                Cinema = cinema
+            });
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(new AddCinemaResponse
+            {
+                Status = "10001",
+                Message = "添加失败：" + ex.Message
+            });
+        }
+    }
 }
