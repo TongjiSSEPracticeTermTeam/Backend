@@ -51,7 +51,7 @@ public class CinemaController
             return new JsonResult(new GetCinemaByIdResponse
             {
                 Status = "4001",
-                Message = "电影院不存在"
+                Message = "该电影院不存在"
             });
         }
 
