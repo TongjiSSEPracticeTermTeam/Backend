@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinema</name>
+    </assembly>
+    <members>
+        <member name="T:Cinema.Controllers.CustomerController">
+            <summary>
+            顾客相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.GetSelfInfo">
+            <summary>
+            获取已经登录的用户的信息（要求必须已经登录）。
+            
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.LoginRequest)">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.register">
+            <summary>
+            注册
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.IAPIResponse">
+            <summary>
+            API接口返回的基类
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.IAPIResponse.Status">
+            <summary>
+            为10000时表示成功，其余为失败
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.IAPIResponse.Message">
+            <summary>
+            返回给前端的消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CustomerService.LoginRequest">
+            <summary>
+            登录请求
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.LoginRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.LoginRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:Cinema.Entities.Customer">
+            <summary>
+                用户
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.CustomerId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Name">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Email">
+            <summary>
+            邮件
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.AvatarUrl">
+            <summary>
+            头像链接
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Customer.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.CinemaDb">
+            <summary>
+                主数据库
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.CinemaDb.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            初始化
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Customers">
+            <summary>
+            客户数据表
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.CinemaDb.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            初始化数据库
+            </summary>
+            <param name="modelBuilder">不用管</param>
+        </member>
+        <member name="T:Cinema.Helpers.UserRole">
+            <summary>
+            用户等级，鉴权系统用
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.User">
+            <summary>
+                普通用户
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.CinemaAdmin">
+            <summary>
+                影院管理员
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.SysAdmin">
+            <summary>
+                系统管理员
+            </summary>
+        </member>
+        <member name="T:Cinema.Helpers.JwtHelper">
+            <summary>
+            JWT工具类
+            </summary>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            初始化
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.GenerateToken(System.String,Cinema.Helpers.UserRole)">
+            <summary>
+                创建一个JWT令牌
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="role">用户等级，参考上方注释</param>
+            <returns>一个签发的JWT令牌</returns>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.SolveName(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+                从HTTP上下文解析用户的用户名
+            </summary>
+            <param name="httpContextAccessor">HTTP上下文</param>
+            <returns>用户名</returns>
+        </member>
+        <member name="T:Cinema.Helpers.Md5Helper">
+            <summary>
+            MD5工具类
+            </summary>
+        </member>
+        <member name="M:Cinema.Helpers.Md5Helper.CalculateMd5Hash(System.String)">
+            <summary>
+                计算一个字符串的MD5
+            </summary>
+            <param name="input">待计算的字符串</param>
+            <returns>结果</returns>
+        </member>
+    </members>
+</doc>

@@ -35,36 +35,36 @@ public class CustomerController
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> CustomerLogin(LoginRequest request)
+    public async Task<LoginResponse> CustomerLogin(LoginRequest request)
     {
         if (request.Password == "" || request.UserName == "")
-            return new JsonResult(new LoginResponse
+            return new LoginResponse
             {
                 Status = "4001",
                 Message = "用户名或密码为空"
-            });
+            };
 
         var customer = await _db.Customers.FindAsync(request.UserName);
         if (customer == null)
-            return new JsonResult(new LoginResponse
+            return new LoginResponse
             {
                 Status = "4002",
                 Message = "用户名或密码错误"
-            });
+            };
 
         if (customer.Password == Md5Helper.CalculateMd5Hash(request.Password))
-            return new JsonResult(new LoginResponse
+            return new LoginResponse
             {
                 Status = "10000",
                 Message = "登录成功",
                 Token = _jwtHelper.GenerateToken(customer.CustomerId, UserRole.User),
                 UserData = customer
-            });
-        return new JsonResult(new LoginResponse
+            };
+        return new LoginResponse
         {
             Status = "4002",
             Message = "用户名或密码错误"
-        });
+        };
     }
 
     [HttpPut]
