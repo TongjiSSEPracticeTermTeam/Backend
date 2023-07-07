@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Entities;
@@ -33,6 +34,11 @@ public class Customer
     /// 头像链接
     /// </summary>
     [Column("AVATAR_URL")] public string? AvatarUrl { get; set; }
+
+    /// <summary>
+    /// 导航属性 - 评论）
+    /// </summary>
+    [JsonIgnore] public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
     /// <summary>
     /// 配置

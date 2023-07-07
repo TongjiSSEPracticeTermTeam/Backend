@@ -5,7 +5,7 @@ namespace Cinema.DTO;
 /// <summary>
 /// API接口返回的基类
 /// </summary>
-public interface IAPIResponse
+public interface IAPIResponse 
 {
     /// <summary>
     /// 为10000时表示成功，其余为失败

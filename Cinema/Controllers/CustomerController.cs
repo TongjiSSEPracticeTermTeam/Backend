@@ -53,7 +53,7 @@ public class CustomerController
     /// 登录
     /// </summary>
     [HttpPost("login")]
-    public async Task<IActionResult> CustomerLogin(LoginRequest request)
+    public async Task<LoginResponse> CustomerLogin([FromBody] LoginRequest request)
     {
         if (request.Password == "" || request.UserName == "")
             return new JsonResult(new LoginResponse
