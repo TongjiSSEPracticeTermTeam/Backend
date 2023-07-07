@@ -80,20 +80,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors("CorsPolicy");
 }
-
-app.UseStaticFiles(new StaticFileOptions
+else
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/dist"))
-});
-app.UseStatusCodePages(new StatusCodePagesOptions
-{
-    HandleAsync = context =>
+    app.UseStaticFiles(new StaticFileOptions
     {
-        var response = context.HttpContext.Response;
-        if (response.StatusCode == 404) response.Redirect("/index.html");
-        return Task.CompletedTask;
-    }
-});
+        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/dist"))
+    });
+    app.UseStatusCodePages(new StatusCodePagesOptions
+    {
+        HandleAsync = context =>
+        {
+            var response = context.HttpContext.Response;
+            if (response.StatusCode == 404) response.Redirect("/index.html");
+            return Task.CompletedTask;
+        }
+    });
+}
 
 app.UseHttpsRedirection();
 
