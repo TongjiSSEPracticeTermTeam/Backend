@@ -5,7 +5,7 @@ namespace Cinema.DTO;
 /// <summary>
 /// API�ӿڷ��صĻ���
 /// </summary>
-public interface IAPIResponse
+public interface IAPIResponse 
 {
     /// <summary>
     /// Ϊ10000ʱ��ʾ�ɹ�������Ϊʧ��
