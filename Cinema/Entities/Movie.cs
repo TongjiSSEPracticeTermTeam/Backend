@@ -66,6 +66,11 @@ namespace Cinema.Entities
         public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
         /// <summary>
+        /// 导航属性 - 拍片
+        /// </summary>
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
+
+        /// <summary>
         /// 配置
         /// </summary>
         /// <param name="modelBuilder"></param>

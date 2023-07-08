@@ -20,3 +20,24 @@ public enum Gender_
     /// </summary>
     apache
 }
+
+/// <summary>
+/// 电影票状态
+/// </summary>
+public enum TicketState
+{
+    /// <summary>
+    /// 正常
+    /// </summary>
+    normal = 0,
+
+    /// <summary>
+    /// 已退票
+    /// </summary>
+    refunded,
+
+    /// <summary>
+    /// 已过期
+    /// </summary>
+    expired
+}

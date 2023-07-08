@@ -16,12 +16,12 @@ public class AddCinemaResponse : IAPIResponse
     /// <summary>
     /// 响应状态
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 响应消息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }
 
 /// <summary>
@@ -37,12 +37,12 @@ public class GetCinemaByIdResponse : IAPIResponse
     /// <summary>
     /// 响应状态
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 响应消息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }
 
 /// <summary>
@@ -58,12 +58,12 @@ public class GetCinemaByManagerIdResponse : IAPIResponse
     /// <summary>
     /// 响应状态
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 响应消息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }
 
 /// <summary>
@@ -79,12 +79,12 @@ public class GetCinemaByNameResponse : IAPIResponse
     /// <summary>
     /// 响应状态
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 响应消息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }
 
 /// <summary>
@@ -100,12 +100,12 @@ public class GetCinemaByFeatureResponse : IAPIResponse
     /// <summary>
     /// 响应状态
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 响应消息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }
 
 

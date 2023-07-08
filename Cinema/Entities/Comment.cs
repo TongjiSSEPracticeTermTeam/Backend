@@ -13,27 +13,27 @@ namespace Cinema.Entities
         /// <summary>
         /// 评论id
         /// </summary>
-        [Required][Key][Column("COMMENT_ID")] public string CommentId { get; set; } = null!;
+        [Required][Key][Column("COMMENT_ID")] public string CommentId { get; set; } = String.Empty;
 
         /// <summary>
         /// 内容
         /// </summary>
-        [Required][Column("CONTENT")] public string Content { get; set; } = null!;
+        [Required][Column("CONTENT")] public string Content { get; set; } = String.Empty;
 
         /// <summary>
         /// 分数
         /// </summary>
-        [Required][Column("SCORE")] public float Score { get; set; } = null!;
+        [Required][Column("SCORE")] public float Score { get; set; } 
 
         /// <summary>
         /// 点赞数
         /// </summary>
-        [Required][Column("LIKE_COUNT")] public int LikeCount { get; set; } = null!;
+        [Required][Column("LIKE_COUNT")] public int LikeCount { get; set; } 
 
         /// <summary>
         /// 点踩数
         /// </summary>
-        [Required][Column("DISLIKE_COUNT")] public int DislikeCount { get; set; } = null!;
+        [Required][Column("DISLIKE_COUNT")] public int DislikeCount { get; set; } 
 
         /// <summary>
         /// 发送日期
@@ -48,12 +48,12 @@ namespace Cinema.Entities
         /// <summary>
         /// 所属电影id
         /// </summary>
-        [Required][Column("MOVIE_ID")] public string MovieId { get; set; } = null!;
+        [Required][Column("MOVIE_ID")] public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
         /// 发送用户id
         /// </summary>
-        [Required][Column("CUSTOMER_ID")] public string CustomerId { get; set; } = null!;
+        [Required][Column("CUSTOMER_ID")] public string CustomerId { get; set; } = String.Empty;
 
         /// <summary>
         /// 导航属性 - 所属电影
@@ -81,6 +81,5 @@ namespace Cinema.Entities
                 .WithMany(s => s.Comments)
                 .HasForeignKey(e => e.CustomerId);
         }
-
     }
 }

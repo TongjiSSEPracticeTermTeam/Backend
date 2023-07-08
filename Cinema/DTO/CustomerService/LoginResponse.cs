@@ -21,10 +21,10 @@ public class LoginResponse : IAPIResponse
     /// <summary>
     /// 状态,10000为成功
     /// </summary>
-    public string Status { get; set; } = null!;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// 信息
     /// </summary>
-    public string Message { get; set; } = null!;
+    public string Message { get; set; } = String.Empty;
 }

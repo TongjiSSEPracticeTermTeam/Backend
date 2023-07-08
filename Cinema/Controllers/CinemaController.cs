@@ -102,7 +102,7 @@ public class CinemaController
     public async Task<IActionResult> GetCinemaByName(string name)
     {
         var cinemas = await _db.Cinemas.Where(c => c.Name.Contains(name)).ToListAsync();
-        if (cinemas.Count == 0)
+        if (cinemas == null || cinemas!.Count == 0)
         {
             return new JsonResult(new GetCinemaByNameResponse
             {
@@ -115,7 +115,7 @@ public class CinemaController
         {
             Status = "10000",
             Message = "查询成功",
-            Cinemas = cinemas
+            Cinemas = cinemas!
         };
 
         return new JsonResult(response);

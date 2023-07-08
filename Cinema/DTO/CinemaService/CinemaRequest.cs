@@ -10,22 +10,22 @@ public class AddCinemaRequest
     /// <summary>
     /// 电影院id
     /// </summary>
-    [JsonPropertyName("cinema_id")] public string CinemaId { get; set; } = null!;
+    [JsonPropertyName("cinema_id")] public string CinemaId { get; set; } = String.Empty;
 
     /// <summary>
     /// 电影位置
     /// </summary>
-    [JsonPropertyName("location")] public string Location { get; set; } = null!;
+    [JsonPropertyName("location")] public string Location { get; set; } = String.Empty;
 
     /// <summary>
     /// 电影名字
     /// </summary>
-    [JsonPropertyName("name")] public string Name { get; set; } = null!;
+    [JsonPropertyName("name")] public string Name { get; set; } = String.Empty;
 
     /// <summary>
     /// 管理员id
     /// </summary>
-    [JsonPropertyName("manager_id")] public string ManagerId { get; set; } = null!;
+    [JsonPropertyName("manager_id")] public string ManagerId { get; set; } = String.Empty;
 
     /// <summary>
     /// 电影封面外链地址

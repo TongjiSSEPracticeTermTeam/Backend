@@ -13,17 +13,17 @@ namespace Cinema.Entities
         /// <summary>
         /// 演员id
         /// </summary>
-        [Required][Column("STAFF_ID")] public string StaffId { get; set; } = "";
-        
+        [Required][Column("STAFF_ID")] public string StaffId { get; set; } = String.Empty;
+
         /// <summary>
         /// 电影id
         /// </summary>
-        [Required][Column("MOVIE_ID")] public string MovieId { get; set; } = "";
+        [Required][Column("MOVIE_ID")] public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
         /// 职务
         /// </summary>
-        [Required][Column("ROLE")] public string Role { get; set; } = "";
+        [Required][Column("ROLE")] public string Role { get; set; } = String.Empty;
 
         /// <summary>
         /// 导航属性

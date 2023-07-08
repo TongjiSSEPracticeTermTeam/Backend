@@ -20,7 +20,6 @@ public class CinemaDb : DbContext
     /// 客户数据表
     /// </summary>
     public DbSet<Customer> Customers { get; set; } = null!;
-    public DbSet<Cinemas> Cinemas { get; set; } = null!;
 
     /// <summary>
     /// 电影院表
@@ -47,6 +46,36 @@ public class CinemaDb : DbContext
     /// </summary>
     public DbSet<Comment> Comments { get; set; } = null!;
 
+    /// <summary>
+    /// 影厅表
+    /// </summary>
+    public DbSet<Hall> Halls { get; set; } = null!;
+
+    /// <summary>
+    /// 影院经理表
+    /// </summary>
+    public DbSet<Manager> Managers { get; set; } = null!;
+
+    /// <summary>
+    /// 管理员表
+    /// </summary>
+    public DbSet<Administrator> Administrators { get; set; } = null!;
+
+    /// <summary>
+    /// 电影排片表
+    /// </summary>
+    public DbSet<Session> Sessions { get; set; } = null!;
+
+    /// <summary>
+    /// 电影排片表
+    /// </summary>
+    public DbSet<Ticket> Tickets { get; set; } = null!;
+
+    /// <summary>
+    /// VIP表
+    /// </summary>
+    public DbSet<VipInfo> VipInfos { get; set; } = null!;
+
 
     /// <summary>
     /// 初始化数据库
@@ -60,5 +89,11 @@ public class CinemaDb : DbContext
         Staff.ConfigureDbContext(modelBuilder);
         Act.ConfigureDbContext(modelBuilder);
         Comment.ConfigureDbContext(modelBuilder);
+        Hall.ConfigureDbContext(modelBuilder);
+        Manager.ConfigureDbContext(modelBuilder);
+        Administrator.ConfigureDbContext(modelBuilder);
+        Session.ConfigureDbContext(modelBuilder);
+        Ticket.ConfigureDbContext(modelBuilder);
+        VipInfo.ConfigureDbContext(modelBuilder);
     }
 }
