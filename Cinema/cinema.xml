@@ -4,31 +4,6 @@
         <name>Cinema</name>
     </assembly>
     <members>
-        <member name="T:Cinema.Controllers.AdministratorController">
-            <summary>
-            影院经理相关接口
-            </summary>
-        </member>
-        <member name="M:Cinema.Controllers.AdministratorController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
-            <summary>
-            初始化
-            </summary>
-            <param name="db"></param>
-            <param name="httpContextAccessor"></param>
-            <param name="jwtHelper"></param>
-        </member>
-        <member name="M:Cinema.Controllers.AdministratorController.GetSelfInfo">
-            <summary>
-            获取已经登录的用户的信息（要求必须已经登录）。
-            
-            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </summary>
-        </member>
-        <member name="M:Cinema.Controllers.AdministratorController.AdministratorLogin(Cinema.DTO.AdministratorService.AdminLoginRequest)">
-            <summary>
-            登录
-            </summary>
-        </member>
         <member name="T:Cinema.Controllers.CinemaController">
             <summary>
             电影院实体类控制器类
@@ -109,7 +84,7 @@
             前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.CustomerLoginRequest)">
+        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.LoginRequest)">
             <summary>
             登录
             </summary>
@@ -117,31 +92,6 @@
         <member name="M:Cinema.Controllers.CustomerController.register">
             <summary>
             注册
-            </summary>
-        </member>
-        <member name="T:Cinema.Controllers.ManagerController">
-            <summary>
-            影院经理相关接口
-            </summary>
-        </member>
-        <member name="M:Cinema.Controllers.ManagerController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
-            <summary>
-            初始化
-            </summary>
-            <param name="db"></param>
-            <param name="httpContextAccessor"></param>
-            <param name="jwtHelper"></param>
-        </member>
-        <member name="M:Cinema.Controllers.ManagerController.GetSelfInfo">
-            <summary>
-            获取已经登录的用户的信息（要求必须已经登录）。
-            
-            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </summary>
-        </member>
-        <member name="M:Cinema.Controllers.ManagerController.ManagerLogin(Cinema.DTO.ManagerService.ManagerLoginRequest)">
-            <summary>
-            登录
             </summary>
         </member>
         <member name="T:Cinema.Controllers.MovieController">
@@ -202,60 +152,20 @@
             <param name="request"></param>
             <returns>响应信息</returns>
         </member>
-        <member name="T:Cinema.DTO.AdministratorService.AdminLoginRequest">
-            <summary>
-            登录请求
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.UserName">
-            <summary>
-            用户名
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.Password">
-            <summary>
-            密码
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.AdministratorService.AdminLoginResponse">
-            <summary>
-            登录结果
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.UserData">
-            <summary>
-            用户数据
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Token">
-            <summary>
-            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Status">
-            <summary>
-            状态,10000为成功
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Message">
-            <summary>
-            信息
-            </summary>
-        </member>
         <member name="T:Cinema.DTO.IAPIResponse">
             <summary>
-            API返回数据的公共接口
+            API�ӿڷ��صĻ���
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Status">
             <summary>
-            为10000时表示成功，否则为失败
+            Ϊ10000ʱ��ʾ�ɹ�������Ϊʧ��
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Message">
-            <summary>
-            返回给前端的信息
-            </summary>
+             <summary>
+            ���ظ�ǰ�˵���Ϣ
+             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
             <summary>
@@ -392,82 +302,42 @@
             响应消息
             </summary>
         </member>
-        <member name="T:Cinema.DTO.CustomerService.CustomerLoginRequest">
+        <member name="T:Cinema.DTO.CustomerService.LoginRequest">
             <summary>
             登录请求
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.UserName">
+        <member name="P:Cinema.DTO.CustomerService.LoginRequest.UserName">
             <summary>
             用户名
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.Password">
+        <member name="P:Cinema.DTO.CustomerService.LoginRequest.Password">
             <summary>
             密码
             </summary>
         </member>
-        <member name="T:Cinema.DTO.CustomerService.CustomerLoginResponse">
+        <member name="T:Cinema.DTO.CustomerService.LoginResponse">
             <summary>
             登录结果
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.UserData">
+        <member name="P:Cinema.DTO.CustomerService.LoginResponse.UserData">
             <summary>
             用户数据
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Token">
+        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Token">
             <summary>
             令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Status">
+        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Status">
             <summary>
             状态,10000为成功
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Message">
-            <summary>
-            信息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.ManagerService.ManagerLoginRequest">
-            <summary>
-            登录请求
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.UserName">
-            <summary>
-            用户名
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.Password">
-            <summary>
-            密码
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.ManagerService.ManagerLoginResponse">
-            <summary>
-            登录结果
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.UserData">
-            <summary>
-            用户数据
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Token">
-            <summary>
-            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Status">
-            <summary>
-            状态,10000为成功
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Message">
+        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Message">
             <summary>
             信息
             </summary>
