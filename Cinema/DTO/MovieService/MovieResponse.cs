@@ -93,11 +93,6 @@ public class GetMovieByTagsResponse : IAPIResponse
 public class DeleteMovieByIdResponse : IAPIResponse
 {
     /// <summary>
-    /// 电影院实体
-    /// </summary>
-    [JsonPropertyName("movie")] public Movie? Movie { get; set; }
-
-    /// <summary>
     /// 响应状态
     /// </summary>
     public string Status { get; set; } = String.Empty;

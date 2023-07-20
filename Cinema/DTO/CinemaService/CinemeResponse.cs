@@ -108,5 +108,19 @@ public class GetCinemaByFeatureResponse : IAPIResponse
     public string Message { get; set; } = String.Empty;
 }
 
+/// <summary>
+/// 通过id删除对应电影院
+/// </summary>
+public class DeleteCinemaByIdResponse : IAPIResponse
+{
+    /// <summary>
+    /// 响应状态
+    /// </summary>
+    public string Status { get; set; } = String.Empty;
 
+    /// <summary>
+    /// 响应消息
+    /// </summary>
+    public string Message { get; set; } = String.Empty;
+}
 

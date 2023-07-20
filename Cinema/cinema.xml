@@ -57,6 +57,13 @@
             <param name="feature"></param>
             <returns></returns>
         </member>
+        <member name="M:Cinema.Controllers.CinemaController.DeleteCinemaById(System.String)">
+            <summary>
+            通过ID删除对应电影院
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Cinema.Controllers.CinemaController.AddCinema(Cinema.DTO.CinemaService.AddCinemaRequest)">
             <summary>
             添加电影院
@@ -302,6 +309,21 @@
             响应消息
             </summary>
         </member>
+        <member name="T:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse">
+            <summary>
+            通过id删除对应电影院
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
         <member name="T:Cinema.DTO.CustomerService.LoginRequest">
             <summary>
             登录请求
@@ -470,11 +492,6 @@
         <member name="T:Cinema.DTO.MovieService.DeleteMovieByIdResponse">
             <summary>
             通过id删除对应电影
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.DeleteMovieByIdResponse.Movie">
-            <summary>
-            电影院实体
             </summary>
         </member>
         <member name="P:Cinema.DTO.MovieService.DeleteMovieByIdResponse.Status">

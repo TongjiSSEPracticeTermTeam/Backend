@@ -1,4 +1,5 @@
 using Cinema.DTO.CinemaService;
+using Cinema.DTO.MovieService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -155,11 +156,43 @@ public class CinemaController
     }
 
     /// <summary>
+    /// 通过ID删除对应电影院
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("deleteCinemaById/{id}")]
+    public async Task<IActionResult> DeleteCinemaById(string id)
+    {
+        var cinema = await _db.Cinemas.FindAsync(id);
+
+        if (cinema == null)
+        {
+            return new JsonResult(new DeleteCinemaByIdResponse
+            {
+                Status = "4001",
+                Message = "该电影院不存在"
+            });
+        }
+
+        _db.Cinemas.Remove(cinema);
+        await _db.SaveChangesAsync();
+
+        var response = new DeleteCinemaByIdResponse
+        {
+            Status = "10000",
+            Message = "电影院删除成功"
+        };
+
+        return new JsonResult(response);
+
+    }
+
+    /// <summary>
     /// 添加电影院
     /// </summary>
     /// <param name="request"></param>
     /// <returns>响应信息</returns>
-    [HttpPut("add")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddCinema(AddCinemaRequest request)
     {
         try
@@ -178,7 +211,7 @@ public class CinemaController
             return new JsonResult(new AddCinemaResponse
             {
                 Status = "10000",
-                Message = "添加成功",
+                Message = "电影院添加成功",
                 Cinema = cinema
             });
         }
@@ -187,7 +220,7 @@ public class CinemaController
             return new JsonResult(new AddCinemaResponse
             {
                 Status = "10001",
-                Message = "添加失败：" + ex.Message
+                Message = "电影院添加失败：" + ex.Message
             });
         }
     }

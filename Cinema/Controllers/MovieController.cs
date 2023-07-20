@@ -160,7 +160,7 @@ public class MovieController
     /// </summary>
     /// <param name="request"></param>
     /// <returns>响应信息</returns>
-    [HttpPut("add")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddMovie(AddMovieRequest request)
     {
         try
@@ -181,7 +181,7 @@ public class MovieController
             return new JsonResult(new AddMovieResponse
             {
                 Status = "10000",
-                Message = "添加成功",
+                Message = "电影添加成功",
                 Movie = movie
             });
         }
@@ -190,7 +190,7 @@ public class MovieController
             return new JsonResult(new AddMovieResponse
             {
                 Status = "10001",
-                Message = "添加失败：" + ex.Message
+                Message = "电影添加失败：" + ex.Message
             });
         }
     }
