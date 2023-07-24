@@ -25,6 +25,27 @@ public class AddCinemaResponse : IAPIResponse
 }
 
 /// <summary>
+/// 修改电影院响应体
+/// </summary>
+public class UpdateCinemaResponse : IAPIResponse
+{
+    /// <summary>
+    /// 电影院实体
+    /// </summary>
+    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
+
+    /// <summary>
+    /// 响应状态
+    /// </summary>
+    public string Status { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 响应消息
+    /// </summary>
+    public string Message { get; set; } = String.Empty;
+}
+
+/// <summary>
 /// 通过id查询电影院响应
 /// </summary>
 public class GetCinemaByIdResponse : IAPIResponse

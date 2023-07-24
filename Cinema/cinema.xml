@@ -71,6 +71,13 @@
             <param name="request"></param>
             <returns>响应信息</returns>
         </member>
+        <member name="M:Cinema.Controllers.CinemaController.UpdateCinema(Cinema.DTO.CinemaService.UpdateCinemaRequest)">
+            <summary>
+            修改电影院
+            </summary>
+            <param name="request"></param>
+            <returns>响应信息</returns>
+        </member>
         <member name="T:Cinema.Controllers.CustomerController">
             <summary>
             顾客相关接口
@@ -209,6 +216,41 @@
             电影院特点
             </summary>
         </member>
+        <member name="T:Cinema.DTO.CinemaService.UpdateCinemaRequest">
+            <summary>
+            修改电影院的请求体定义
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.CinemaId">
+            <summary>
+            电影院id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Location">
+            <summary>
+            电影院位置
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Name">
+            <summary>
+            电影院名字
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.CinemaImageUrl">
+            <summary>
+            电影院封面外链地址
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Feature">
+            <summary>
+            电影院特点
+            </summary>
+        </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaResponse">
             <summary>
             添加电影院响应体
@@ -225,6 +267,26 @@
             </summary>
         </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.UpdateCinemaResponse">
+            <summary>
+            修改电影院响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Message">
             <summary>
             响应消息
             </summary>

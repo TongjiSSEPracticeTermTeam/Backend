@@ -43,7 +43,7 @@ public class MovieController
     /// 返回电影json
     /// </returns>
     [HttpGet("getMovieById/{id}")]
-    public async Task<IActionResult> GetMovieById(string id)
+    public async Task<IActionResult> GetMovieById([FromRoute] string id)
     {
         var movie = await _db.Movies.FindAsync(id);
         if (movie == null)
@@ -71,7 +71,7 @@ public class MovieController
     /// 返回电影json
     /// </returns>
     [HttpGet("getMovieByName/{name}")]
-    public async Task<IActionResult> GetMovieByName(string name)
+    public async Task<IActionResult> GetMovieByName([FromRoute] string name)
     {
         var movies = await _db.Movies.Where(c => c.Name.Contains(name)).ToListAsync();
         if (movies == null || movies!.Count == 0)
@@ -100,7 +100,7 @@ public class MovieController
     /// <param name="tags"></param>
     /// <returns></returns>
     [HttpGet("getMovieByTags/{tags}")]
-    public async Task<IActionResult> GetMovieByTags(string tags)
+    public async Task<IActionResult> GetMovieByTags([FromRoute] string tags)
     {
         var movies = await _db.Movies.Where(c => c.Tags != null && c.Tags.Contains(tags)).ToListAsync();
 
@@ -129,7 +129,7 @@ public class MovieController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("deleteMovieById/{id}")]
-    public async Task<IActionResult> DeleteMovieById(string id)
+    public async Task<IActionResult> DeleteMovieById([FromRoute] string id)
     {
         var movie = await _db.Movies.FindAsync(id);
 
@@ -161,7 +161,7 @@ public class MovieController
     /// <param name="request"></param>
     /// <returns>响应信息</returns>
     [HttpPost("add")]
-    public async Task<IActionResult> AddMovie(AddMovieRequest request)
+    public async Task<IActionResult> AddMovie([FromBody] AddMovieRequest request)
     {
         try
         {
