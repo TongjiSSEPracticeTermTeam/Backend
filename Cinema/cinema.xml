@@ -566,6 +566,161 @@
             响应消息
             </summary>
         </member>
+        <member name="T:Cinema.DTO.StaffService.AddStaffRequest">
+            <summary>
+            添加影人的请求体定义
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.StaffId">
+            <summary>
+            影人id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Name">
+            <summary> 
+            影人名字
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Gender">
+            <summary>
+            影人性别
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Introduction">
+            <summary>
+            影人介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.ImageUrl">
+            <summary>
+            图片链接
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.UpdateStaffRequest">
+            <summary>
+            更新影人请求体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.StaffId">
+            <summary>
+            影人id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Name">
+            <summary> 
+            影人名字
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Gender">
+            <summary>
+            影人性别
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Introduction">
+            <summary>
+            影人介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.ImageUrl">
+            <summary>
+            图片链接
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.AddStaffResponse">
+            <summary>
+            添加影人响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Staff">
+            <summary>
+            影人实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.UpdateStaffResponse">
+            <summary>
+            修改影人响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Staff">
+            <summary>
+            影人实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.GetStaffByIdResponse">
+            <summary>
+            通过id查询影人响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Staff">
+            <summary>
+            影人实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.GetStaffByNameResponse">
+            <summary>
+            通过影人姓名查询影人响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Staffs">
+            <summary>
+            查询得到的影人实体列表
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.DeleteStaffByIdResponse">
+            <summary>
+            通过id删除对应影人
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.DeleteStaffByIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.DeleteStaffByIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
         <member name="T:Cinema.Entities.Act">
             <summary>
             电影演员表
@@ -1342,6 +1497,64 @@
             </summary>
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
+        </member>
+        <member name="T:StaffControllers.StaffController">
+            <summary>
+            影人实体类控制器类
+            </summary>
+        </member>
+        <member name="M:StaffControllers.StaffController.#ctor(Cinema.Entities.CinemaDb)">
+            <summary>
+            控制器构造函数
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:StaffControllers.StaffController.GetStaffs">
+            <summary>
+            获得所有影人信息
+            </summary>
+            <returns>
+            返回影人json列表
+            </returns>
+        </member>
+        <member name="M:StaffControllers.StaffController.GetStaffById(System.String)">
+            <summary>
+            根据id获得指定影人信息
+            </summary>
+            <param name="id">影人id</param>
+            <returns>
+            返回对应影人json
+            </returns>
+        </member>
+        <member name="M:StaffControllers.StaffController.GetStaffByName(System.String)">
+            <summary>
+            根据影人名称获得指定影人信息
+            </summary>
+            <param name="name">影人名称</param>
+            <returns>
+            返回影人json
+            </returns>
+        </member>
+        <member name="M:StaffControllers.StaffController.DeleteStaffById(System.String)">
+            <summary>
+            通过ID删除对应影人
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StaffControllers.StaffController.AddStaff(Cinema.DTO.StaffService.AddStaffRequest)">
+            <summary>
+            添加影人
+            </summary>
+            <param name="request"></param>
+            <returns>响应信息</returns>
+        </member>
+        <member name="M:StaffControllers.StaffController.UpdateStaff(Cinema.DTO.StaffService.UpdateStaffRequest)">
+            <summary>
+            修改影人
+            </summary>
+            <param name="request"></param>
+            <returns>响应信息</returns>
         </member>
     </members>
 </doc>

@@ -1,5 +1,4 @@
 using Cinema.DTO.CinemaService;
-using Cinema.DTO.MovieService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

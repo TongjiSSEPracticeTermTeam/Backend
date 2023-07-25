@@ -13,12 +13,12 @@ public enum Gender_
     /// <summary>
     /// 女
     /// </summary>
-    female,
+    female = 1,
 
     /// <summary>
     /// 武装直升机
     /// </summary>
-    apache
+    apache = 2,
 }
 
 /// <summary>
