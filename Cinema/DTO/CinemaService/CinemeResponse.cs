@@ -14,6 +14,11 @@ public class AddCinemaResponse : IAPIResponse
     [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
 
     /// <summary>
+    /// 管理员实体
+    /// </summary>
+    [JsonPropertyName("manager")] public Manager? Manager { get; set; }
+
+    /// <summary>
     /// 响应状态
     /// </summary>
     public string Status { get; set; } = String.Empty;

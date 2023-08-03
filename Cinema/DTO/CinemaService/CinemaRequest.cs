@@ -23,11 +23,6 @@ public class AddCinemaRequest
     [JsonPropertyName("name")] public string Name { get; set; } = String.Empty;
 
     /// <summary>
-    /// 管理员id
-    /// </summary>
-    [JsonPropertyName("manager_id")] public string ManagerId { get; set; } = String.Empty;
-
-    /// <summary>
     /// 电影院封面外链地址
     /// </summary>
     [JsonPropertyName("cinema_image_url")] public string? CinemaImageUrl { get; set; }
@@ -37,6 +32,21 @@ public class AddCinemaRequest
     /// 电影院特点
     /// </summary>
     [JsonPropertyName("feature")] public string? Feature { get; set; }
+
+    /// <summary>
+    /// 管理员id
+    /// </summary>
+    [JsonPropertyName("manager_id")] public string ManagerId { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 管理员邮箱
+    /// </summary>
+    [JsonPropertyName("manager_email")] public string Email { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 管理员密码
+    /// </summary>
+    [JsonPropertyName("manager_password")] public string Password { get; set; } = String.Empty;
 }
 
 /// <summary>

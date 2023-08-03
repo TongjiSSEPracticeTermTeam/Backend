@@ -201,11 +201,6 @@
             电影院名字
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
-            <summary>
-            管理员id
-            </summary>
-        </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
             <summary>
             电影院封面外链地址
@@ -214,6 +209,21 @@
         <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
             <summary>
             电影院特点
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Email">
+            <summary>
+            管理员邮箱
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Password">
+            <summary>
+            管理员密码
             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.UpdateCinemaRequest">
@@ -259,6 +269,11 @@
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Cinema">
             <summary>
             电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Manager">
+            <summary>
+            管理员实体
             </summary>
         </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Status">

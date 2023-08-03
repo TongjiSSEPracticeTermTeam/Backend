@@ -205,13 +205,23 @@ public class CinemaController
                 CinemaImageUrl = request.CinemaImageUrl,
                 Feature = request.Feature
             };
+            var manager = new Manager
+            {
+                Id = request.ManagerId,
+                Name = "管理员" + request.ManagerId,
+                Password = request.Password,
+                Email = request.Email,
+                AvatarUrl = String.Empty
+            };
             await _db.AddAsync(cinema);
+            await _db.AddAsync(manager);
             await _db.SaveChangesAsync();
             return new JsonResult(new AddCinemaResponse
             {
                 Status = "10000",
                 Message = "电影院添加成功",
-                Cinema = cinema
+                Cinema = cinema,
+                Manager = manager
             });
         }
         catch (Exception ex)
