@@ -24,7 +24,7 @@ public class MovieController
     }
 
     /// <summary>
-    /// 获得所有电影院信息
+    /// 获得所有电影信息
     /// </summary>
     /// <returns>
     /// 返回电影json列表
@@ -32,7 +32,10 @@ public class MovieController
     [HttpGet]
     public async Task<IActionResult> GetMovie()
     {
-        return new JsonResult(await _db.Movies.ToListAsync());
+        var movies = await _db.Movies.ToListAsync();
+        movies = movies.OrderBy(movie => movie.MovieId).ToList();
+        //return new JsonResult(await _db.Movies.ToListAsync());
+        return new JsonResult(movies);
     }
 
     /// <summary>
@@ -46,6 +49,7 @@ public class MovieController
     public async Task<IActionResult> GetMovieById([FromRoute] string id)
     {
         var movie = await _db.Movies.FindAsync(id);
+
         if (movie == null)
         {
             return new JsonResult(new GetMovieByIdResponse
@@ -54,12 +58,15 @@ public class MovieController
                 Message = "该电影不存在"
             });
         }
+        //添加导航属性
+        movie.Acts = await _db.Entry(movie).Collection(movie => movie.Acts).Query().ToListAsync();
+        movie.Comments = await _db.Entry(movie).Collection(movie => movie.Comments).Query().ToListAsync();
 
         return new JsonResult(new GetMovieByIdResponse
         {
             Status = "10000",
             Message = "查询成功",
-            Movie = movie
+            Movie = (Movie)movie
         });
     }
 

@@ -121,7 +121,7 @@
         </member>
         <member name="M:Cinema.Controllers.MovieController.GetMovie">
             <summary>
-            获得所有电影院信息
+            获得所有电影信息
             </summary>
             <returns>
             返回电影json列表

@@ -33,7 +33,10 @@ public class StaffController
     [HttpGet]
     public async Task<IActionResult> GetStaffs()
     {
-        return new JsonResult(await _db.Staffs.ToListAsync());
+        var staffs = await _db.Staffs.ToListAsync();
+        staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
+        //return new JsonResult(await _db.Staffs.ToListAsync());
+        return new JsonResult(staffs);
     }
 
     /// <summary>

@@ -32,7 +32,10 @@ public class CinemaController
     [HttpGet]
     public async Task<IActionResult> GetCinemas()
     {
-        return new JsonResult(await _db.Cinemas.ToListAsync());
+        var cinemas = await _db.Cinemas.ToListAsync();
+        cinemas = cinemas.OrderBy(cinema => cinema.CinemaId).ToList();
+        //return new JsonResult(await _db.Cinemas.ToListAsync());
+        return new JsonResult(cinemas);
     }
 
     /// <summary>
