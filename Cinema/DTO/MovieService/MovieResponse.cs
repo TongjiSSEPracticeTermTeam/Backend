@@ -46,14 +46,45 @@ public class GetMovieByIdResponse : IAPIResponse
 }
 
 /// <summary>
+/// 通过id查询电影和对应影人响应
+/// </summary>
+public class GetMovieByIdwithStaffResponse : IAPIResponse
+{
+    /// <summary>
+    /// 电影院实体
+    /// </summary>
+    [JsonPropertyName("movie")] public Movie? Movie { get; set; }
+
+    /// <summary>
+    /// 导演
+    /// </summary>
+    [JsonPropertyName("director")] public Staff? Director { get; set; }
+
+    /// <summary>
+    /// 主演
+    /// </summary>
+    [JsonPropertyName("actors")] public List<Staff?>? Actors { get; set; }
+
+    /// <summary>
+    /// 响应状态
+    /// </summary>
+    public string Status { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 响应消息
+    /// </summary>
+    public string Message { get; set; } = String.Empty;
+}
+
+/// <summary>
 /// 通过电影名查询电影响应，模糊查找
 /// </summary>
 public class GetMovieByNameResponse : IAPIResponse
 {
     /// <summary>
-    /// 查询得到的电影院实体列表
+    /// 查询得到的电影实体列表
     /// </summary>
-    [JsonPropertyName("movie")] public List<Movie?>? Movies { get; set; }
+    [JsonPropertyName("movies")] public List<Movie?>? Movies { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -72,9 +103,30 @@ public class GetMovieByNameResponse : IAPIResponse
 public class GetMovieByTagsResponse : IAPIResponse
 {
     /// <summary>
-    /// 查询得到的电影院实体列表
+    /// 电影实体列表
     /// </summary>
     [JsonPropertyName("movies")] public List<Movie?>? Movies { get; set; }
+
+    /// <summary>
+    /// 响应状态
+    /// </summary>
+    public string Status { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 响应消息
+    /// </summary>
+    public string Message { get; set; } = String.Empty;
+}
+
+/// <summary>
+/// 修改电影响应体
+/// </summary>
+public class UpdateMovieResponse : IAPIResponse
+{
+    /// <summary>
+    /// 修改后电影实体
+    /// </summary>
+    [JsonPropertyName("movies")] public Movie? Movie { get; set; }
 
     /// <summary>
     /// 响应状态

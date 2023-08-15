@@ -136,6 +136,15 @@
             返回电影json
             </returns>
         </member>
+        <member name="M:Cinema.Controllers.MovieController.GetMovieByIdwithStaff(System.String)">
+            <summary>
+            根据id获取指定电影和相关影人
+            </summary>
+            <param name="id"></param>
+            <returns>
+            返回电影、导演和主演json
+            </returns>
+        </member>
         <member name="M:Cinema.Controllers.MovieController.GetMovieByName(System.String)">
             <summary>
             根据电影名称获得指定电影信息,模糊查询
@@ -165,6 +174,13 @@
             </summary>
             <param name="request"></param>
             <returns>响应信息</returns>
+        </member>
+        <member name="M:Cinema.Controllers.MovieController.UpdateMovie(Cinema.DTO.MovieService.UpdateMovieRequest)">
+            <summary>
+            修改电影
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="T:Cinema.DTO.IAPIResponse">
             <summary>
@@ -486,6 +502,61 @@
             到期日期
             </summary>
         </member>
+        <member name="T:Cinema.DTO.MovieService.UpdateMovieRequest">
+            <summary>
+            修改电影的请求体定义
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.MovieId">
+            <summary>
+            电影ID
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Name">
+            <summary>
+            电影名称
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Duration">
+            <summary>
+            电影时长
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Instruction">
+            <summary>
+            电影介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.PostUrl">
+            <summary>
+            电影海报URL
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Tags">
+            <summary>
+            电影标签
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.ReleaseDate">
+            <summary>
+            上映日期
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.RemovalDate">
+            <summary>
+            到期日期
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.DirectorId">
+            <summary>
+            导演Id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.ActorIds">
+            <summary>
+            演员Id
+            </summary>
+        </member>
         <member name="T:Cinema.DTO.MovieService.AddMovieResponse">
             <summary>
             添加电影响应体
@@ -526,6 +597,36 @@
             响应消息
             </summary>
         </member>
+        <member name="T:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse">
+            <summary>
+            通过id查询电影和对应影人响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Movie">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Director">
+            <summary>
+            导演
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Actors">
+            <summary>
+            主演
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
         <member name="T:Cinema.DTO.MovieService.GetMovieByNameResponse">
             <summary>
             通过电影名查询电影响应，模糊查找
@@ -533,7 +634,7 @@
         </member>
         <member name="P:Cinema.DTO.MovieService.GetMovieByNameResponse.Movies">
             <summary>
-            查询得到的电影院实体列表
+            查询得到的电影实体列表
             </summary>
         </member>
         <member name="P:Cinema.DTO.MovieService.GetMovieByNameResponse.Status">
@@ -553,7 +654,7 @@
         </member>
         <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Movies">
             <summary>
-            查询得到的电影院实体列表
+            电影实体列表
             </summary>
         </member>
         <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Status">
@@ -562,6 +663,26 @@
             </summary>
         </member>
         <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.MovieService.UpdateMovieResponse">
+            <summary>
+            修改电影响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Movie">
+            <summary>
+            修改后电影实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Message">
             <summary>
             响应消息
             </summary>

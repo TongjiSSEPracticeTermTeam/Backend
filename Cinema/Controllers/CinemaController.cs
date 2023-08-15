@@ -256,7 +256,7 @@ public class CinemaController
                 CinemaImageUrl = request.CinemaImageUrl,
                 Feature = request.Feature
             };
-            _db.Update(cinema);
+            _db.Cinemas.Update(cinema);
             await _db.SaveChangesAsync();
             return new JsonResult(new UpdateCinemaResponse
             {

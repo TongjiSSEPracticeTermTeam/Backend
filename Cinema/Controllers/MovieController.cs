@@ -1,4 +1,5 @@
-﻿using Cinema.DTO.MovieService;
+﻿using Cinema.DTO.CinemaService;
+using Cinema.DTO.MovieService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,15 +59,63 @@ public class MovieController
                 Message = "该电影不存在"
             });
         }
-        //添加导航属性
-        movie.Acts = await _db.Entry(movie).Collection(movie => movie.Acts).Query().ToListAsync();
-        movie.Comments = await _db.Entry(movie).Collection(movie => movie.Comments).Query().ToListAsync();
 
         return new JsonResult(new GetMovieByIdResponse
         {
             Status = "10000",
             Message = "查询成功",
             Movie = (Movie)movie
+        });
+    }
+
+    /// <summary>
+    /// 根据id获取指定电影和相关影人
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>
+    /// 返回电影、导演和主演json
+    /// </returns>
+    [HttpGet("getMovieByIdwithStaff/{id}")]
+    public async Task<IActionResult> GetMovieByIdwithStaff([FromRoute] string id)
+    {
+        var movie = await _db.Movies.FindAsync(id);
+        //var movie = await _db.Movies
+        //    .Include(movie => movie.Acts)
+        //    .ThenInclude(act => act.Staff)
+        //    .FirstOrDefaultAsync(movie => movie.MovieId == id);
+
+        if (movie == null)
+        {
+            return new JsonResult(new GetMovieByIdwithStaffResponse
+            {
+                Status = "4001",
+                Message = "该电影不存在"
+            });
+        }
+
+        //添加影人
+        var acts = await _db.Acts.Where(act => act.MovieId == movie.MovieId).Include(act => act.Staff).ToListAsync();
+        var actor = new List<Staff?>();
+        var director = new Staff();
+
+        if(acts !=  null && acts!.Count > 0)
+        {
+            foreach (var act in acts)
+            {
+                if (act.Role.Equals("0"))
+                    actor.Add(act.Staff);
+                else
+                    director = act.Staff;
+            }
+        }
+
+        return new JsonResult(new GetMovieByIdwithStaffResponse
+        {
+            Status = "10000",
+            Message = "查询成功",
+            Movie = (Movie)movie,
+            Director = director.StaffId == String.Empty? null : director,
+            Actors  = actor
         });
     }
 
@@ -201,5 +250,79 @@ public class MovieController
             });
         }
     }
-}
 
+    /// <summary>
+    /// 修改电影
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateMovie([FromBody] UpdateMovieRequest request)
+    {
+        try
+        {
+            var movie = new Movie
+            {
+                MovieId = request.MovieId,
+                Name = request.Name,
+                Duration = request.Duration,
+                Instruction = request.Instruction,
+                PostUrl = request.PostUrl,
+                Tags = request.Tags,
+                ReleaseDate = DateTime.ParseExact(request.ReleaseDate, "yyyy-MM-dd", System.Globalization.CultureInfo.CurrentCulture),
+                RemovalDate = DateTime.ParseExact(request.RemovalDate, "yyyy-MM-dd", System.Globalization.CultureInfo.CurrentCulture)
+            };
+
+            var preActs = await _db.Acts.Where(a => a.MovieId == movie.MovieId).ToListAsync();
+            var directorId = request.DirectorId;
+            var actorIds = request.ActorIds;
+            var newActs = new List<Act>();
+
+            if(preActs.Count != 0)
+            {
+                _db.Acts.RemoveRange(preActs);
+                _db.SaveChanges();
+            }
+            if (directorId != "-1")
+            {
+                newActs.Add(new Act
+                {
+                    StaffId = directorId,
+                    MovieId = movie.MovieId,
+                    Role = "1"
+                });
+            }
+            foreach (var id in actorIds)
+            {
+                newActs.Add(new Act
+                {
+                    StaffId = id,
+                    MovieId = movie.MovieId,
+                    Role = "0"
+                });
+            }
+            if(newActs.Count != 0)
+            {
+                await _db.Acts.AddRangeAsync(newActs);
+            }
+
+            _db.Movies.Update(movie);
+            await _db.SaveChangesAsync();
+
+            return new JsonResult(new UpdateMovieResponse
+            {
+                Status = "10000",
+                Message = "电影修改成功",
+                Movie = movie
+            });
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(new UpdateMovieResponse
+            {
+                Status = "10001",
+                Message = "电影修改失败：" + ex.Message
+            });
+        }
+    }
+}
