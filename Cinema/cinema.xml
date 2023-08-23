@@ -1,0 +1,1199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinema</name>
+    </assembly>
+    <members>
+        <member name="T:Cinema.Controllers.AdministratorController">
+            <summary>
+            影院经理相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.GetSelfInfo">
+            <summary>
+            获取已经登录的用户的信息（要求必须已经登录）。
+            
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.AdministratorLogin(Cinema.DTO.AdministratorService.AdminLoginRequest)">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="T:Cinema.Controllers.CinemaController">
+            <summary>
+            电影院实体类控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.#ctor(Cinema.Entities.CinemaDb)">
+            <summary>
+            控制器构造函数
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemas">
+            <summary>
+            获得所有电影院信息
+            </summary>
+            <returns>
+            返回电影院json列表
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaById(System.String)">
+            <summary>
+            根据id获得指定电影院信息
+            </summary>
+            <param name="id">电影院id</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByManagerId(System.String)">
+            <summary>
+            根据管理员id获得指定电影院信息
+            </summary>
+            <param name="id">管理员id</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByName(System.String)">
+            <summary>
+            根据电影院名称获得指定电影院信息,模糊查询
+            </summary>
+            <param name="name">电影院名称</param>
+            <returns>
+            返回电影院json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemaByFeature(System.String)">
+            <summary>
+            通过特点搜索到电影院列表
+            </summary>
+            <param name="feature"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.AddCinema(Cinema.DTO.CinemaService.AddCinemaRequest)">
+            <summary>
+            添加电影院
+            </summary>
+            <param name="request"></param>
+            <returns>响应信息</returns>
+        </member>
+        <member name="T:Cinema.Controllers.CustomerController">
+            <summary>
+            顾客相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.GetSelfInfo">
+            <summary>
+            获取已经登录的用户的信息（要求必须已经登录）。
+            </summary>
+            <returns>
+            用户名称
+            </returns>
+            <remarks>
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </remarks>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.CustomerLoginRequest)">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CustomerController.register">
+            <summary>
+            注册
+            </summary>
+        </member>
+        <member name="T:Cinema.Controllers.ManagerController">
+            <summary>
+            影院经理相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.ManagerController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.ManagerController.GetSelfInfo">
+            <summary>
+            获取已经登录的用户的信息（要求必须已经登录）。
+            
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.ManagerController.ManagerLogin(Cinema.DTO.ManagerService.ManagerLoginRequest)">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.AdministratorService.AdminLoginRequest">
+            <summary>
+            登录请求
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.AdministratorService.AdminLoginResponse">
+            <summary>
+            登录结果
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.UserData">
+            <summary>
+            用户数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Token">
+            <summary>
+            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Status">
+            <summary>
+            状态,10000为成功
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Message">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.IAPIResponse">
+            <summary>
+            API返回数据的公共接口
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.IAPIResponse.Status">
+            <summary>
+            为10000时表示成功，否则为失败
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.IAPIResponse.Message">
+            <summary>
+            返回给前端的信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
+            <summary>
+            添加电影院的请求体定义
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaId">
+            <summary>
+            电影院id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Location">
+            <summary>
+            电影位置
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Name">
+            <summary>
+            电影名字
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
+            <summary>
+            电影封面外链地址
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
+            <summary>
+            电影特点
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.AddCinemaResponse">
+            <summary>
+            添加电影院响应体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByIdResponse">
+            <summary>
+            通过id查询电影院响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse">
+            <summary>
+            通过管理员Id查询电影院响应
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Cinema">
+            <summary>
+            电影院实体
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByManagerIdResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByNameResponse">
+            <summary>
+            通过电影院名查询电影院响应,支持模糊查找
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Cinemas">
+            <summary>
+            查询得到的电影院实体列表
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByNameResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse">
+            <summary>
+            通过特点查询电影院响应,支持模糊查找
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Cinemas">
+            <summary>
+            查询得到的电影院实体列表
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Status">
+            <summary>
+            响应状态
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CinemaService.GetCinemaByFeatureResponse.Message">
+            <summary>
+            响应消息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CustomerService.CustomerLoginRequest">
+            <summary>
+            登录请求
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CustomerService.CustomerLoginResponse">
+            <summary>
+            登录结果
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.UserData">
+            <summary>
+            用户数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Token">
+            <summary>
+            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Status">
+            <summary>
+            状态,10000为成功
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Message">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.ManagerService.ManagerLoginRequest">
+            <summary>
+            登录请求
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.ManagerService.ManagerLoginResponse">
+            <summary>
+            登录结果
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.UserData">
+            <summary>
+            用户数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Token">
+            <summary>
+            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Status">
+            <summary>
+            状态,10000为成功
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Message">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="T:Cinema.Entities.Act">
+            <summary>
+            电影演员表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Act.StaffId">
+            <summary>
+            演员id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Act.MovieId">
+            <summary>
+            电影id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Act.Role">
+            <summary>
+            职务
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Act.Staff">
+            <summary>
+            导航属性
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Act.Movie">
+            <summary>
+            导航属性
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Act.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置多对多
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Administrator">
+            <summary>
+            管理员表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Administrator.Id">
+            <summary>
+            管理员Id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Administrator.Password">
+            <summary>
+            管理员密码
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Administrator.AvatarUrl">
+            <summary>
+            头像链接
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Administrator.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Cinemas">
+            <summary>
+            电影院实体类
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.CinemaId">
+            <summary>
+            cinema_id 主键
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Location">
+            <summary>
+            位置
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Name">
+            <summary>
+            名字
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.ManagerId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.CinemaImageUrl">
+            <summary>
+            电影封面Url
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Feature">
+            <summary>
+            电影特点字符串，不同特点用逗号分割
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Halls">
+            <summary>
+            导航属性 - 所拥有的影厅
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Cinemas.Manager">
+            <summary>
+            导航属性 - 影厅经理
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Cinemas.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            注册主键
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Comment">
+            <summary>
+            评论
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.CommentId">
+            <summary>
+            评论id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.Score">
+            <summary>
+            分数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.LikeCount">
+            <summary>
+            点赞数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.DislikeCount">
+            <summary>
+            点踩数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.PublishDate">
+            <summary>
+            发送日期
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.Display">
+            <summary>
+            阅读数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.MovieId">
+            <summary>
+            所属电影id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.CustomerId">
+            <summary>
+            发送用户id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.MovieBelongTo">
+            <summary>
+            导航属性 - 所属电影
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Comment.Sender">
+            <summary>
+            导航属性 - 发送用户
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Comment.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Gender_">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.Gender_.male">
+            <summary>
+            男
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.Gender_.female">
+            <summary>
+            女
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.Gender_.apache">
+            <summary>
+            武装直升机
+            </summary>
+        </member>
+        <member name="T:Cinema.Entities.TicketState">
+            <summary>
+            电影票状态
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.TicketState.normal">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.TicketState.refunded">
+            <summary>
+            已退票
+            </summary>
+        </member>
+        <member name="F:Cinema.Entities.TicketState.expired">
+            <summary>
+            已过期
+            </summary>
+        </member>
+        <member name="T:Cinema.Entities.Customer">
+            <summary>
+                用户
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.CustomerId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Name">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Email">
+            <summary>
+            邮件
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.AvatarUrl">
+            <summary>
+            头像链接
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Comments">
+            <summary>
+            导航属性 - 评论
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Tickets">
+            <summary>
+            导航属性 - 购票
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Customer.Vip">
+            <summary>
+            导航属性 - VIP身份
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Customer.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.CinemaDb">
+            <summary>
+                主数据库
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.CinemaDb.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            初始化
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Customers">
+            <summary>
+            客户数据表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Cinemas">
+            <summary>
+            电影院表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Movies">
+            <summary>
+            电影表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Staffs">
+            <summary>
+            演员表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Acts">
+            <summary>
+            电影-演员关系表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Comments">
+            <summary>
+            评论表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Halls">
+            <summary>
+            影厅表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Managers">
+            <summary>
+            影院经理表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Administrators">
+            <summary>
+            管理员表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Sessions">
+            <summary>
+            电影排片表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.Tickets">
+            <summary>
+            电影排片表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.CinemaDb.VipInfos">
+            <summary>
+            VIP表
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.CinemaDb.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            初始化数据库
+            </summary>
+            <param name="modelBuilder">不用管</param>
+        </member>
+        <member name="T:Cinema.Entities.Hall">
+            <summary>
+            影厅表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.Id">
+            <summary>
+            影厅ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.CinemaId">
+            <summary>
+            所属影院
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.RowCount">
+            <summary>
+            行数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.ColumnCount">
+            <summary>
+            列数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.HallType">
+            <summary>
+            影厅类型
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.CinemaBelongTo">
+            <summary>
+            导航属性 - 所属影院
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Hall.Sessions">
+            <summary>
+            导航属性 - 排片
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Hall.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Manager">
+            <summary>
+            经理表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.Id">
+            <summary>
+            经理Id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.AvatarUrl">
+            <summary>
+            头像地址
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Manager.ManagedCinema">
+            <summary>
+            导航属性 - 管理的影厅
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Manager.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Movie">
+            <summary>
+            电影
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.MovieId">
+            <summary>
+            电影ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Duration">
+            <summary>
+            时长
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Instruction">
+            <summary>
+            介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Score">
+            <summary>
+            分数
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.PostUrl">
+            <summary>
+            海报图片
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Tags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.ReleaseDate">
+            <summary>
+            上映日期
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.RemovalDate">
+            <summary>
+            到期日期
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Acts">
+            <summary>
+            导航属性 - 演电影（多对多）
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Comments">
+            <summary>
+            导航属性 - 评论）
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Movie.Sessions">
+            <summary>
+            导航属性 - 拍片
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Movie.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Session">
+            <summary>
+            排片表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.MovieId">
+            <summary>
+            电影ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.CinemaId">
+            <summary>
+            影院ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.HallId">
+            <summary>
+            影厅ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.StartTime">
+            <summary>
+            起始时间
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.Attendence">
+            <summary>
+            上座率
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.Price">
+            <summary>
+            票价
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.Language">
+            <summary>
+            语言
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.Dimesion">
+            <summary>
+            播放维数（3d、2d）
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.MovieBelongsTo">
+            <summary>
+            导航属性 - 所属电影
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.HallLocatedAt">
+            <summary>
+            导航属性 - 所位于影厅
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Session.Tickets">
+            <summary>
+            导航属性 - 所关联影票
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Session.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Staff">
+            <summary>
+            演职员
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.StaffId">
+            <summary>
+            演员Id
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.Introduction">
+            <summary>
+            介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.ImageUrl">
+            <summary>
+            图片链接
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Staff.Acts">
+            <summary>
+            导航属性 - 演电影（多对多）
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Staff.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.Ticket">
+            <summary>
+            影票表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Id">
+            <summary>
+            影票ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Row">
+            <summary>
+            座位（行）
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Col">
+            <summary>
+            座位（列）
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.OrderTime">
+            <summary>
+            下单时间
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.State">
+            <summary>
+            影票状态
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Draw">
+            <summary>
+            是否已经出票
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Price">
+            <summary>
+            票价
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.CustomerId">
+            <summary>
+            客户编号
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.MovieId">
+            <summary>
+            电影编号
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.HallId">
+            <summary>
+            影厅编号
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.CinemaId">
+            <summary>
+            影院编号
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.SessionAt">
+            <summary>
+            导航属性 - 所属排片
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.Ticket.Buyer">
+            <summary>
+            导航属性 - 购买客户
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.Ticket.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Entities.VipInfo">
+            <summary>
+            VIP身份表
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.VipInfo.CustomerId">
+            <summary>
+            客户ID
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.VipInfo.EndDate">
+            <summary>
+            到期时间
+            </summary>
+        </member>
+        <member name="P:Cinema.Entities.VipInfo.Owner">
+            <summary>
+            导航属性 - 所有者
+            </summary>
+        </member>
+        <member name="M:Cinema.Entities.VipInfo.ConfigureDbContext(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            配置
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Cinema.Helpers.UserRole">
+            <summary>
+            用户等级，鉴权系统用
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.User">
+            <summary>
+                普通用户
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.CinemaAdmin">
+            <summary>
+                影院管理员
+            </summary>
+        </member>
+        <member name="F:Cinema.Helpers.UserRole.SysAdmin">
+            <summary>
+                系统管理员
+            </summary>
+        </member>
+        <member name="T:Cinema.Helpers.JwtHelper">
+            <summary>
+            JWT工具类
+            </summary>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            初始化
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.GenerateToken(System.String,Cinema.Helpers.UserRole)">
+            <summary>
+                创建一个JWT令牌
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="role">用户等级，参考上方注释</param>
+            <returns>一个签发的JWT令牌</returns>
+        </member>
+        <member name="M:Cinema.Helpers.JwtHelper.SolveName(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+                从HTTP上下文解析用户的用户名
+            </summary>
+            <param name="httpContextAccessor">HTTP上下文</param>
+            <returns>用户名</returns>
+        </member>
+        <member name="T:Cinema.Helpers.Md5Helper">
+            <summary>
+            MD5工具类
+            </summary>
+        </member>
+        <member name="M:Cinema.Helpers.Md5Helper.CalculateMd5Hash(System.String)">
+            <summary>
+                计算一个字符串的MD5
+            </summary>
+            <param name="input">待计算的字符串</param>
+            <returns>结果</returns>
+        </member>
+    </members>
+</doc>
