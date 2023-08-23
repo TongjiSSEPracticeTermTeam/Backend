@@ -13,7 +13,7 @@ namespace Cinema.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-public class CustomerController
+public class CustomerController : ControllerBase
 {
     private readonly CinemaDb _db;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -59,10 +59,10 @@ public class CustomerController
     /// 登录
     /// </summary>
     [HttpPost("login")]
-    public async Task<LoginResponse> CustomerLogin([FromBody] LoginRequest request)
+    public async Task<CustomerLoginResponse> CustomerLogin([FromBody] CustomerLoginRequest request)
     {
         if (request.Password == "" || request.UserName == "")
-            return new LoginResponse
+            return new CustomerLoginResponse
             {
                 Status = "4001",
                 Message = "用户名或密码为空"
@@ -70,21 +70,21 @@ public class CustomerController
 
         var customer = await _db.Customers.FindAsync(request.UserName);
         if (customer == null)
-            return new LoginResponse
+            return new CustomerLoginResponse
             {
                 Status = "4002",
                 Message = "用户名或密码错误"
             };
 
         if (customer.Password == Md5Helper.CalculateMd5Hash(request.Password))
-            return new LoginResponse
+            return new CustomerLoginResponse
             {
                 Status = "10000",
                 Message = "登录成功",
                 Token = _jwtHelper.GenerateToken(customer.CustomerId, UserRole.User),
                 UserData = customer
             };
-        return new LoginResponse
+        return new CustomerLoginResponse
         {
             Status = "4002",
             Message = "用户名或密码错误"
