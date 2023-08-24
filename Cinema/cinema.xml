@@ -29,6 +29,40 @@
             登录
             </summary>
         </member>
+        <member name="T:Cinema.Controllers.AvatarController">
+            <summary>
+            头像相关控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.GetMyAvatar">
+            <summary>
+            获取当前已登录用户的头像
+            </summary>
+            <returns>头像URL</returns>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.GetUserAvatar(System.String)">
+            <summary>
+            获取任意用户的头像
+            </summary>
+            <param name="Username">用户名</param>
+            <returns>头像URL</returns>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.ChangeAvatar(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传新头像
+            </summary>
+            <returns>新头像的URL</returns>
+            <remarks>文件从请求体中上传</remarks>
+        </member>
         <member name="T:Cinema.Controllers.CinemaController">
             <summary>
             电影院实体类控制器类
@@ -105,16 +139,20 @@
         <member name="M:Cinema.Controllers.CustomerController.GetSelfInfo">
             <summary>
             获取已经登录的用户的信息（要求必须已经登录）。
-            
-            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
+            <returns>
+            用户名称
+            </returns>
+            <remarks>
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </remarks>
         </member>
         <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.CustomerLoginRequest)">
             <summary>
             登录
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.CustomerController.register">
+        <member name="M:Cinema.Controllers.CustomerController.Register(Cinema.DTO.CustomerService.RegisterRequest)">
             <summary>
             注册
             </summary>
@@ -143,6 +181,28 @@
             <summary>
             登录
             </summary>
+        </member>
+        <member name="T:Cinema.Controllers.UserGeneralController">
+            <summary>
+            通用接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.UserGeneralController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.UserGeneralController.getUserCurrentLoggedin">
+            <summary>
+            获取当前登录的用户的信息
+            </summary>
+            <returns>用户信息</returns>
+            <remarks>
+            如果用户没有登录，或者登录过期，会返回401。
+            </remarks>
         </member>
         <member name="T:Cinema.DTO.AdministratorService.AdminLoginRequest">
             <summary>
@@ -197,6 +257,36 @@
         <member name="P:Cinema.DTO.IAPIResponse.Message">
             <summary>
             返回给前端的信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.APIResponse">
+            <summary>
+            API返回数据的接口实现
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.APIResponse.Status">
+            <summary>
+            为10000时表示成功，否则为失败
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.APIResponse.Message">
+            <summary>
+            返回给前端的信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.AvatarService.AvatarResponse">
+            <summary>
+            获取头像
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AvatarService.AvatarResponse.HasAvatar">
+            <summary>
+            是否有头像
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AvatarService.AvatarResponse.Url">
+            <summary>
+            头像链接
             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
@@ -374,6 +464,46 @@
             信息
             </summary>
         </member>
+        <member name="T:Cinema.DTO.CustomerService.RegisterRequest">
+            <summary>
+            注册请求
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.DisplayName">
+            <summary>
+            显示名（可以是真名、昵称等）
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Email">
+            <summary>
+            电子邮箱
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.CustomerService.RegisterResponse">
+            <summary>
+            注册结果
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterResponse.Token">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.CustomerService.RegisterResponse.UserData">
+            <summary>
+            新用户的实体类数据
+            </summary>
+        </member>
         <member name="T:Cinema.DTO.ManagerService.ManagerLoginRequest">
             <summary>
             登录请求
@@ -412,6 +542,31 @@
         <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Message">
             <summary>
             信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.UserGeneralService.CurrentUserResponse">
+            <summary>
+            当前登录的用户信息
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Type">
+            <summary>
+            用户类型，以下三选一：'Customer' | 'Manager' | 'Administrator'
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.DisplayName">
+            <summary>
+            显示昵称
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Avatar">
+            <summary>
+            头像Url
             </summary>
         </member>
         <member name="T:Cinema.Entities.Act">
@@ -1179,6 +1334,13 @@
             <param name="httpContextAccessor">HTTP上下文</param>
             <returns>用户名</returns>
         </member>
+        <member name="M:Cinema.Helpers.JwtHelper.SolveRole(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+               从HTTP上下文解析用户的角色
+            </summary>
+            <param name="httpContextAccessor">HTTP上下文</param>
+            <returns>角色</returns>
+        </member>
         <member name="T:Cinema.Helpers.Md5Helper">
             <summary>
             MD5工具类
@@ -1190,6 +1352,29 @@
             </summary>
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
+        </member>
+        <member name="M:Cinema.Services.CinemaDbQCosCredentialProvider.GetCredential">
+            <summary>
+            生成临时凭据
+            </summary>
+        </member>
+        <member name="T:Cinema.Services.QCosSrvice">
+            <summary>
+            腾讯云COS服务类
+            </summary>
+        </member>
+        <member name="M:Cinema.Services.QCosSrvice.#ctor">
+            <summary>
+            默认初始化
+            </summary>
+        </member>
+        <member name="M:Cinema.Services.QCosSrvice.UploadFile(System.String,System.String)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="key">文件Key</param>
+            <param name="localPath">本地路径</param>
+            <returns></returns>
         </member>
     </members>
 </doc>

@@ -11,6 +11,7 @@ namespace Cinema.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
+[ProducesResponseType(typeof(Manager),StatusCodes.Status200OK)]
 public class ManagerController : ControllerBase
 {
     private readonly CinemaDb _db;

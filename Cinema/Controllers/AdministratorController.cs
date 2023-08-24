@@ -37,6 +37,7 @@ public class AdministratorController : ControllerBase
     /// </summary>
     [HttpGet]
     [Authorize(Policy = "RegUser")]
+    [ProducesResponseType(typeof(Administrator),StatusCodes.Status200OK)]
     public async Task<IActionResult> GetSelfInfo()
     {
         var name = JwtHelper.SolveName(_httpContextAccessor);

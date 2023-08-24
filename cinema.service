@@ -7,7 +7,7 @@ Type=simple
 User=root
 Restart=on-failure
 RestartSec=5s
-Environment="CINEMA_DATABASE='Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME XE)));User Id=CINEMA_DBA;Password=tjdb;'"
+Environment="CINEMA_DATABASE='Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME XE)));User Id=CINEMA_DBA;Password=tjdb;' TCCLOUD_SECRETKEY=KQIvJSN2RbWBbmiOp00nLd0A5lFUTDhw"
 ExecStart=dotnet run -lp pro --project /root/Backend/Cinema
 
 [Install]
