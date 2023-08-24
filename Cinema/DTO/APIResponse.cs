@@ -17,3 +17,19 @@ public interface IAPIResponse
     /// </summary>
     [JsonPropertyName("message")] public string Message { get; set; }
 }
+
+/// <summary>
+/// API返回数据的接口实现
+/// </summary>
+public class APIResponse : IAPIResponse
+{
+    /// <summary>
+    /// 为10000时表示成功，否则为失败
+    /// </summary>
+    [JsonPropertyName("status")] public string Status { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 返回给前端的信息
+    /// </summary>
+    [JsonPropertyName("message")] public string Message { get; set; } = string.Empty;
+}

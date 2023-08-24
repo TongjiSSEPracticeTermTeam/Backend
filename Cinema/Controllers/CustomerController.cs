@@ -1,3 +1,4 @@
+using Cinema.DTO;
 using Cinema.DTO.CustomerService;
 using Cinema.Entities;
 using Cinema.Helpers;
@@ -95,8 +96,44 @@ public class CustomerController : ControllerBase
     /// 注册
     /// </summary>
     [HttpPut]
-    public IActionResult register()
+    [ProducesResponseType(typeof(RegisterResponse), StatusCodes.Status200OK)]
+    public async Task<IAPIResponse> Register([FromBody] RegisterRequest request)
     {
-        return new OkObjectResult("您正在尝试注册");
+        if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.Username))
+            return new APIResponse
+            {
+                Status = "4001",
+                Message = "用户名或密码为空"
+            };
+
+        if (string.IsNullOrWhiteSpace(request.DisplayName))
+        {
+            request.DisplayName = request.Username;
+        }
+
+        if ((await _db.Customers.FindAsync(request.Username) != null)|| (await _db.Managers.FindAsync(request.Username) != null)|| (await _db.Administrators.FindAsync(request.Username) != null))
+            return new APIResponse
+            {
+                Status = "4002",
+                Message = "用户名已存在"
+            };
+
+        var customer = new Customer
+        {
+            CustomerId = request.Username,
+            Password = Md5Helper.CalculateMd5Hash(request.Password),
+            Name = request.DisplayName,
+            Email = request.Email
+        };
+
+        await _db.Customers.AddAsync(customer);
+        await _db.SaveChangesAsync();
+        return new RegisterResponse
+        {
+            Status = "10000",
+            Message = "注册成功",
+            Token = _jwtHelper.GenerateToken(customer.CustomerId, UserRole.User),
+            UserData = customer
+        };
     }
 }

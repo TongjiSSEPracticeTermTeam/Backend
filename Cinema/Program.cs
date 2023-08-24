@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using Cinema.Entities;
 using Cinema.Helpers;
+using Cinema.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -26,6 +27,27 @@ builder.Services.AddSwaggerGen(c =>
     });
     var docPath = Path.Combine(AppContext.BaseDirectory, "cinema.xml");
     c.IncludeXmlComments(docPath, true);
+
+    // 定义JWT身份验证方案
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Description = "Enter JWT Bearer token **_only_**",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {securityScheme, Array.Empty<string>()}
+        });
 });
 
 // 配置跨域
@@ -44,6 +66,11 @@ var oracleConnectionString = Environment.GetEnvironmentVariable("CINEMA_DATABASE
 Console.WriteLine(oracleConnectionString);
 builder.Services.AddDbContext<CinemaDb>(options =>
     options.UseOracle(oracleConnectionString));
+
+// 配置腾讯云QCOS
+if (Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY") == null)
+    throw new InvalidOperationException("请配置腾讯云密钥");
+builder.Services.AddSingleton(new QCosSrvice());
 
 // 配置JWT
 if (configuration["Jwt:Issuer"] == null)
@@ -86,7 +113,11 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    // 如果使用JWT，启用授权按钮
+    c.OAuthUsePkce();
+});
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("CorsPolicy");
