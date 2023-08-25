@@ -1,17 +1,17 @@
 using System.Text.Json.Serialization;
 using Cinema.Entities;
 
-namespace Cinema.DTO.CustomerService;
+namespace Cinema.DTO.ManagerService;
 
 /// <summary>
 /// 登录结果
 /// </summary>
-public class CustomerLoginResponse : IAPIResponse
+public class ManagerLoginResponse : IAPIResponse
 {
     /// <summary>
     /// 用户数据
     /// </summary>
-    [JsonPropertyName("userdata")] public Customer? UserData { get; set; }
+    [JsonPropertyName("userdata")] public Manager? UserData { get; set; }
 
     /// <summary>
     /// 令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）

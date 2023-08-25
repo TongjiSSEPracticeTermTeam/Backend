@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 
-namespace Cinema.DTO.CustomerService;
+namespace Cinema.DTO.ManagerService;
 
 /// <summary>
 /// 登录请求
 /// </summary>
-public class CustomerLoginRequest
+public class ManagerLoginRequest
 {
     /// <summary>
     /// 用户名

@@ -4,6 +4,65 @@
         <name>Cinema</name>
     </assembly>
     <members>
+        <member name="T:Cinema.Controllers.AdministratorController">
+            <summary>
+            影院经理相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.GetSelfInfo">
+            <summary>
+            获取已经登录的用户的信息（要求必须已经登录）。
+            
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AdministratorController.AdministratorLogin(Cinema.DTO.AdministratorService.AdminLoginRequest)">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="T:Cinema.Controllers.AvatarController">
+            <summary>
+            头像相关控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.GetMyAvatar">
+            <summary>
+            获取当前已登录用户的头像
+            </summary>
+            <returns>头像URL</returns>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.GetUserAvatar(System.String)">
+            <summary>
+            获取任意用户的头像
+            </summary>
+            <param name="Username">用户名</param>
+            <returns>头像URL</returns>
+        </member>
+        <member name="M:Cinema.Controllers.AvatarController.ChangeAvatar(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传新头像
+            </summary>
+            <returns>新头像的URL</returns>
+            <remarks>文件从请求体中上传</remarks>
+        </member>
         <member name="T:Cinema.Controllers.CinemaController">
             <summary>
             电影院实体类控制器类
@@ -57,23 +116,9 @@
             <param name="feature"></param>
             <returns></returns>
         </member>
-        <member name="M:Cinema.Controllers.CinemaController.DeleteCinemaById(System.String)">
-            <summary>
-            通过ID删除对应电影院
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="M:Cinema.Controllers.CinemaController.AddCinema(Cinema.DTO.CinemaService.AddCinemaRequest)">
             <summary>
             添加电影院
-            </summary>
-            <param name="request"></param>
-            <returns>响应信息</returns>
-        </member>
-        <member name="M:Cinema.Controllers.CinemaController.UpdateCinema(Cinema.DTO.CinemaService.UpdateCinemaRequest)">
-            <summary>
-            修改电影院
             </summary>
             <param name="request"></param>
             <returns>响应信息</returns>
@@ -94,108 +139,147 @@
         <member name="M:Cinema.Controllers.CustomerController.GetSelfInfo">
             <summary>
             获取已经登录的用户的信息（要求必须已经登录）。
-            
-            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </summary>
-        </member>
-        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.LoginRequest)">
             <summary>
             登录
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.CustomerController.register">
+
             <summary>
             注册
             </summary>
         </member>
-        <member name="T:Cinema.Controllers.MovieController">
+
+        <member name="T:Cinema.Controllers.ManagerController">
             <summary>
-            电影实体类控制器类
+            影院经理相关接口
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.#ctor(Cinema.Entities.CinemaDb)">
+        <member name="M:Cinema.Controllers.ManagerController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
             <summary>
-            控制器构造函数
+            初始化
             </summary>
             <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.GetMovie">
+        <member name="M:Cinema.Controllers.ManagerController.GetSelfInfo">
             <summary>
-            获得所有电影信息
+            获取已经登录的用户的信息（要求必须已经登录）。
+            
+            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
-            <returns>
-            返回电影json列表
-            </returns>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.GetMovieById(System.String)">
+        <member name="M:Cinema.Controllers.ManagerController.ManagerLogin(Cinema.DTO.ManagerService.ManagerLoginRequest)">
             <summary>
-            根据id获得指定电影信息
+            登录
             </summary>
-            <param name="id">电影id</param>
-            <returns>
-            返回电影json
-            </returns>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.GetMovieByIdwithStaff(System.String)">
+        <member name="T:Cinema.Controllers.UserGeneralController">
             <summary>
-            根据id获取指定电影和相关影人
+            通用接口
             </summary>
-            <param name="id"></param>
-            <returns>
-            返回电影、导演和主演json
-            </returns>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.GetMovieByName(System.String)">
+        <member name="M:Cinema.Controllers.UserGeneralController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper)">
             <summary>
-            根据电影名称获得指定电影信息,模糊查询
+            初始化
             </summary>
-            <param name="name">电影名称</param>
-            <returns>
-            返回电影json
-            </returns>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.GetMovieByTags(System.String)">
+        <member name="M:Cinema.Controllers.UserGeneralController.getUserCurrentLoggedin">
             <summary>
-            通过特点搜索到电影院列表
+            获取当前登录的用户的信息
             </summary>
-            <param name="tags"></param>
-            <returns></returns>
+            <returns>用户信息</returns>
+            <remarks>
+            如果用户没有登录，或者登录过期，会返回401。
+            </remarks>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.DeleteMovieById(System.String)">
+        <member name="T:Cinema.DTO.AdministratorService.AdminLoginRequest">
             <summary>
-            通过ID删除对应电影
+            登录请求
             </summary>
-            <param name="id"></param>
-            <returns></returns>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.AddMovie(Cinema.DTO.MovieService.AddMovieRequest)">
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.UserName">
             <summary>
-            添加电影
+            用户名
             </summary>
-            <param name="request"></param>
-            <returns>响应信息</returns>
         </member>
-        <member name="M:Cinema.Controllers.MovieController.UpdateMovie(Cinema.DTO.MovieService.UpdateMovieRequest)">
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginRequest.Password">
             <summary>
-            修改电影
+            密码
             </summary>
-            <param name="request"></param>
-            <returns></returns>
+        </member>
+        <member name="T:Cinema.DTO.AdministratorService.AdminLoginResponse">
+            <summary>
+            登录结果
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.UserData">
+            <summary>
+            用户数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Token">
+            <summary>
+            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Status">
+            <summary>
+            状态,10000为成功
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AdministratorService.AdminLoginResponse.Message">
+            <summary>
+            信息
+            </summary>
         </member>
         <member name="T:Cinema.DTO.IAPIResponse">
             <summary>
-            API�ӿڷ��صĻ���
+            API返回数据的公共接口
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Status">
             <summary>
-            Ϊ10000ʱ��ʾ�ɹ�������Ϊʧ��
+            为10000时表示成功，否则为失败
             </summary>
         </member>
         <member name="P:Cinema.DTO.IAPIResponse.Message">
-             <summary>
-            ���ظ�ǰ�˵���Ϣ
-             </summary>
+            <summary>
+            返回给前端的信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.APIResponse">
+            <summary>
+            API返回数据的接口实现
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.APIResponse.Status">
+            <summary>
+            为10000时表示成功，否则为失败
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.APIResponse.Message">
+            <summary>
+            返回给前端的信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.AvatarService.AvatarResponse">
+            <summary>
+            获取头像
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AvatarService.AvatarResponse.HasAvatar">
+            <summary>
+            是否有头像
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.AvatarService.AvatarResponse.Url">
+            <summary>
+            头像链接
+            </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
             <summary>
@@ -209,22 +293,12 @@
         </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Location">
             <summary>
-            电影院位置
+            电影位置
             </summary>
         </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Name">
             <summary>
-            电影院名字
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
-            <summary>
-            电影院封面外链地址
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
-            <summary>
-            电影院特点
+            电影名字
             </summary>
         </member>
         <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
@@ -232,49 +306,14 @@
             管理员id
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Email">
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
             <summary>
-            管理员邮箱
+            电影封面外链地址
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Password">
+        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
             <summary>
-            管理员密码
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.CinemaService.UpdateCinemaRequest">
-            <summary>
-            修改电影院的请求体定义
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.CinemaId">
-            <summary>
-            电影院id
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Location">
-            <summary>
-            电影院位置
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Name">
-            <summary>
-            电影院名字
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.ManagerId">
-            <summary>
-            管理员id
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.CinemaImageUrl">
-            <summary>
-            电影院封面外链地址
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaRequest.Feature">
-            <summary>
-            电影院特点
+            电影特点
             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaResponse">
@@ -287,37 +326,14 @@
             电影院实体
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Manager">
-            <summary>
-            管理员实体
-            </summary>
-        </member>
+
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Status">
             <summary>
             响应状态
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.CinemaService.UpdateCinemaResponse">
-            <summary>
-            修改电影院响应体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Cinema">
-            <summary>
-            电影院实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.UpdateCinemaResponse.Message">
             <summary>
             响应消息
             </summary>
@@ -402,459 +418,158 @@
             响应消息
             </summary>
         </member>
-        <member name="T:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse">
-            <summary>
-            通过id删除对应电影院
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.CinemaService.DeleteCinemaByIdResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.CustomerService.LoginRequest">
+
+        <member name="T:Cinema.DTO.CustomerService.CustomerLoginRequest">
             <summary>
             登录请求
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginRequest.UserName">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.UserName">
             <summary>
             用户名
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginRequest.Password">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.Password">
             <summary>
             密码
             </summary>
         </member>
-        <member name="T:Cinema.DTO.CustomerService.LoginResponse">
+
+        <member name="T:Cinema.DTO.CustomerService.CustomerLoginResponse">
             <summary>
             登录结果
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginResponse.UserData">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.UserData">
             <summary>
             用户数据
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Token">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Token">
             <summary>
             令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Status">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Status">
             <summary>
             状态,10000为成功
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CustomerService.LoginResponse.Message">
+
+        <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Message">
             <summary>
             信息
             </summary>
         </member>
-        <member name="T:Cinema.DTO.MovieService.AddMovieRequest">
+
+        <member name="T:Cinema.DTO.CustomerService.RegisterRequest">
             <summary>
-            添加电影的请求体定义
+            注册请求
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.MovieId">
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Username">
             <summary>
-            电影ID
+            用户名
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.Name">
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Password">
             <summary>
-            电影名称
+            密码
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.Duration">
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.DisplayName">
             <summary>
-            电影时长
+            显示名（可以是真名、昵称等）
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.Instruction">
+        <member name="P:Cinema.DTO.CustomerService.RegisterRequest.Email">
             <summary>
-            电影介绍
+            电子邮箱
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.PostUrl">
+        <member name="T:Cinema.DTO.CustomerService.RegisterResponse">
             <summary>
-            电影海报URL
+            注册结果
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.Tags">
+        <member name="P:Cinema.DTO.CustomerService.RegisterResponse.Token">
             <summary>
-            电影标签
+            令牌
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.ReleaseDate">
+        <member name="P:Cinema.DTO.CustomerService.RegisterResponse.UserData">
             <summary>
-            上映日期
+            新用户的实体类数据
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieRequest.RemovalDate">
+        <member name="T:Cinema.DTO.ManagerService.ManagerLoginRequest">
             <summary>
-            到期日期
+            登录请求
             </summary>
         </member>
-        <member name="T:Cinema.DTO.MovieService.UpdateMovieRequest">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.UserName">
             <summary>
-            修改电影的请求体定义
+            用户名
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.MovieId">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginRequest.Password">
             <summary>
-            电影ID
+            密码
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Name">
+        <member name="T:Cinema.DTO.ManagerService.ManagerLoginResponse">
             <summary>
-            电影名称
+            登录结果
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Duration">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.UserData">
             <summary>
-            电影时长
+            用户数据
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Instruction">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Token">
             <summary>
-            电影介绍
+            令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.PostUrl">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Status">
             <summary>
-            电影海报URL
+            状态,10000为成功
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.Tags">
+        <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Message">
             <summary>
-            电影标签
+            信息
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.ReleaseDate">
+        <member name="T:Cinema.DTO.UserGeneralService.CurrentUserResponse">
             <summary>
-            上映日期
+            当前登录的用户信息
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.RemovalDate">
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Type">
             <summary>
-            到期日期
+            用户类型，以下三选一：'Customer' | 'Manager' | 'Administrator'
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.DirectorId">
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Username">
             <summary>
-            导演Id
+            用户名
             </summary>
         </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieRequest.ActorIds">
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.DisplayName">
             <summary>
-            演员Id
+            显示昵称
             </summary>
         </member>
-        <member name="T:Cinema.DTO.MovieService.AddMovieResponse">
+        <member name="P:Cinema.DTO.UserGeneralService.CurrentUserResponse.Avatar">
             <summary>
-            添加电影响应体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieResponse.Movie">
-            <summary>
-            电影实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.AddMovieResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.GetMovieByIdResponse">
-            <summary>
-            通过id查询电影响应
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdResponse.Movie">
-            <summary>
-            电影院实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse">
-            <summary>
-            通过id查询电影和对应影人响应
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Movie">
-            <summary>
-            电影院实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Director">
-            <summary>
-            导演
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Actors">
-            <summary>
-            主演
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByIdwithStaffResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.GetMovieByNameResponse">
-            <summary>
-            通过电影名查询电影响应，模糊查找
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByNameResponse.Movies">
-            <summary>
-            查询得到的电影实体列表
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByNameResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByNameResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.GetMovieByTagsResponse">
-            <summary>
-            通过特点查询电影响应，模糊查找
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Movies">
-            <summary>
-            电影实体列表
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.GetMovieByTagsResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.UpdateMovieResponse">
-            <summary>
-            修改电影响应体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Movie">
-            <summary>
-            修改后电影实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.UpdateMovieResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.MovieService.DeleteMovieByIdResponse">
-            <summary>
-            通过id删除对应电影
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.DeleteMovieByIdResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.MovieService.DeleteMovieByIdResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.AddStaffRequest">
-            <summary>
-            添加影人的请求体定义
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.StaffId">
-            <summary>
-            影人id
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Name">
-            <summary> 
-            影人名字
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Gender">
-            <summary>
-            影人性别
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.Introduction">
-            <summary>
-            影人介绍
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffRequest.ImageUrl">
-            <summary>
-            图片链接
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.UpdateStaffRequest">
-            <summary>
-            更新影人请求体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.StaffId">
-            <summary>
-            影人id
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Name">
-            <summary> 
-            影人名字
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Gender">
-            <summary>
-            影人性别
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.Introduction">
-            <summary>
-            影人介绍
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffRequest.ImageUrl">
-            <summary>
-            图片链接
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.AddStaffResponse">
-            <summary>
-            添加影人响应体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Staff">
-            <summary>
-            影人实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.AddStaffResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.UpdateStaffResponse">
-            <summary>
-            修改影人响应体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Staff">
-            <summary>
-            影人实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.UpdateStaffResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.GetStaffByIdResponse">
-            <summary>
-            通过id查询影人响应
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Staff">
-            <summary>
-            影人实体
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByIdResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.GetStaffByNameResponse">
-            <summary>
-            通过影人姓名查询影人响应
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Staffs">
-            <summary>
-            查询得到的影人实体列表
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.GetStaffByNameResponse.Message">
-            <summary>
-            响应消息
-            </summary>
-        </member>
-        <member name="T:Cinema.DTO.StaffService.DeleteStaffByIdResponse">
-            <summary>
-            通过id删除对应影人
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.DeleteStaffByIdResponse.Status">
-            <summary>
-            响应状态
-            </summary>
-        </member>
-        <member name="P:Cinema.DTO.StaffService.DeleteStaffByIdResponse.Message">
-            <summary>
-            响应消息
+            头像Url
             </summary>
         </member>
         <member name="T:Cinema.Entities.Act">
@@ -1622,6 +1337,13 @@
             <param name="httpContextAccessor">HTTP上下文</param>
             <returns>用户名</returns>
         </member>
+        <member name="M:Cinema.Helpers.JwtHelper.SolveRole(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+               从HTTP上下文解析用户的角色
+            </summary>
+            <param name="httpContextAccessor">HTTP上下文</param>
+            <returns>角色</returns>
+        </member>
         <member name="T:Cinema.Helpers.Md5Helper">
             <summary>
             MD5工具类
@@ -1634,63 +1356,29 @@
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
         </member>
-        <member name="T:StaffControllers.StaffController">
+
+        <member name="M:Cinema.Services.CinemaDbQCosCredentialProvider.GetCredential">
             <summary>
-            影人实体类控制器类
+            生成临时凭据
             </summary>
         </member>
-        <member name="M:StaffControllers.StaffController.#ctor(Cinema.Entities.CinemaDb)">
+        <member name="T:Cinema.Services.QCosSrvice">
             <summary>
-            控制器构造函数
+            腾讯云COS服务类
             </summary>
-            <param name="db"></param>
         </member>
-        <member name="M:StaffControllers.StaffController.GetStaffs">
+        <member name="M:Cinema.Services.QCosSrvice.#ctor">
             <summary>
-            获得所有影人信息
+            默认初始化
             </summary>
-            <returns>
-            返回影人json列表
-            </returns>
         </member>
-        <member name="M:StaffControllers.StaffController.GetStaffById(System.String)">
+        <member name="M:Cinema.Services.QCosSrvice.UploadFile(System.String,System.String)">
             <summary>
-            根据id获得指定影人信息
+            上传文件
             </summary>
-            <param name="id">影人id</param>
-            <returns>
-            返回对应影人json
-            </returns>
-        </member>
-        <member name="M:StaffControllers.StaffController.GetStaffByName(System.String)">
-            <summary>
-            根据影人名称获得指定影人信息
-            </summary>
-            <param name="name">影人名称</param>
-            <returns>
-            返回影人json
-            </returns>
-        </member>
-        <member name="M:StaffControllers.StaffController.DeleteStaffById(System.String)">
-            <summary>
-            通过ID删除对应影人
-            </summary>
-            <param name="id"></param>
+            <param name="key">文件Key</param>
+            <param name="localPath">本地路径</param>
             <returns></returns>
-        </member>
-        <member name="M:StaffControllers.StaffController.AddStaff(Cinema.DTO.StaffService.AddStaffRequest)">
-            <summary>
-            添加影人
-            </summary>
-            <param name="request"></param>
-            <returns>响应信息</returns>
-        </member>
-        <member name="M:StaffControllers.StaffController.UpdateStaff(Cinema.DTO.StaffService.UpdateStaffRequest)">
-            <summary>
-            修改影人
-            </summary>
-            <param name="request"></param>
-            <returns>响应信息</returns>
         </member>
     </members>
 </doc>

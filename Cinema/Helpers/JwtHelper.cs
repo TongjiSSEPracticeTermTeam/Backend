@@ -81,4 +81,15 @@ public class JwtHelper
         var identity = httpContextAccessor.HttpContext?.User?.Identity as ClaimsIdentity;
         return identity?.FindFirst(ClaimTypes.Name)?.Value;
     }
+
+    /// <summary>
+    ///    从HTTP上下文解析用户的角色
+    /// </summary>
+    /// <param name="httpContextAccessor">HTTP上下文</param>
+    /// <returns>角色</returns>
+    public static string? SolveRole(IHttpContextAccessor httpContextAccessor)
+    {
+        var identity = httpContextAccessor.HttpContext?.User?.Identity as ClaimsIdentity;
+        return identity?.FindFirst(ClaimTypes.Role)?.Value;
+    }
 }
