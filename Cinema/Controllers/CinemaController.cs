@@ -32,7 +32,10 @@ public class CinemaController
     [HttpGet]
     public async Task<IActionResult> GetCinemas()
     {
-        return new JsonResult(await _db.Cinemas.ToListAsync());
+        var cinemas = await _db.Cinemas.ToListAsync();
+        cinemas = cinemas.OrderBy(cinema => cinema.CinemaId).ToList();
+        //return new JsonResult(await _db.Cinemas.ToListAsync());
+        return new JsonResult(cinemas);
     }
 
     /// <summary>
@@ -43,7 +46,7 @@ public class CinemaController
     /// 返回电影院json
     /// </returns>
     [HttpGet("getCinemaById/{id}")]
-    public async Task<IActionResult> GetCinemaById(string id)
+    public async Task<IActionResult> GetCinemaById([FromRoute] string id)
     {
         var cinema = await _db.Cinemas.FindAsync(id);
         if (cinema == null)
@@ -71,7 +74,7 @@ public class CinemaController
     /// 返回电影院json
     /// </returns>
     [HttpGet("getCinemaByManagerId/{id}")]
-    public async Task<IActionResult> GetCinemaByManagerId(string id)
+    public async Task<IActionResult> GetCinemaByManagerId([FromRoute] string id)
     {
         var cinema = await _db.Cinemas.FirstOrDefaultAsync(c => c.ManagerId == id);
         if (cinema == null)
@@ -99,7 +102,7 @@ public class CinemaController
     /// 返回电影院json
     /// </returns>
     [HttpGet("getCinemaByName/{name}")]
-    public async Task<IActionResult> GetCinemaByName(string name)
+    public async Task<IActionResult> GetCinemaByName([FromRoute] string name)
     {
         var cinemas = await _db.Cinemas.Where(c => c.Name.Contains(name)).ToListAsync();
         if (cinemas == null || cinemas!.Count == 0)
@@ -131,7 +134,7 @@ public class CinemaController
     /// <param name="feature"></param>
     /// <returns></returns>
     [HttpGet("getCinemaByFeature/{feature}")]
-    public async Task<IActionResult> GetCinemaByFeature(string feature)
+    public async Task<IActionResult> GetCinemaByFeature([FromRoute] string feature)
     {
         var cinemas = await _db.Cinemas.Where(c => c.Feature != null && c.Feature.Contains(feature)).ToListAsync();
 
@@ -155,12 +158,44 @@ public class CinemaController
     }
 
     /// <summary>
+    /// 通过ID删除对应电影院
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("deleteCinemaById/{id}")]
+    public async Task<IActionResult> DeleteCinemaById([FromRoute] string id)
+    {
+        var cinema = await _db.Cinemas.FindAsync(id);
+
+        if (cinema == null)
+        {
+            return new JsonResult(new DeleteCinemaByIdResponse
+            {
+                Status = "4001",
+                Message = "该电影院不存在"
+            });
+        }
+
+        _db.Cinemas.Remove(cinema);
+        await _db.SaveChangesAsync();
+
+        var response = new DeleteCinemaByIdResponse
+        {
+            Status = "10000",
+            Message = "电影院删除成功"
+        };
+
+        return new JsonResult(response);
+
+    }
+
+    /// <summary>
     /// 添加电影院
     /// </summary>
     /// <param name="request"></param>
     /// <returns>响应信息</returns>
-    [HttpPut("add")]
-    public async Task<IActionResult> AddCinema(AddCinemaRequest request)
+    [HttpPost("add")]
+    public async Task<IActionResult> AddCinema([FromBody] AddCinemaRequest request)
     {
         try
         {
@@ -173,13 +208,23 @@ public class CinemaController
                 CinemaImageUrl = request.CinemaImageUrl,
                 Feature = request.Feature
             };
+            var manager = new Manager
+            {
+                Id = request.ManagerId,
+                Name = "管理员" + request.ManagerId,
+                Password = request.Password,
+                Email = request.Email,
+                AvatarUrl = String.Empty
+            };
             await _db.AddAsync(cinema);
+            await _db.AddAsync(manager);
             await _db.SaveChangesAsync();
             return new JsonResult(new AddCinemaResponse
             {
                 Status = "10000",
-                Message = "添加成功",
-                Cinema = cinema
+                Message = "电影院添加成功",
+                Cinema = cinema,
+                Manager = manager
             });
         }
         catch (Exception ex)
@@ -187,7 +232,45 @@ public class CinemaController
             return new JsonResult(new AddCinemaResponse
             {
                 Status = "10001",
-                Message = "添加失败：" + ex.Message
+                Message = "电影院添加失败：" + ex.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// 修改电影院
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>响应信息</returns>
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateCinema([FromBody] UpdateCinemaRequest request)
+    {
+        try
+        {
+            var cinema = new Cinemas
+            {
+                CinemaId = request.CinemaId,
+                Location = request.Location,
+                Name = request.Name,
+                ManagerId = request.ManagerId,
+                CinemaImageUrl = request.CinemaImageUrl,
+                Feature = request.Feature
+            };
+            _db.Cinemas.Update(cinema);
+            await _db.SaveChangesAsync();
+            return new JsonResult(new UpdateCinemaResponse
+            {
+                Status = "10000",
+                Message = "电影院修改成功",
+                Cinema = cinema
+            });
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(new UpdateCinemaResponse
+            {
+                Status = "10001",
+                Message = "电影院修改失败：" + ex.Message
             });
         }
     }

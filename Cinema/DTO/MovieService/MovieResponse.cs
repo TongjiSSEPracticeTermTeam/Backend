@@ -1,22 +1,38 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Cinema.Entities;
 
-namespace Cinema.DTO.CinemaService;
+namespace Cinema.DTO.MovieService;
 
 /// <summary>
-/// 添加电影院响应体
+/// 添加电影响应体
 /// </summary>
-public class AddCinemaResponse : IAPIResponse
+public class AddMovieResponse : IAPIResponse
+{
+    /// <summary>
+    /// 电影实体
+    /// </summary>
+    [JsonPropertyName("movie")] public Movie? Movie { get; set; }
+
+    /// <summary>
+    /// 响应状态
+    /// </summary>
+    public string Status { get; set; } = String.Empty;
+
+    /// <summary>
+    /// 响应消息
+    /// </summary>
+    public string Message { get; set; } = String.Empty;
+}
+
+/// <summary>
+/// 通过id查询电影响应
+/// </summary>
+public class GetMovieByIdResponse : IAPIResponse
 {
     /// <summary>
     /// 电影院实体
     /// </summary>
-    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
-
-    /// <summary>
-    /// 管理员实体
-    /// </summary>
-    [JsonPropertyName("manager")] public Manager? Manager { get; set; }
+    [JsonPropertyName("movie")] public Movie? Movie { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -30,14 +46,24 @@ public class AddCinemaResponse : IAPIResponse
 }
 
 /// <summary>
-/// 修改电影院响应体
+/// 通过id查询电影和对应影人响应
 /// </summary>
-public class UpdateCinemaResponse : IAPIResponse
+public class GetMovieByIdwithStaffResponse : IAPIResponse
 {
     /// <summary>
     /// 电影院实体
     /// </summary>
-    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
+    [JsonPropertyName("movie")] public Movie? Movie { get; set; }
+
+    /// <summary>
+    /// 导演
+    /// </summary>
+    [JsonPropertyName("director")] public Staff? Director { get; set; }
+
+    /// <summary>
+    /// 主演
+    /// </summary>
+    [JsonPropertyName("actors")] public List<Staff?>? Actors { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -51,14 +77,14 @@ public class UpdateCinemaResponse : IAPIResponse
 }
 
 /// <summary>
-/// 通过id查询电影院响应
+/// 通过电影名查询电影响应，模糊查找
 /// </summary>
-public class GetCinemaByIdResponse : IAPIResponse
+public class GetMovieByNameResponse : IAPIResponse
 {
     /// <summary>
-    /// 电影院实体
+    /// 查询得到的电影实体列表
     /// </summary>
-    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
+    [JsonPropertyName("movies")] public List<Movie?>? Movies { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -72,14 +98,14 @@ public class GetCinemaByIdResponse : IAPIResponse
 }
 
 /// <summary>
-/// 通过管理员Id查询电影院响应
+/// 通过特点查询电影响应，模糊查找
 /// </summary>
-public class GetCinemaByManagerIdResponse : IAPIResponse
+public class GetMovieByTagsResponse : IAPIResponse
 {
     /// <summary>
-    /// 电影院实体
+    /// 电影实体列表
     /// </summary>
-    [JsonPropertyName("cinema")] public Cinemas? Cinema { get; set; }
+    [JsonPropertyName("movies")] public List<Movie?>? Movies { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -93,14 +119,14 @@ public class GetCinemaByManagerIdResponse : IAPIResponse
 }
 
 /// <summary>
-/// 通过电影院名查询电影院响应,支持模糊查找
+/// 修改电影响应体
 /// </summary>
-public class GetCinemaByNameResponse : IAPIResponse
+public class UpdateMovieResponse : IAPIResponse
 {
     /// <summary>
-    /// 查询得到的电影院实体列表
+    /// 修改后电影实体
     /// </summary>
-    [JsonPropertyName("cinemas")] public List<Cinemas?>? Cinemas { get; set; }
+    [JsonPropertyName("movies")] public Movie? Movie { get; set; }
 
     /// <summary>
     /// 响应状态
@@ -114,30 +140,9 @@ public class GetCinemaByNameResponse : IAPIResponse
 }
 
 /// <summary>
-/// 通过特点查询电影院响应,支持模糊查找
+/// 通过id删除对应电影
 /// </summary>
-public class GetCinemaByFeatureResponse : IAPIResponse
-{
-    /// <summary>
-    /// 查询得到的电影院实体列表
-    /// </summary>
-    [JsonPropertyName("cinemas")] public List<Cinemas?>? Cinemas { get; set; }
-
-    /// <summary>
-    /// 响应状态
-    /// </summary>
-    public string Status { get; set; } = String.Empty;
-
-    /// <summary>
-    /// 响应消息
-    /// </summary>
-    public string Message { get; set; } = String.Empty;
-}
-
-/// <summary>
-/// 通过id删除对应电影院
-/// </summary>
-public class DeleteCinemaByIdResponse : IAPIResponse
+public class DeleteMovieByIdResponse : IAPIResponse
 {
     /// <summary>
     /// 响应状态
@@ -149,4 +154,3 @@ public class DeleteCinemaByIdResponse : IAPIResponse
     /// </summary>
     public string Message { get; set; } = String.Empty;
 }
-

@@ -139,24 +139,16 @@
         <member name="M:Cinema.Controllers.CustomerController.GetSelfInfo">
             <summary>
             获取已经登录的用户的信息（要求必须已经登录）。
-            </summary>
-            <returns>
-            用户名称
-            </returns>
-            <remarks>
-            前端调用方法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
-            </remarks>
-        </member>
-        <member name="M:Cinema.Controllers.CustomerController.CustomerLogin(Cinema.DTO.CustomerService.CustomerLoginRequest)">
             <summary>
             登录
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.CustomerController.Register(Cinema.DTO.CustomerService.RegisterRequest)">
+
             <summary>
             注册
             </summary>
         </member>
+
         <member name="T:Cinema.Controllers.ManagerController">
             <summary>
             影院经理相关接口
@@ -334,11 +326,13 @@
             电影院实体
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Status">
             <summary>
             响应状态
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CinemaService.AddCinemaResponse.Message">
             <summary>
             响应消息
@@ -424,46 +418,55 @@
             响应消息
             </summary>
         </member>
+
         <member name="T:Cinema.DTO.CustomerService.CustomerLoginRequest">
             <summary>
             登录请求
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.UserName">
             <summary>
             用户名
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginRequest.Password">
             <summary>
             密码
             </summary>
         </member>
+
         <member name="T:Cinema.DTO.CustomerService.CustomerLoginResponse">
             <summary>
             登录结果
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.UserData">
             <summary>
             用户数据
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Token">
             <summary>
             令牌，用法：加上HTTP请求头：Authorization: Bearer [令牌]（所有需要身份验证的地方都这样调用）
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Status">
             <summary>
             状态,10000为成功
             </summary>
         </member>
+
         <member name="P:Cinema.DTO.CustomerService.CustomerLoginResponse.Message">
             <summary>
             信息
             </summary>
         </member>
+
         <member name="T:Cinema.DTO.CustomerService.RegisterRequest">
             <summary>
             注册请求
@@ -1353,6 +1356,7 @@
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
         </member>
+
         <member name="M:Cinema.Services.CinemaDbQCosCredentialProvider.GetCredential">
             <summary>
             生成临时凭据
