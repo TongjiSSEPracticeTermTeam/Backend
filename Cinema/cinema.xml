@@ -68,19 +68,41 @@
             电影院实体类控制器类
             </summary>
         </member>
-        <member name="M:Cinema.Controllers.CinemaController.#ctor(Cinema.Entities.CinemaDb)">
+        <member name="M:Cinema.Controllers.CinemaController.#ctor(Cinema.Entities.CinemaDb,Microsoft.Extensions.Logging.ILogger{Cinema.Controllers.CinemaController})">
             <summary>
             控制器构造函数
             </summary>
             <param name="db"></param>
+            <param name="logger"></param>
         </member>
-        <member name="M:Cinema.Controllers.CinemaController.GetCinemas">
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemasAll">
             <summary>
             获得所有电影院信息
             </summary>
             <returns>
             返回电影院json列表
             </returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemasLength">
+            <summary>
+            管理端接口，获取所有电影的数量
+            </summary>
+            <returns></returns>
+            <remarks>用于分页</remarks>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.AddMovie(Cinema.DTO.CinemaService.CinemaDTO)">
+            <summary>
+            管理端接口，添加电影院
+            </summary>
+            <param name="cinema"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.CinemaController.EditMovie(Cinema.DTO.CinemaService.CinemaDTO)">
+            <summary>
+            管理端接口，修改电影院信息
+            </summary>
+            <param name="cinema"></param>
+            <returns></returns>
         </member>
         <member name="M:Cinema.Controllers.CinemaController.GetCinemaById(System.String)">
             <summary>
@@ -116,12 +138,12 @@
             <param name="feature"></param>
             <returns></returns>
         </member>
-        <member name="M:Cinema.Controllers.CinemaController.AddCinema(Cinema.DTO.CinemaService.AddCinemaRequest)">
+        <member name="M:Cinema.Controllers.CinemaController.DeleteCinemaById(System.String)">
             <summary>
-            添加电影院
+            通过ID删除对应电影院
             </summary>
-            <param name="request"></param>
-            <returns>响应信息</returns>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:Cinema.Controllers.CustomerController">
             <summary>
@@ -157,6 +179,29 @@
             注册
             </summary>
         </member>
+        <member name="T:Cinema.Controllers.ImageController">
+            <summary>
+            图片相关接口
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.ImageController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.ImageController.UploadImage(System.String,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            图片上传
+            </summary>
+            <param name="prefix"></param>
+            <param name="imageName">【可选】意向图片名，留空使用GUID</param>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
         <member name="T:Cinema.Controllers.ManagerController">
             <summary>
             影院经理相关接口
@@ -181,6 +226,116 @@
             <summary>
             登录
             </summary>
+        </member>
+        <member name="T:Cinema.Controllers.MoviesController">
+            <summary>
+            电影相关控制器
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Logging.ILogger{Cinema.Controllers.MoviesController},Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="logger"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.GetMovies(System.UInt64,System.UInt64)">
+            <summary>
+            管理端接口，获取所有电影的信息（分页）
+            </summary>
+            <returns></returns>
+            <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.GetMoviesLength">
+            <summary>
+            管理端接口，获取所有电影的数量
+            </summary>
+            <returns></returns>
+            <remarks>用于分页</remarks>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.AddMovie(Cinema.DTO.MoviesService.MovieDTO)">
+            <summary>
+            管理端接口，添加电影
+            </summary>
+            <param name="movie"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.EditMovie(Cinema.DTO.MoviesService.MovieDTO)">
+            <summary>
+            管理端接口，修改电影信息
+            </summary>
+            <param name="movie"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.ChangePoster(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传电影海报
+            </summary>
+            <returns>电影海报的URL</returns>
+            <remarks>文件从请求体中上传</remarks>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.DeleteMovie(System.String)">
+            <summary>
+            删除电影
+            </summary>
+            <param name="movieId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Cinema.Controllers.StaffController">
+            <summary>
+            影人控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Logging.ILogger{Cinema.Controllers.StaffController},Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="logger"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.GetStaffs">
+            <summary>
+            获得所有影人信息
+            </summary>
+            <returns>
+            返回影人json列表
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.GetStaffById(System.String)">
+            <summary>
+            根据id获得指定影人信息
+            </summary>
+            <param name="id">影人id</param>
+            <returns>
+            返回对应影人json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.DeleteStaffById(System.String)">
+            <summary>
+            通过ID删除对应影人
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.AddStaff(Cinema.DTO.StaffService.StaffDTO)">
+            <summary>
+            添加影人
+            </summary>
+            <param name="staff"></param>
+            <returns>响应信息</returns>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.UpdateStaff(Cinema.DTO.StaffService.StaffDTO)">
+            <summary>
+            修改影人
+            </summary>
+            <param name="staff"></param>
+            <returns>响应信息</returns>
         </member>
         <member name="T:Cinema.Controllers.UserGeneralController">
             <summary>
@@ -244,6 +399,23 @@
             信息
             </summary>
         </member>
+        <member name="T:Cinema.DTO.APIDataResponse`1">
+            <summary>
+            API返回数据，带有一个Data
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.APIDataResponse`1.Data">
+            <summary>
+            返回的Data
+            </summary>
+        </member>
+        <member name="M:Cinema.DTO.APIDataResponse`1.BuildAPIDataSuccessResponse(`0)">
+            <summary>
+            构造一个成功的API Data结果并返回
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
         <member name="T:Cinema.DTO.IAPIResponse">
             <summary>
             API返回数据的公共接口
@@ -274,6 +446,20 @@
             返回给前端的信息
             </summary>
         </member>
+        <member name="M:Cinema.DTO.APIResponse.Failaure(System.String,System.String)">
+            <summary>
+            制作失败结果
+            </summary>
+            <param name="Status"></param>
+            <param name="Message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.DTO.APIResponse.Success">
+            <summary>
+            制作成功结果
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Cinema.DTO.AvatarService.AvatarResponse">
             <summary>
             获取头像
@@ -289,39 +475,49 @@
             头像链接
             </summary>
         </member>
-        <member name="T:Cinema.DTO.CinemaService.AddCinemaRequest">
+        <member name="T:Cinema.DTO.CinemaService.CinemaDTO">
             <summary>
-            添加电影院的请求体定义
+            电影院DTO
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaId">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.CinemaId">
             <summary>
-            电影院id
+            cinema_id 主键
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Location">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.Location">
             <summary>
-            电影位置
+            位置
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Name">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.Name">
             <summary>
-            电影名字
+            名字
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.ManagerId">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.ManagerId">
             <summary>
             管理员id
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.CinemaImageUrl">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.CinemaImageUrl">
             <summary>
-            电影封面外链地址
+            电影封面Url
             </summary>
         </member>
-        <member name="P:Cinema.DTO.CinemaService.AddCinemaRequest.Feature">
+        <member name="P:Cinema.DTO.CinemaService.CinemaDTO.Feature">
             <summary>
-            电影特点
+            电影特点字符串，不同特点用逗号分割
+            </summary>
+        </member>
+        <member name="M:Cinema.DTO.CinemaService.CinemaDTO.#ctor">
+            <summary>
+            默认构造
+            </summary>
+        </member>
+        <member name="M:Cinema.DTO.CinemaService.CinemaDTO.#ctor(Cinema.Entities.Cinemas)">
+            <summary>
+            由实体类构造
             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.AddCinemaResponse">
@@ -542,6 +738,106 @@
         <member name="P:Cinema.DTO.ManagerService.ManagerLoginResponse.Message">
             <summary>
             信息
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.MoviesService.MovieDTO">
+            <summary>
+            电影的DTO
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.MovieId">
+            <summary>
+            电影ID
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.Duration">
+            <summary>
+            时长
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.Instruction">
+            <summary>
+            介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.Score">
+            <summary>
+            分数
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.PostUrl">
+            <summary>
+            海报图片
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.Tags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.ReleaseDate">
+            <summary>
+            上映日期
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.MovieDTO.RemovalDate">
+            <summary>
+            到期日期
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.MoviesService.QueryMovieNumResponse">
+            <summary>
+            获取电影数量的返回值
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.QueryMovieNumResponse.Length">
+            <summary>
+            电影数据
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.MoviesService.QueryMovieResponse">
+            <summary>
+            获取电影的返回值
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.MoviesService.QueryMovieResponse.Data">
+            <summary>
+            电影数据
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.StaffService.StaffDTO">
+            <summary>
+            演职员DTO
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.StaffDTO.StaffId">
+            <summary>
+            演员Id
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.StaffDTO.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.StaffDTO.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.StaffDTO.Introduction">
+            <summary>
+            介绍
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.StaffService.StaffDTO.ImageUrl">
+            <summary>
+            图片链接
             </summary>
         </member>
         <member name="T:Cinema.DTO.UserGeneralService.CurrentUserResponse">
@@ -1352,6 +1648,28 @@
             </summary>
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
+        </member>
+        <member name="T:Cinema.Services.ImageService">
+            <summary>
+            图片服务
+            </summary>
+        </member>
+        <member name="M:Cinema.Services.ImageService.PreprocessUploadedImage(System.String)">
+            <summary>
+            预处理外部上传的图片
+            </summary>
+            <param name="fileName">图片临时保存的地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Services.ImageService.UploadImage(System.String,System.String,Microsoft.AspNetCore.Http.IFormFile,Cinema.Services.QCosSrvice)">
+            <summary>
+            提供上传图片的接口
+            </summary>
+            <param name="prefix">前缀，例如“cinema/”，这样表示保存的图片是影院的照片</param>
+            <param name="imageName">【可选】意向图片名，留空使用GUID</param>
+            <param name="file">来自HTTP请求的文件</param>
+            <param name="qCosSrvice">当前控制器类的QCosService单例</param>
+            <returns></returns>
         </member>
         <member name="M:Cinema.Services.CinemaDbQCosCredentialProvider.GetCredential">
             <summary>

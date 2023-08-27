@@ -32,4 +32,32 @@ public class APIResponse : IAPIResponse
     /// 返回给前端的信息
     /// </summary>
     [JsonPropertyName("message")] public string Message { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制作失败结果
+    /// </summary>
+    /// <param name="Status"></param>
+    /// <param name="Message"></param>
+    /// <returns></returns>
+    public static APIResponse Failaure(string Status, string Message)
+    {
+        return new APIResponse
+        {
+            Status = Status,
+            Message = Message
+        };
+    }
+
+    /// <summary>
+    /// 制作成功结果
+    /// </summary>
+    /// <returns></returns>
+    public static APIResponse Success()
+    {
+        return new APIResponse
+        {
+            Status = "10000",
+            Message = "成功"
+        };
+    }
 }

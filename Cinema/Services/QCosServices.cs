@@ -30,7 +30,7 @@ namespace Cinema.Services
         static TempCredential GetCredential()
         {
             const string secretId = "AKIDdHwdHtV3Vr1wc4IRO8euvhEVcWBbmiQs";
-            string secretKey = Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY")!;
+            string secretKey = Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY")!.TrimEnd('\r', '\n');
             const string allowPrefix = "userdata/*";
             string[] allowActions = new string[] {
                 "name/cos:PutObject",

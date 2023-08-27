@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -99,8 +101,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RegUser", policy => policy.RequireClaim(ClaimTypes.Name));
     options.AddPolicy("Customer",
-        policy => policy.RequireClaim(ClaimTypes.Role, UserRole.User.ToString(), UserRole.CinemaAdmin.ToString(),
-            UserRole.SysAdmin.ToString()));
+        policy => policy.RequireClaim(ClaimTypes.Role, UserRole.User.ToString()));
     options.AddPolicy("CinemaAdmin",
         policy => policy.RequireClaim(ClaimTypes.Role, UserRole.CinemaAdmin.ToString(), UserRole.SysAdmin.ToString()));
     options.AddPolicy("SysAdmin", policy => policy.RequireClaim(ClaimTypes.Role, UserRole.SysAdmin.ToString()));

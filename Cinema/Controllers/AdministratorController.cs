@@ -75,7 +75,7 @@ public class AdministratorController : ControllerBase
             {
                 Status = "10000",
                 Message = "登录成功",
-                Token = _jwtHelper.GenerateToken(administrator.Id, UserRole.CinemaAdmin),
+                Token = _jwtHelper.GenerateToken(administrator.Id, UserRole.SysAdmin),
                 UserData = administrator
             };
         return new AdminLoginResponse
