@@ -1,5 +1,6 @@
 ﻿using Cinema.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace Cinema.Services
@@ -59,7 +60,7 @@ namespace Cinema.Services
                 return APIResponse.Failaure("4000", "不是有效的图片");
             }
 
-            var imagePath = $"userdata/{prefix}/{imageName ?? Guid.NewGuid().ToString()}.jpg";
+            var imagePath = $"userdata/{prefix}/{(!imageName.IsNullOrEmpty() ? imageName : Guid.NewGuid().ToString())}.jpg";
             string? imageUrl;
             try
             {

@@ -46,7 +46,8 @@ namespace Cinema.Controllers
         /// <returns></returns>
         [HttpPut]
         [Authorize(Policy = "CinemaAdmin")]
-        public async Task<IAPIResponse> UploadImage([FromForm] string prefix, [FromForm] string? imageName, [FromForm] IFormFile file)
+        [ProducesDefaultResponseType(typeof(APIDataResponse<string>))]
+        public async Task<IAPIResponse> UploadImage([FromForm] string prefix, [FromForm] string? imageName, IFormFile file)
         {
             return await ImageService.UploadImage(prefix, imageName, file, _qCosSrvice);
         }

@@ -112,7 +112,8 @@ namespace Cinema.Controllers
                         Message = "成功",
                         Type = "SysAdmin",
                         Username = admin.Id,
-                        Avatar = admin.AvatarUrl
+                        Avatar = admin.AvatarUrl,
+                        DisplayName = $"系统管理员{admin.Id}"
                     };
                 default:
                     return new APIResponse
