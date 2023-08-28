@@ -174,48 +174,12 @@ namespace Cinema.Controllers
                 };
             }
 
-            if(file==null || file.Length==0)
+            var subAPIResponse = await ImageService.UploadImage("avatar", name, file, _qCosSrvice);
+            if (subAPIResponse.Status != "10000")
             {
-                return new APIResponse
-                {
-                    Status = "4002",
-                    Message = "未上传文件"
-                };
+                return subAPIResponse;
             }
-
-            // Save to temp file
-            var tempFileName = Path.GetTempFileName();
-            await using (var tempFile = new FileStream(tempFileName, FileMode.Create))
-            {
-                await file.CopyToAsync(tempFile);
-            }
-
-            var isValidImage = PreprocessImage(tempFileName);
-            if (!isValidImage)
-            {
-                return new APIResponse
-                {
-                    Status = "4000",
-                    Message = "不是有效的图片"
-                };
-            }
-
-            var avatarPath = String.Format("userdata/avatar/{0}.jpg", name);
-            string? avatarUrl;
-            try
-            {
-                avatarUrl = await _qCosSrvice.UploadFile(avatarPath, tempFileName);
-            }
-            catch
-            {
-                System.IO.File.Delete(tempFileName);
-                return new APIResponse
-                {
-                    Status = "4000",
-                    Message = "上传头像失败（内部错误）"
-                };
-            }
-            System.IO.File.Delete(tempFileName);
+            var avatarUrl = ((APIDataResponse<string>)subAPIResponse).Data;
 
             var role = (UserRole)Enum.Parse(typeof(UserRole), roleByString);
             switch (role)
@@ -268,22 +232,6 @@ namespace Cinema.Controllers
                 HasAvatar = true,
                 Url = avatarUrl
             };
-        }
-
-        private static bool PreprocessImage(string fileName)
-        {
-            try
-            {
-                using var image = Image.Load(fileName);
-                image.Save(fileName, new JpegEncoder() { 
-                    Quality = 80
-                });
-                return true;
-            }
-            catch 
-            {
-                return false;
-            }
         }
     }
 }

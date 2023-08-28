@@ -1,7 +1,11 @@
+using Cinema.DTO;
 using Cinema.DTO.CinemaService;
+using Cinema.DTO.MoviesService;
 using Cinema.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Cinema.Controllers;
 
@@ -13,14 +17,24 @@ namespace Cinema.Controllers;
 public class CinemaController
 {
     private readonly CinemaDb _db;
+    private readonly ILogger _logger;
+
+    private static int _cinemaId;
 
     /// <summary>
     /// 控制器构造函数
     /// </summary>
     /// <param name="db"></param>
-    public CinemaController(CinemaDb db)
+    /// <param name="logger"></param>
+    public CinemaController(CinemaDb db, ILogger<CinemaController> logger)
     {
         _db = db;
+        _logger = logger;
+
+        if (_cinemaId == 0)
+        {
+            _cinemaId = int.Parse(_db.Cinemas.Max(m => m.CinemaId) ?? "0");
+        }
     }
 
     /// <summary>
@@ -30,9 +44,109 @@ public class CinemaController
     /// 返回电影院json列表
     /// </returns>
     [HttpGet]
-    public async Task<IActionResult> GetCinemas()
+    [ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
+    public async Task<IAPIResponse> GetCinemasAll()
     {
-        return new JsonResult(await _db.Cinemas.ToListAsync());
+        var cinemas = await _db.Cinemas.ToArrayAsync();
+        var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
+        return APIDataResponse<List<CinemaDTO>>.BuildAPIDataSuccessResponse(cinemaDTOs);
+    }
+
+//    /// <summary>
+//    /// 管理端接口，获取所有电影的信息（分页）
+//    /// </summary>
+//    /// <returns></returns>
+//    /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
+//    [HttpGet]
+//    [Authorize(Policy = "CinemaAdmin")]
+//    [ProducesDefaultResponseType(typeof(APIDataResponse<Cinemas[]>))]
+//    public async Task<IAPIResponse> GetCinemas([FromQuery] ulong pageSize, [FromQuery] ulong pageNumber)
+//    {
+//        var movies = await _db.Cinemas
+//                .Skip((int)((pageNumber - 1ul) * pageSize))
+//                .Take((int)pageSize)
+//                .OrderBy(m => m.CinemaId)
+//                .ToArrayAsync();
+//        return APIDataResponse<Cinemas[]>.BuildAPIDataSuccessResponse(movies);
+//    }
+
+    /// <summary>
+    /// 管理端接口，获取所有电影的数量
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>用于分页</remarks>
+    [HttpGet("length")]
+    [Authorize(Policy = "CinemaAdmin")]
+    [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
+    public async Task<IAPIResponse> GetCinemasLength()
+    {
+        var length = await _db.Cinemas.CountAsync();
+        return APIDataResponse<int>.BuildAPIDataSuccessResponse(length);
+    }
+
+    /// <summary>
+    /// 管理端接口，添加电影院
+    /// </summary>
+    /// <param name="cinema"></param>
+    /// <returns></returns>
+    [HttpPut]
+    [Authorize(Policy = "SysAdmin")]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> AddMovie([FromBody] CinemaDTO cinema)
+    {
+        var cinemaId = Interlocked.Increment(ref _cinemaId);
+        cinema.CinemaId = $"{cinemaId:000000}";
+
+        var cinemaEntity = new Cinemas
+        {
+            CinemaId = cinema.CinemaId,
+            Name = cinema.Name,
+            Location = cinema.Location,
+            ManagerId = cinema.ManagerId,
+            CinemaImageUrl = cinema.CinemaImageUrl,
+            Feature = cinema.Feature,
+        };
+
+        await _db.Cinemas.AddAsync(cinemaEntity);
+        await _db.SaveChangesAsync();
+        return APIResponse.Success();
+    }
+
+    /// <summary>
+    /// 管理端接口，修改电影院信息
+    /// </summary>
+    /// <param name="cinema"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Authorize(Policy = "CinemaAdmin")]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> EditMovie([FromBody] CinemaDTO cinema)
+    {
+        var cinemaEntity = await _db.Cinemas.FindAsync(cinema.CinemaId);
+        if (cinemaEntity == null)
+        {
+            return APIResponse.Failaure("4000", "电影院不存在");
+        }
+
+        cinemaEntity.CinemaId = cinema.CinemaId;
+        cinemaEntity.Name = cinema.Name;
+        cinemaEntity.Location = cinema.Location;
+        cinemaEntity.ManagerId = cinema.ManagerId;
+        cinemaEntity.CinemaImageUrl = cinema.CinemaImageUrl;
+        cinemaEntity.Feature = cinema.Feature;
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch
+        {
+            return APIResponse.Failaure("5000", "服务器内部错误");
+        }
+
+        _db.Cinemas.Update(cinemaEntity);
+        await _db.SaveChangesAsync();
+        return APIResponse.Success();
     }
 
     /// <summary>
@@ -42,7 +156,7 @@ public class CinemaController
     /// <returns>
     /// 返回电影院json
     /// </returns>
-    [HttpGet("getCinemaById/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetCinemaById(string id)
     {
         var cinema = await _db.Cinemas.FindAsync(id);
@@ -70,7 +184,7 @@ public class CinemaController
     /// <returns>
     /// 返回电影院json
     /// </returns>
-    [HttpGet("getCinemaByManagerId/{id}")]
+    [HttpGet("byManagerId/{id}")]
     public async Task<IActionResult> GetCinemaByManagerId(string id)
     {
         var cinema = await _db.Cinemas.FirstOrDefaultAsync(c => c.ManagerId == id);
@@ -98,11 +212,11 @@ public class CinemaController
     /// <returns>
     /// 返回电影院json
     /// </returns>
-    [HttpGet("getCinemaByName/{name}")]
+    [HttpGet("byName/{name}")]
     public async Task<IActionResult> GetCinemaByName(string name)
     {
         var cinemas = await _db.Cinemas.Where(c => c.Name.Contains(name)).ToListAsync();
-        if (cinemas == null || cinemas!.Count == 0)
+        if (cinemas!.Count == 0)
         {
             return new JsonResult(new GetCinemaByNameResponse
             {
@@ -122,73 +236,42 @@ public class CinemaController
 
     }
 
-
-
-
     /// <summary>
     /// 通过特点搜索到电影院列表
     /// </summary>
     /// <param name="feature"></param>
     /// <returns></returns>
-    [HttpGet("getCinemaByFeature/{feature}")]
-    public async Task<IActionResult> GetCinemaByFeature(string feature)
+    [HttpGet("byFeature/{feature}")]
+    public async Task<IAPIResponse> GetCinemaByFeature(string feature)
     {
         var cinemas = await _db.Cinemas.Where(c => c.Feature != null && c.Feature.Contains(feature)).ToListAsync();
 
         if (cinemas.Count == 0)
         {
-            return new JsonResult(new GetCinemaByFeatureResponse
-            {
-                Status = "4001",
-                Message = "电影院不存在"
-            });
+            return APIResponse.Failaure("4001","电影院不存在");
         }
 
-        var response = new GetCinemaByFeatureResponse
-        {
-            Status = "10000",
-            Message = "查询成功",
-            Cinemas = cinemas.Select(c => c != null ? (Cinemas?)c : null).ToList()
-        };
-
-        return new JsonResult(response);
+        return APIDataResponse<List<Cinemas>>.BuildAPIDataSuccessResponse(cinemas);
     }
 
     /// <summary>
-    /// 添加电影院
+    /// 通过ID删除对应电影院
     /// </summary>
-    /// <param name="request"></param>
-    /// <returns>响应信息</returns>
-    [HttpPut("add")]
-    public async Task<IActionResult> AddCinema(AddCinemaRequest request)
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<IAPIResponse> DeleteCinemaById([FromRoute] string id)
     {
-        try
+        var cinema = await _db.Cinemas.FindAsync(id);
+
+        if (cinema == null)
         {
-            var cinema = new Cinemas
-            {
-                CinemaId = request.CinemaId,
-                Location = request.Location,
-                Name = request.Name,
-                ManagerId = request.ManagerId,
-                CinemaImageUrl = request.CinemaImageUrl,
-                Feature = request.Feature
-            };
-            await _db.AddAsync(cinema);
-            await _db.SaveChangesAsync();
-            return new JsonResult(new AddCinemaResponse
-            {
-                Status = "10000",
-                Message = "添加成功",
-                Cinema = cinema
-            });
+            return APIResponse.Failaure("4001","电影院不存在");
         }
-        catch (Exception ex)
-        {
-            return new JsonResult(new AddCinemaResponse
-            {
-                Status = "10001",
-                Message = "添加失败：" + ex.Message
-            });
-        }
+
+        _db.Cinemas.Remove(cinema);
+        await _db.SaveChangesAsync();
+
+        return APIResponse.Success();
     }
 }
