@@ -10,3 +10,4 @@ riderModule.iml
 /Cinema/wwwroot
 /.vs
 /Cinema/cinema.xml
+.env
