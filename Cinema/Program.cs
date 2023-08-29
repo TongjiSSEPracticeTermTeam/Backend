@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -68,6 +69,15 @@ var oracleConnectionString = Environment.GetEnvironmentVariable("CINEMA_DATABASE
 Console.WriteLine(oracleConnectionString);
 builder.Services.AddDbContext<CinemaDb>(options =>
     options.UseOracle(oracleConnectionString));
+
+// 配置Redis
+if (Environment.GetEnvironmentVariable("CINEMA_REDIS") == null)
+    throw new InvalidOperationException("请配置Redis连接信息");
+var redisConnectionString = Environment.GetEnvironmentVariable("CINEMA_REDIS")!.TrimEnd('\r', '\n');
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+
+// 配置票房服务
+builder.Services.AddScoped<BoxOfficeServices>();
 
 // 配置腾讯云QCOS
 if (Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY") == null)

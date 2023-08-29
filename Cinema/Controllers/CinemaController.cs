@@ -49,7 +49,7 @@ public class CinemaController
     {
         var cinemas = await _db.Cinemas.ToArrayAsync();
         var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
-        return APIDataResponse<List<CinemaDTO>>.BuildAPIDataSuccessResponse(cinemaDTOs);
+        return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
     }
 
 //    /// <summary>
@@ -81,7 +81,7 @@ public class CinemaController
     public async Task<IAPIResponse> GetCinemasLength()
     {
         var length = await _db.Cinemas.CountAsync();
-        return APIDataResponse<int>.BuildAPIDataSuccessResponse(length);
+        return APIDataResponse<int>.Success(length);
     }
 
     /// <summary>
@@ -251,7 +251,7 @@ public class CinemaController
             return APIResponse.Failaure("4001","电影院不存在");
         }
 
-        return APIDataResponse<List<Cinemas>>.BuildAPIDataSuccessResponse(cinemas);
+        return APIDataResponse<List<Cinemas>>.Success(cinemas);
     }
 
     /// <summary>

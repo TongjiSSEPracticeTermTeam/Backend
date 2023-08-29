@@ -17,7 +17,7 @@ public class APIDataResponse<T> : APIResponse
     /// </summary>
     /// <param name="Data"></param>
     /// <returns></returns>
-    public static APIDataResponse<T> BuildAPIDataSuccessResponse(T Data)
+    public static APIDataResponse<T> Success(T Data)
     {
         return new APIDataResponse<T>
         {
