@@ -26,4 +26,19 @@ public class APIDataResponse<T> : APIResponse
             Data = Data
         };
     }
+
+    /// <summary>
+    /// 构造一个失败的API Data结果返回
+    /// </summary>
+    /// <param name="Status"></param>
+    /// <param name="Message"></param>
+    /// <returns></returns>
+    //public static APIDataResponse<T> Failaure(string Status, string Message)
+    //{
+    //    return new APIDataResponse<T>
+    //    {
+    //        Status = Status,
+    //        Message = Message
+    //    };
+    //}
 }

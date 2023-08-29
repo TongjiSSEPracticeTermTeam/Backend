@@ -152,7 +152,7 @@
             <summary>
             通过特点搜索到电影院列表
             </summary>
-            <param name="feature"></param>
+            <param name="feature">电影院特点</param>
             <returns></returns>
         </member>
         <member name="M:Cinema.Controllers.CinemaController.DeleteCinemaById(System.String)">
@@ -294,11 +294,27 @@
             <returns>电影海报的URL</returns>
             <remarks>文件从请求体中上传</remarks>
         </member>
+        <member name="M:Cinema.Controllers.MoviesController.GetMoviesByName(System.String)">
+            <summary>
+            根据电影名获得对应电影信息，模糊查询
+            </summary>
+            <param name="name">电影名称</param>
+            <returns>
+            返回电影列表json
+            </returns>
+        </member>
+        <member name="M:Cinema.Controllers.MoviesController.GetMovieById(System.String)">
+            <summary>
+            根据电影id获得对应电影
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Cinema.Controllers.MoviesController.DeleteMovie(System.String)">
             <summary>
-            删除电影
+            通过ID删除电影
             </summary>
-            <param name="movieId"></param>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:Cinema.Controllers.StaffController">
@@ -882,6 +898,17 @@
             到期日期
             </summary>
         </member>
+        <member name="M:Cinema.DTO.MoviesService.MovieDTO.#ctor">
+            <summary>
+            默认构造
+            </summary>
+        </member>
+        <member name="M:Cinema.DTO.MoviesService.MovieDTO.#ctor(Cinema.Entities.Movie)">
+            <summary>
+            实体构造
+            </summary>
+            <param name="entity"></param>
+        </member>
         <member name="T:Cinema.DTO.MoviesService.QueryMovieNumResponse">
             <summary>
             获取电影数量的返回值
@@ -894,7 +921,7 @@
         </member>
         <member name="T:Cinema.DTO.MoviesService.QueryMovieResponse">
             <summary>
-            获取电影的返回值
+            获取电影数组的返回值
             </summary>
         </member>
         <member name="P:Cinema.DTO.MoviesService.QueryMovieResponse.Data">
@@ -931,6 +958,17 @@
             <summary>
             图片链接
             </summary>
+        </member>
+        <member name="M:Cinema.DTO.StaffService.StaffDTO.#ctor">
+            <summary>
+            默认构造
+            </summary>
+        </member>
+        <member name="M:Cinema.DTO.StaffService.StaffDTO.#ctor(Cinema.Entities.Staff)">
+            <summary>
+            实体构造
+            </summary>
+            <param name="entity"></param>
         </member>
         <member name="T:Cinema.DTO.UserGeneralService.CurrentUserResponse">
             <summary>

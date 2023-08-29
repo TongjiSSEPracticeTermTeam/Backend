@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Cinema.Entities;
 
 namespace Cinema.DTO.MoviesService
 {
@@ -62,5 +63,30 @@ namespace Cinema.DTO.MoviesService
         /// </summary>
         [JsonPropertyName("removalDate")]
         public DateTime RemovalDate { get; set; }
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public MovieDTO()
+        {
+        }
+
+        /// <summary>
+        /// 实体构造
+        /// </summary>
+        /// <param name="entity"></param>
+        public MovieDTO(Movie entity)
+        {
+            MovieId = entity.MovieId;
+            Name = entity.Name;
+            Duration = entity.Duration;
+            Instruction = entity.Instruction;
+            Score = entity.Score;
+            PostUrl = entity.PostUrl;
+            Tags = entity.Tags;
+            ReleaseDate = entity.ReleaseDate;
+            RemovalDate = entity.RemovalDate;
+        }
+
     }
 }
