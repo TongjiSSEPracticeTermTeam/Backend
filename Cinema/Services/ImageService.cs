@@ -72,7 +72,7 @@ namespace Cinema.Services
                 return APIResponse.Failaure("4000", "上传图片失败（内部错误）");
             }
             System.IO.File.Delete(tempFileName);
-            return APIDataResponse<string>.BuildAPIDataSuccessResponse(imageUrl);
+            return APIDataResponse<string>.Success(imageUrl);
         }
     }
 }

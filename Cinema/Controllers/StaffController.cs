@@ -61,7 +61,7 @@ namespace Cinema.Controllers
             var staffs = await _db.Staffs.ToListAsync();
             staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
             //return new JsonResult(await _db.Staffs.ToListAsync());
-            return APIDataResponse<List<Staff>>.BuildAPIDataSuccessResponse(staffs);
+            return APIDataResponse<List<Staff>>.Success(staffs);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("4001", "该影人不存在");
             }
 
-            return APIDataResponse<Staff>.BuildAPIDataSuccessResponse(staff);
+            return APIDataResponse<Staff>.Success(staff);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Cinema.Controllers
                 }
                 await _db.Staffs.AddAsync(staffEntity);
                 await _db.SaveChangesAsync();
-                return APIDataResponse<Staff>.BuildAPIDataSuccessResponse(staffEntity);
+                return APIDataResponse<Staff>.Success(staffEntity);
             }
             catch
             {
@@ -180,7 +180,7 @@ namespace Cinema.Controllers
 
                 _db.Staffs.Update(staffEntity);
                 await _db.SaveChangesAsync();
-                return APIDataResponse<Staff>.BuildAPIDataSuccessResponse(staffEntity);
+                return APIDataResponse<Staff>.Success(staffEntity);
             }
             catch
             {

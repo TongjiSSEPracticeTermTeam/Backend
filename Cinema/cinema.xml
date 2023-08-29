@@ -63,6 +63,23 @@
             <returns>新头像的URL</returns>
             <remarks>文件从请求体中上传</remarks>
         </member>
+        <member name="T:Cinema.Controllers.BoxOfficeController">
+            <summary>
+            票房控制器
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.BoxOfficeController.#ctor(Cinema.Services.BoxOfficeServices)">
+            <summary>
+            初始化
+            </summary>
+            <param name="boxOfficeServices"></param>
+        </member>
+        <member name="M:Cinema.Controllers.BoxOfficeController.GetBoxOffice">
+            <summary>
+            获取当日票房数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Cinema.Controllers.CinemaController">
             <summary>
             电影院实体类控制器类
@@ -409,7 +426,7 @@
             返回的Data
             </summary>
         </member>
-        <member name="M:Cinema.DTO.APIDataResponse`1.BuildAPIDataSuccessResponse(`0)">
+        <member name="M:Cinema.DTO.APIDataResponse`1.Success(`0)">
             <summary>
             构造一个成功的API Data结果并返回
             </summary>
@@ -473,6 +490,81 @@
         <member name="P:Cinema.DTO.AvatarService.AvatarResponse.Url">
             <summary>
             头像链接
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.BoxOfficeService.BoxOfficeData">
+            <summary>
+            票房数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.BoxOfficeData.GereralData">
+            <summary>
+            通用数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.BoxOfficeData.MovieData">
+            <summary>
+            影片数据
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.BoxOfficeService.GeneralData">
+            <summary>
+            通用数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.GeneralData.UpdateTime">
+            <summary>
+            数据更新时间
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.GeneralData.SumBoxOffice">
+            <summary>
+            总票房
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.GeneralData.SumShowCount">
+            <summary>
+            总场次
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.GeneralData.SumAudienceCount">
+            <summary>
+            总人次
+            </summary>
+        </member>
+        <member name="T:Cinema.DTO.BoxOfficeService.MovieData">
+            <summary>
+            影片数据
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.MovieName">
+            <summary>
+            影片名称
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.Irank">
+            <summary>
+            排名
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.EnMovieName">
+            <summary>
+            英文电影名称
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.BoxOffice">
+            <summary>
+            当日票房
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.ShowCount">
+            <summary>
+            当日场次
+            </summary>
+        </member>
+        <member name="P:Cinema.DTO.BoxOfficeService.MovieData.AudienceCount">
+            <summary>
+            当日观众
             </summary>
         </member>
         <member name="T:Cinema.DTO.CinemaService.CinemaDTO">
@@ -1584,6 +1676,17 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="T:Cinema.Helpers.HttpHelper">
+            <summary>
+            HTTP请求的相关工具类
+            </summary>
+        </member>
+        <member name="M:Cinema.Helpers.HttpHelper.GetHttpClient">
+            <summary>
+            获取HttpClient实例
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Cinema.Helpers.UserRole">
             <summary>
             用户等级，鉴权系统用
@@ -1648,6 +1751,23 @@
             </summary>
             <param name="input">待计算的字符串</param>
             <returns>结果</returns>
+        </member>
+        <member name="T:Cinema.Services.BoxOfficeServices">
+            <summary>
+            票房服务类
+            </summary>
+        </member>
+        <member name="M:Cinema.Services.BoxOfficeServices.#ctor(StackExchange.Redis.IConnectionMultiplexer)">
+            <summary>
+            初始化
+            </summary>
+            <param name="redis"></param>
+        </member>
+        <member name="M:Cinema.Services.BoxOfficeServices.GetBoxOfficeData">
+            <summary>
+            获取当日票房数据
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Cinema.Services.ImageService">
             <summary>

@@ -204,7 +204,7 @@ namespace Cinema.Controllers
             System.IO.File.Delete(tempFileName);
 
             _logger.LogInformation("Poster upload request succesfully completed.");
-            return APIDataResponse<string>.BuildAPIDataSuccessResponse(posterUrl);
+            return APIDataResponse<string>.Success(posterUrl);
         }
 
         /// <summary>
