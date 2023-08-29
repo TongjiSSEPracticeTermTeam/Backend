@@ -129,32 +129,37 @@ app.UseSwaggerUI(c =>
     // 如果使用JWT，启用授权按钮
     c.OAuthUsePkce();
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("CorsPolicy");
 }
 else
 {
+    // 手动处理路由回退
+    app.Use(async (context, next) =>
+    {
+        await next();
+
+        // 没有能够被中间件处理的路由全部交还给/index.html
+        if (context.Response.StatusCode == 404 &&
+            !Path.HasExtension(context.Request.Path.Value) &&
+            !context.Request.Path.Value!.StartsWith("/api/"))
+        {
+            context.Request.Path = "/index.html"; // 将路由重定向至index.html
+            await next();
+        }
+    });
+
     app.UseStaticFiles(new StaticFileOptions
     {
         FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/dist"))
     });
-    app.UseStatusCodePages(new StatusCodePagesOptions
-    {
-        HandleAsync = context =>
-        {
-            var response = context.HttpContext.Response;
-            if (response.StatusCode == 404) response.Redirect("/index.html");
-            return Task.CompletedTask;
-        }
-    });
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
