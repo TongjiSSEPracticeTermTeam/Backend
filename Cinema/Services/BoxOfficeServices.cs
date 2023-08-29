@@ -1,4 +1,4 @@
-﻿using Cinema.DTO.BoxOfficeService;
+using Cinema.DTO.BoxOfficeService;
 using Cinema.Helpers;
 using StackExchange.Redis;
 using System.Net.Http.Headers;
@@ -60,10 +60,10 @@ namespace Cinema.Services
                     var rawBoxOfficeData = QuickType.BoxOfficePerDay.FromJson(result)!;
 
                     var boxOfficeData = new BoxOfficeData();
-                    boxOfficeData.GereralData.UpdateTime = rawBoxOfficeData.Data.Table0[0].UpTime.ToString("T");
-                    boxOfficeData.GereralData.SumBoxOffice = rawBoxOfficeData.Data.Table0[0].SumBoxOffice;
-                    boxOfficeData.GereralData.SumShowCount = rawBoxOfficeData.Data.Table0[0].SumShowCount;
-                    boxOfficeData.GereralData.SumAudienceCount = rawBoxOfficeData.Data.Table0[0].SumAudienceCount;
+                    boxOfficeData.GeneralData.UpdateTime = rawBoxOfficeData.Data.Table0[0].UpTime.ToString("T");
+                    boxOfficeData.GeneralData.SumBoxOffice = rawBoxOfficeData.Data.Table0[0].SumBoxOffice;
+                    boxOfficeData.GeneralData.SumShowCount = rawBoxOfficeData.Data.Table0[0].SumShowCount;
+                    boxOfficeData.GeneralData.SumAudienceCount = rawBoxOfficeData.Data.Table0[0].SumAudienceCount;
 
                     boxOfficeData.MovieData = rawBoxOfficeData.Data.Table1.Select(t =>
                     new MovieData{
