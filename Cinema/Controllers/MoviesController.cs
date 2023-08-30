@@ -56,7 +56,6 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
-        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
         public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
@@ -75,7 +74,6 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
         [HttpGet("length")]
-        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
         public async Task<IAPIResponse> GetMoviesLength()
         {
