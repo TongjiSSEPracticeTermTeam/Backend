@@ -41,9 +41,9 @@ namespace Cinema.Entities
         [Required][Column("PUBLISH_TIME")] public DateTime PublishDate { get; set; } = new DateTime();
 
         /// <summary>
-        /// 阅读数
+        /// 是否展示
         /// </summary>
-        [Required][Column("DISPLAY")] public int Display { get; set; }
+        [Required][Column("DISPLAY")] public bool Display { get; set; }
 
         /// <summary>
         /// 所属电影id
