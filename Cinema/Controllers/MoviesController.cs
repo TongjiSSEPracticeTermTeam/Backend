@@ -1,5 +1,6 @@
 ﻿using Cinema.DTO;
 using Cinema.DTO.AvatarService;
+using Cinema.DTO.CinemaService;
 using Cinema.DTO.MoviesService;
 using Cinema.Entities;
 using Cinema.Helpers;
@@ -55,20 +56,16 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
-        [ProducesDefaultResponseType(typeof(QueryMovieResponse))]
-        public async Task<IAPIResponse> GetMovies([FromQuery] ulong pageSize, [FromQuery] ulong pageNumber)
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
             var movies = await _db.Movies
                     .Skip((int)((pageNumber - 1ul) * pageSize))
                     .Take((int)pageSize)
                     .OrderBy(m => m.MovieId)
                     .ToArrayAsync();
-            return new QueryMovieResponse
-            {
-                Status = "10000",
-                Message = "成功",
-                Data = movies
-            };
+            var moviesDTO = movies.Select(c => new MovieDTO(c)).ToList();
+            return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
         }
 
         /// <summary>
@@ -102,16 +99,11 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
         [HttpGet("length")]
-        [ProducesDefaultResponseType(typeof(QueryMovieNumResponse))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
         public async Task<IAPIResponse> GetMoviesLength()
         {
             var length = await _db.Movies.CountAsync();
-            return new QueryMovieNumResponse
-            {
-                Status = "10000",
-                Message = "成功",
-                Length = length
-            };
+            return APIDataResponse<int>.Success(length);
         }
 
         /// <summary>
@@ -231,16 +223,54 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 删除电影
+        /// 根据电影名获得对应电影信息，模糊查询
         /// </summary>
-        /// <param name="movieId"></param>
+        /// <param name="name">电影名称</param>
+        /// <returns>
+        /// 返回电影列表json
+        /// </returns>
+        [HttpGet("ByName/{name}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMoviesByName([FromRoute]string name)
+        {
+            var movies = await _db.Movies.Where(m => m.Name.Contains(name)).ToListAsync();
+            if (movies!.Count() == 0)
+            {
+                return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
+            }
+            var movieDTOs = movies.Select(m => new MovieDTO(m)).ToList();
+            return APIDataResponse<List<MovieDTO>>.Success(movieDTOs);
+        }
+
+        /// <summary>
+        /// 根据电影id获得对应电影
+        /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpGet("{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<MovieDTO>))]
+        public async Task<IAPIResponse> GetMovieById([FromRoute]string id)
+        {
+            var movie = await _db.Movies.Where(m => m.MovieId == id).FirstOrDefaultAsync();
+            if(movie == null)
+            {
+                return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
+            }
+            var movieDTO = new MovieDTO(movie);
+            return APIDataResponse<MovieDTO>.Success(movieDTO);
+        }
+
+        /// <summary>
+        /// 通过ID删除电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
         [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
-        public async Task<IAPIResponse> DeleteMovie([FromQuery] string movieId)
+        public async Task<IAPIResponse> DeleteMovie([FromRoute] string id)
         {
-            var movie = await _db.Movies.FindAsync(movieId);
+            var movie = await _db.Movies.FindAsync(id);
             if(movie==null)
             {
                 return APIResponse.Failaure("4000", "电影不存在");

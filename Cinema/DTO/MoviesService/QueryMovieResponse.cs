@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Cinema.DTO.MoviesService
 {
     /// <summary>
-    /// 获取电影的返回值
+    /// 获取电影数组的返回值
     /// </summary>
     public class QueryMovieResponse:APIResponse
     {

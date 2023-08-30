@@ -40,5 +40,25 @@ namespace Cinema.DTO.StaffService
         /// </summary>
         [JsonPropertyName("imageUrl")]
         public string? ImageUrl { get; set; }
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public StaffDTO()
+        {
+        }
+
+        /// <summary>
+        /// 实体构造
+        /// </summary>
+        /// <param name="entity"></param>
+        public StaffDTO(Staff entity)
+        {
+            StaffId = entity.StaffId;
+            Name = entity.Name;
+            Gender = entity.Gender.ToString();
+            Introduction = entity.Introduction;
+            ImageUrl = entity.ImageUrl;
+        }
     }
 }
