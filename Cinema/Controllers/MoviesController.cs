@@ -69,10 +69,10 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 获取特定的信息
+        /// 获取特定电影的详细信息
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("detail/{id}")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Movie>))]
         public async Task<IAPIResponse> GetMovie([FromRoute] string id)
         {
@@ -240,6 +240,24 @@ namespace Cinema.Controllers
             }
             var movieDTOs = movies.Select(m => new MovieDTO(m)).ToList();
             return APIDataResponse<List<MovieDTO>>.Success(movieDTOs);
+        }
+
+        /// <summary>
+        /// 根据电影id获得对应电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<MovieDTO>))]
+        public async Task<IAPIResponse> GetMovieById([FromRoute]string id)
+        {
+            var movie = await _db.Movies.Where(m => m.MovieId == id).FirstOrDefaultAsync();
+            if(movie == null)
+            {
+                return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
+            }
+            var movieDTO = new MovieDTO(movie);
+            return APIDataResponse<MovieDTO>.Success(movieDTO);
         }
 
         /// <summary>
