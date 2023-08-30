@@ -28,7 +28,7 @@ namespace Cinema.Entities
         /// <summary>
         /// 导航属性
         /// </summary>
-        [JsonIgnore] public Staff Staff { get; set; } = null!;
+        public Staff Staff { get; set; } = null!;
 
         /// <summary>
         /// 导航属性

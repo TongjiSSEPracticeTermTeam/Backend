@@ -62,7 +62,7 @@ namespace Cinema.Entities
         /// 播放维数（3d、2d）
         /// </summary>
         [Required]
-        [Column("DIMESION")]
+        [Column("DIMENSION")]
         public string Dimesion { get; set; } = String.Empty;
 
         /// <summary>

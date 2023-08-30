@@ -50,17 +50,17 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有电影的信息（分页）
+        /// 获取所有电影的信息（分页）
         /// </summary>
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
         [ProducesDefaultResponseType(typeof(QueryMovieResponse))]
-        public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
+        public async Task<IAPIResponse> GetMovies([FromQuery] ulong pageSize, [FromQuery] ulong pageNumber)
         {
             var movies = await _db.Movies
-                    .Skip((int)((page_number - 1ul) * page_size))
-                    .Take((int)page_size)
+                    .Skip((int)((pageNumber - 1ul) * pageSize))
+                    .Take((int)pageSize)
                     .OrderBy(m => m.MovieId)
                     .ToArrayAsync();
             return new QueryMovieResponse
@@ -72,7 +72,32 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有电影的数量
+        /// 获取特定的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Movie>))]
+        public async Task<IAPIResponse> GetMovie([FromRoute] string id)
+        {
+            var movies = await _db.Movies
+                .Include(m=>m.Acts)
+                .ThenInclude(a=>a.Staff)
+                .Include(m=>m.Sessions)
+                .Include(m=>m.Comments.OrderByDescending(c=>c.PublishDate).Take(10))
+                .Where(m=>m.MovieId==id)
+                .FirstAsync();
+            if (movies != null)
+            {
+                return APIDataResponse<Movie>.Success(movies);
+            }
+            else
+            {
+                return APIResponse.Failaure("4001", "未找到此电影");
+            }
+        }
+
+        /// <summary>
+        /// 获取所有电影的数量
         /// </summary>
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
