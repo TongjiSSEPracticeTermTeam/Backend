@@ -10,7 +10,7 @@ namespace Cinema.DTO.BoxOfficeService
         /// <summary>
         /// 通用数据
         /// </summary>
-        public GeneralData GereralData { get; set; } = new GeneralData();
+        public GeneralData GeneralData { get; set; } = new GeneralData();
 
         /// <summary>
         /// 影片数据
