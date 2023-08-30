@@ -1,4 +1,4 @@
-using Cinema.DTO;
+ï»¿using Cinema.DTO;
 using Cinema.DTO.StaffService;
 using Cinema.Entities;
 using Cinema.Helpers;
@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TencentCloud.Dc.V20180410.Models;
 using TencentCloud.Tic.V20201117.Models;
 
 namespace Cinema.Controllers
 {
     /// <summary>
-    /// ÆÀÂÛ¿ØÖÆÆ÷Àà
+    /// è¯„è®ºæ§åˆ¶å™¨ç±»
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +28,7 @@ namespace Cinema.Controllers
         private static int _commentId;
 
         /// <summary>
-        /// ³õÊ¼»¯
+        /// åˆå§‹åŒ–
         /// </summary>
         /// <param name="db"></param>
         /// <param name="httpContextAccessor"></param>
@@ -49,7 +50,7 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// ¸ù¾İµçÓ°ID»ñÈ¡¶ÔÓ¦ÆÀÂÛ
+        /// æ ¹æ®ç”µå½±IDè·å–å¯¹åº”è¯„è®º
         /// </summary>
         /// <param name="movieId"></param>
         /// <returns></returns>
@@ -62,7 +63,7 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// ¸ù¾İÓÃ»§ID»ñÈ¡¶ÔÓ¦ÆÀÂÛ
+        /// æ ¹æ®ç”¨æˆ·IDè·å–å¯¹åº”è¯„è®º
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
@@ -72,6 +73,28 @@ namespace Cinema.Controllers
         {
             var comments = await _db.Comments.Where(c => c.CustomerId == customerId).ToListAsync();
             return APIDataResponse<List<Comment>>.Success(comments);
+        }
+
+        /// <summary>
+        /// æ ¹æ®è¯„è®ºIDå±è”½è¯„è®º
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost("ban/{id}")]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> BanCommentById([FromRoute] string id)
+        {
+            var comment = await _db.Comments.FirstOrDefaultAsync(c => c.CommentId == id);
+            
+            if(comment == null)
+            {
+                return APIResponse.Failaure("4001", "è¯„è®ºä¸å­˜åœ¨");
+            }
+
+            comment.Display = false;
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
         }
     }
 }
