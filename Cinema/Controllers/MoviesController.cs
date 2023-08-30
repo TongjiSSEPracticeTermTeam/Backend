@@ -60,8 +60,8 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
             var movies = await _db.Movies
-                    .Skip((int)((pageNumber - 1ul) * pageSize))
-                    .Take((int)pageSize)
+                    .Skip((int)((page_number - 1ul) * page_size))
+                    .Take((int)page_size)
                     .OrderBy(m => m.MovieId)
                     .ToArrayAsync();
             var moviesDTO = movies.Select(c => new MovieDTO(c)).ToList();
