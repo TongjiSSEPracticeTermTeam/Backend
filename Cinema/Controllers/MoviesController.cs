@@ -209,7 +209,7 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetMoviesByName([FromRoute]string name)
         {
             var movies = await _db.Movies.Where(m => m.Name.Contains(name)).ToListAsync();
-            if (movies!.Count == 0)
+            if (movies!.Count() == 0)
             {
                 return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
             }
