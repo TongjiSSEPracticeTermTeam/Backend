@@ -92,17 +92,16 @@
             <param name="db"></param>
             <param name="logger"></param>
         </member>
-        <member name="M:Cinema.Controllers.CinemaController.GetCinemasAll">
+        <member name="M:Cinema.Controllers.CinemaController.GetCinemas(System.UInt64,System.UInt64)">
             <summary>
-            获得所有电影院信息
+            管理端接口，获取所有电影院的信息（分页）
             </summary>
-            <returns>
-            返回电影院json列表
-            </returns>
+            <returns></returns>
+            <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         </member>
         <member name="M:Cinema.Controllers.CinemaController.GetCinemasLength">
             <summary>
-            管理端接口，获取所有电影的数量
+            管理端接口，获取所有电影院的数量
             </summary>
             <returns></returns>
             <remarks>用于分页</remarks>
@@ -160,6 +159,35 @@
             通过ID删除对应电影院
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Cinema.Controllers.CommentController">
+            <summary>
+            评论控制器类
+            </summary>
+        </member>
+        <member name="M:Cinema.Controllers.CommentController.#ctor(Cinema.Entities.CinemaDb,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Logging.ILogger{Cinema.Controllers.CommentController},Cinema.Helpers.JwtHelper,Cinema.Services.QCosSrvice)">
+            <summary>
+            初始化
+            </summary>
+            <param name="db"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="logger"></param>
+            <param name="jwtHelper"></param>
+            <param name="qCosSrvice"></param>
+        </member>
+        <member name="M:Cinema.Controllers.CommentController.GetCommentsByMovieId(System.String)">
+            <summary>
+            根据电影ID获取对应评论
+            </summary>
+            <param name="movieId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinema.Controllers.CommentController.GetCommentsByCustomerId(System.String)">
+            <summary>
+            根据用户ID获取对应评论
+            </summary>
+            <param name="customerId"></param>
             <returns></returns>
         </member>
         <member name="T:Cinema.Controllers.CustomerController">
@@ -332,13 +360,19 @@
             <param name="jwtHelper"></param>
             <param name="qCosSrvice"></param>
         </member>
-        <member name="M:Cinema.Controllers.StaffController.GetStaffs">
+        <member name="M:Cinema.Controllers.StaffController.GetStaffs(System.UInt64,System.UInt64)">
             <summary>
-            获得所有影人信息
+            管理端接口，获取所有影人的信息（分页）
             </summary>
-            <returns>
-            返回影人json列表
-            </returns>
+            <returns></returns>
+            <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
+        </member>
+        <member name="M:Cinema.Controllers.StaffController.GetStaffsLength">
+            <summary>
+            管理端接口，获取所有影人的数量
+            </summary>
+            <returns></returns>
+            <remarks>用于分页</remarks>
         </member>
         <member name="M:Cinema.Controllers.StaffController.GetStaffById(System.String)">
             <summary>

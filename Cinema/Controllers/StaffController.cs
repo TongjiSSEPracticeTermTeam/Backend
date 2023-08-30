@@ -1,4 +1,5 @@
 ﻿using Cinema.DTO;
+using Cinema.DTO.MoviesService;
 using Cinema.DTO.StaffService;
 using Cinema.Entities;
 using Cinema.Helpers;
@@ -48,20 +49,52 @@ namespace Cinema.Controllers
             }
         }
 
+        ///// <summary>
+        ///// 获得所有影人信息
+        ///// </summary>
+        ///// <returns>
+        ///// 返回影人json列表
+        ///// </returns>
+        //[HttpGet]
+        //[ProducesDefaultResponseType(typeof(APIDataResponse<List<Staff>>))]
+        //public async Task<IAPIResponse> GetStaffs()
+        //{
+        //    var staffs = await _db.Staffs.ToListAsync();
+        //    staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
+        //    //return new JsonResult(await _db.Staffs.ToListAsync());
+        //    return APIDataResponse<List<Staff>>.Success(staffs);
+        //}
+
         /// <summary>
-        /// 获得所有影人信息
+        /// 管理端接口，获取所有影人的信息（分页）
         /// </summary>
-        /// <returns>
-        /// 返回影人json列表
-        /// </returns>
+        /// <returns></returns>
+        /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<Staff>>))]
-        public async Task<IAPIResponse> GetStaffs()
+        public async Task<IAPIResponse> GetStaffs([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
-            var staffs = await _db.Staffs.ToListAsync();
-            staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
-            //return new JsonResult(await _db.Staffs.ToListAsync());
+            var staffs = await _db.Staffs
+                    .Skip((int)((page_number - 1ul) * page_size))
+                    .Take((int)page_size)
+                    .OrderBy(m => m.StaffId)
+                    .ToListAsync();
             return APIDataResponse<List<Staff>>.Success(staffs);
+        }
+
+        /// <summary>
+        /// 管理端接口，获取所有影人的数量
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>用于分页</remarks>
+        [HttpGet("length")]
+        [Authorize(Policy = "CinemaAdmin")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
+        public async Task<IAPIResponse> GetStaffsLength()
+        {
+            var length = await _db.Staffs.CountAsync();
+            return APIDataResponse<int>.Success(length);
         }
 
         /// <summary>

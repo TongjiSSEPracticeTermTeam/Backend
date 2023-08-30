@@ -56,7 +56,7 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
-        [Authorize(Policy = "CinemaAdmin")]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
         public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
@@ -66,12 +66,7 @@ namespace Cinema.Controllers
                     .OrderBy(m => m.MovieId)
                     .ToArrayAsync();
             var moviesDTO = movies.Select(c => new MovieDTO(c)).ToList();
-            return new APIDataResponse<List<MovieDTO>>
-            {
-                Status = "10000",
-                Message = "成功",
-                Data = moviesDTO
-            };
+            return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
         }
 
         /// <summary>

@@ -37,41 +37,42 @@ public class CinemaController
         }
     }
 
+    ///// <summary>
+    ///// 获得所有电影院信息
+    ///// </summary>
+    ///// <returns>
+    ///// 返回电影院json列表
+    ///// </returns>
+    //[HttpGet]
+    //[ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
+    //public async Task<IAPIResponse> GetCinemasAll()
+    //{
+    //    var cinemas = await _db.Cinemas.ToArrayAsync().OrderBy(c => c.CinemaId);
+    //    var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
+    //    return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
+    //}
+
     /// <summary>
-    /// 获得所有电影院信息
+    /// 管理端接口，获取所有电影院的信息（分页）
     /// </summary>
-    /// <returns>
-    /// 返回电影院json列表
-    /// </returns>
+    /// <returns></returns>
+    /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
     [HttpGet]
+    //[Authorize(Policy = "CinemaAdmin")]
     [ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
-    public async Task<IAPIResponse> GetCinemasAll()
+    public async Task<IAPIResponse> GetCinemas([FromQuery] ulong page_size, [FromQuery] ulong page_number)
     {
-        var cinemas = await _db.Cinemas.ToArrayAsync();
+        var cinemas = await _db.Cinemas
+                .Skip((int)((page_number - 1ul) * page_size))
+                .Take((int)page_size)
+                .OrderBy(m => m.CinemaId)
+                .ToArrayAsync();
         var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
         return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
     }
 
-//    /// <summary>
-//    /// 管理端接口，获取所有电影院的信息（分页）
-//    /// </summary>
-//    /// <returns></returns>
-//    /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
-//    [HttpGet]
-//    [Authorize(Policy = "CinemaAdmin")]
-//    [ProducesDefaultResponseType(typeof(APIDataResponse<Cinemas[]>))]
-//    public async Task<IAPIResponse> GetCinemas([FromQuery] ulong pageSize, [FromQuery] ulong pageNumber)
-//    {
-//        var movies = await _db.Cinemas
-//                .Skip((int)((pageNumber - 1ul) * pageSize))
-//                .Take((int)pageSize)
-//                .OrderBy(m => m.CinemaId)
-//                .ToArrayAsync();
-//        return APIDataResponse<Cinemas[]>.BuildAPIDataSuccessResponse(movies);
-//    }
-
     /// <summary>
-    /// 管理端接口，获取所有电影的数量
+    /// 管理端接口，获取所有电影院的数量
     /// </summary>
     /// <returns></returns>
     /// <remarks>用于分页</remarks>
