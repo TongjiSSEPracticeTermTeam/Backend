@@ -4,8 +4,10 @@ using Cinema.Entities;
 using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using TencentCloud.Tcss.V20201101.Models;
 
 namespace Cinema.Controllers;
 
@@ -20,6 +22,8 @@ public class CustomerController : ControllerBase
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
 
+    private static int _customerId;
+
     /// <summary>
     /// 初始化
     /// </summary>
@@ -31,6 +35,11 @@ public class CustomerController : ControllerBase
         _db = db;
         _httpContextAccessor = httpContextAccessor;
         _jwtHelper = jwtHelper;
+
+        if(_customerId==0)
+        {
+            _customerId = int.Parse(_db.Customers.Max(m => m.CustomerId) ?? "0");
+        }
     }
 
     /// <summary>
@@ -62,19 +71,18 @@ public class CustomerController : ControllerBase
     [HttpPost("login")]
     public async Task<CustomerLoginResponse> CustomerLogin([FromBody] CustomerLoginRequest request)
     {
-        if (request.Password == "" || request.UserName == "")
+        if (request.Password == "" || request.Email == "")
             return new CustomerLoginResponse
             {
                 Status = "4001",
-                Message = "用户名或密码为空"
+                Message = "邮箱或密码为空"
             };
-
-        var customer = await _db.Customers.FindAsync(request.UserName);
+        var customer = await _db.Customers.FirstOrDefaultAsync(c=>c.Email==request.Email);
         if (customer == null)
             return new CustomerLoginResponse
             {
                 Status = "4002",
-                Message = "用户名或密码错误"
+                Message = "邮箱或密码错误"
             };
 
         if (customer.Password == Md5Helper.CalculateMd5Hash(request.Password))
@@ -106,23 +114,40 @@ public class CustomerController : ControllerBase
                 Message = "用户名或密码为空"
             };
 
-        if (string.IsNullOrWhiteSpace(request.DisplayName))
-        {
-            request.DisplayName = request.Username;
-        }
-
-        if ((await _db.Customers.FindAsync(request.Username) != null)|| (await _db.Managers.FindAsync(request.Username) != null)|| (await _db.Administrators.FindAsync(request.Username) != null))
+        if (string.IsNullOrWhiteSpace(request.Email))
             return new APIResponse
             {
-                Status = "4002",
-                Message = "用户名已存在"
+                Status = "4003",
+                Message = "邮箱不能为空"
             };
 
+
+        try
+        {
+            if(await _db.Customers.FirstOrDefaultAsync(c => c.Email == request.Email) != null)
+            {
+                return new APIResponse
+                {
+                    Status = "4002",
+                    Message = "邮箱已存在"
+                };
+            }
+        } catch (Exception ex)
+        {
+            return new APIResponse
+            {
+                Status = "error",
+                Message = ex.ToString()
+            };
+        };
+
+            
+        var customerId = Interlocked.Increment(ref _customerId);
         var customer = new Customer
         {
-            CustomerId = request.Username,
+            CustomerId = String.Format("{0:000000}",customerId),
             Password = Md5Helper.CalculateMd5Hash(request.Password),
-            Name = request.DisplayName,
+            Name = request.Username,
             Email = request.Email
         };
 
