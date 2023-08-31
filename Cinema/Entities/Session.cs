@@ -73,7 +73,7 @@ namespace Cinema.Entities
         /// <summary>
         /// 导航属性 - 所位于影厅
         /// </summary>
-        [JsonIgnore] public Hall HallLocatedAt { get; set; } = null!;
+        public Hall HallLocatedAt { get; set; } = null!;
 
         /// <summary>
         /// 导航属性 - 所关联影票
