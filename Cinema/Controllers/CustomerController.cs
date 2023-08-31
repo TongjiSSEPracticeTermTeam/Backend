@@ -141,15 +141,6 @@ public class CustomerController : ControllerBase
             };
         };
 
-        if (await _db.Managers.FindAsync(request.Username) != null || await _db.Administrators.FindAsync(request.Username) != null)
-        {
-            return new APIResponse
-            {
-                Status = "4004",
-                Message = "管理员与经理已存在"
-            };
-        }
-
             
         var customerId = Interlocked.Increment(ref _customerId);
         var customer = new Customer
