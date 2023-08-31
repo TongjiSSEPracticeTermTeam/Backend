@@ -187,8 +187,7 @@ public class CinemaController
             return APIResponse.Failaure("5000", "服务器内部错误");
         }
 
-        //_db.Cinemas.Update(cinemaEntity);
-        //await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync();
         return APIResponse.Success();
     }
 
@@ -238,20 +237,9 @@ public class CinemaController
         var cinema = await _db.Cinemas.FirstOrDefaultAsync(c => c.ManagerId == id);
         if (cinema == null)
         {
-            //return new JsonResult(new GetCinemaByManagerIdResponse
-            //{
-            //    Status = "4001",
-            //    Message = "电影院不存在"
-            //});
             return APIDataResponse<CinemaDTO>.Failaure("4001", "电影院不存在");
         }
 
-        //return new JsonResult(new GetCinemaByManagerIdResponse
-        //{
-        //    Status = "10000",
-        //    Message = "查询成功",
-        //    Cinema = cinema
-        //});
         var cinemaDTO = new CinemaDTO(cinema);
         return APIDataResponse<CinemaDTO>.Success(cinemaDTO);
     }
@@ -270,21 +258,9 @@ public class CinemaController
         var cinemas = await _db.Cinemas.Where(c => c.Name.Contains(name)).ToListAsync();
         if (cinemas!.Count == 0)
         {
-            //return new JsonResult(new GetCinemaByNameResponse
-            //{
-            //    Status = "4001",
-            //    Message = "电影院不存在"
-            //});
             return APIDataResponse<List<CinemaDTO>>.Failaure("4001", "电影院不存在");
         }
 
-        //var response = new GetCinemaByNameResponse
-        //{
-        //    Status = "10000",
-        //    Message = "查询成功",
-        //    Cinemas = cinemas!
-        //};
-        //return new JsonResult(response);
         var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
         return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
     }

@@ -59,7 +59,6 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
         [HttpGet]
-        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
         public async Task<IAPIResponse> GetMovies([FromQuery] ulong page_size, [FromQuery] ulong page_number)
         {
@@ -81,7 +80,6 @@ namespace Cinema.Controllers
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
         [HttpGet("length")]
-        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
         public async Task<IAPIResponse> GetMoviesLength()
         {
@@ -95,7 +93,7 @@ namespace Cinema.Controllers
         /// <param name="movie"></param>
         /// <returns></returns>
         [HttpPut]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> AddMovie([FromBody] MovieDTO movie)
         {
@@ -284,7 +282,7 @@ namespace Cinema.Controllers
                 .ThenInclude(a => a.Staff)
                 .ToListAsync();
 
-            if (movies!.Count == 0)
+            if (movies!.Count() == 0)
             {
                 return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
             }
