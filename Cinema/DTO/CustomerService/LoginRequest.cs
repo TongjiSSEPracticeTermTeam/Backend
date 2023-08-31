@@ -8,9 +8,9 @@ namespace Cinema.DTO.CustomerService;
 public class CustomerLoginRequest
 {
     /// <summary>
-    /// 用户名
+    /// 邮箱地址
     /// </summary>
-    [JsonPropertyName("username")] public string UserName { get; set; } = "";
+    [JsonPropertyName("email")] public string Email { get; set; } = "";
 
     /// <summary>
     /// 密码
