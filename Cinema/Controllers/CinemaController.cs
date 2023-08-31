@@ -1,11 +1,14 @@
-﻿using Cinema.DTO;
+﻿using Cinema.DTO.ManagerService;
+using Cinema.DTO;
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.MoviesService;
 using Cinema.Entities;
+using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
+using TencentCloud.Kms.V20190118.Models;
 
 namespace Cinema.Controllers;
 
@@ -85,32 +88,71 @@ public class CinemaController
         return APIDataResponse<int>.Success(length);
     }
 
+    ///// <summary>
+    ///// 管理端接口，添加电影院
+    ///// </summary>
+    ///// <param name="cinema"></param>
+    ///// <returns></returns>
+    //[HttpPut]
+    //[Authorize(Policy = "SysAdmin")]
+    //[ProducesDefaultResponseType(typeof(APIResponse))]
+    //public async Task<IAPIResponse> AddMovie([FromBody] CinemaDTO cinema)
+    //{
+    //    var cinemaId = Interlocked.Increment(ref _cinemaId);
+    //    cinema.CinemaId = $"{cinemaId:000000}";
+
+    //    var cinemaEntity = new Cinemas
+    //    {
+    //        CinemaId = cinema.CinemaId,
+    //        Name = cinema.Name,
+    //        Location = cinema.Location,
+    //        ManagerId = cinema.ManagerId,
+    //        CinemaImageUrl = cinema.CinemaImageUrl,
+    //        Feature = cinema.Feature,
+    //    };
+
+    //    await _db.Cinemas.AddAsync(cinemaEntity);
+    //    await _db.SaveChangesAsync();
+    //    return APIResponse.Success();
+    //}
+
     /// <summary>
-    /// 管理端接口，添加电影院
+    /// 管理员接口，添加电影院和对应管理员
     /// </summary>
-    /// <param name="cinema"></param>
+    /// <param name="data"></param>
     /// <returns></returns>
     [HttpPut]
     [Authorize(Policy = "SysAdmin")]
-    [ProducesDefaultResponseType(typeof(APIResponse))]
-    public async Task<IAPIResponse> AddMovie([FromBody] CinemaDTO cinema)
+    [ProducesDefaultResponseType(typeof(APIDataResponse<CinemaDTO>))]
+    public async Task<IAPIResponse> AddMoviewithManager([FromBody] CinemaCreator data)
     {
         var cinemaId = Interlocked.Increment(ref _cinemaId);
-        cinema.CinemaId = $"{cinemaId:000000}";
+        data.CinemaId = $"{cinemaId:000000}";
 
         var cinemaEntity = new Cinemas
         {
-            CinemaId = cinema.CinemaId,
-            Name = cinema.Name,
-            Location = cinema.Location,
-            ManagerId = cinema.ManagerId,
-            CinemaImageUrl = cinema.CinemaImageUrl,
-            Feature = cinema.Feature,
+            CinemaId = data.CinemaId,
+            Name = data.Name,
+            Location = data.Location,
+            ManagerId = data.CinemaId,
+            CinemaImageUrl = data.CinemaImageUrl,
+            Feature = data.Feature,
+        };
+        var cinemaDTO = new CinemaDTO(cinemaEntity);
+
+        var managerEntity = new Manager
+        {
+            Id = data.CinemaId,
+            Name = data.ManagerName,
+            Password = Md5Helper.CalculateMd5Hash(data.ManagerPassword),
+            Email = data.ManagerEmail,
+            AvatarUrl = String.Empty
         };
 
+        await _db.Managers.AddAsync(managerEntity);
         await _db.Cinemas.AddAsync(cinemaEntity);
         await _db.SaveChangesAsync();
-        return APIResponse.Success();
+        return APIDataResponse<CinemaDTO>.Success(cinemaDTO);
     }
 
     /// <summary>

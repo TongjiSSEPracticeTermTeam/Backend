@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using TencentCloud.Bda.V20200324.Models;
+using TencentCloud.Ecm.V20190719.Models;
 
 namespace Cinema.DTO.StaffService
 {
@@ -59,6 +61,34 @@ namespace Cinema.DTO.StaffService
             Gender = entity.Gender.ToString();
             Introduction = entity.Introduction;
             ImageUrl = entity.ImageUrl;
+        }
+    }
+
+    public class eStaff
+    {
+        [Required]
+        [JsonPropertyName("staffId")]
+        public string StaffId { get; set; } = String.Empty;
+
+        [Required]
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public eStaff()
+        {
+        }
+
+        /// <summary>
+        /// 实体构造
+        /// </summary>
+        /// <param name="entity"></param>
+        public eStaff(Staff entity)
+        {
+            StaffId = entity.StaffId;
+            Name = entity.Name;
         }
     }
 }

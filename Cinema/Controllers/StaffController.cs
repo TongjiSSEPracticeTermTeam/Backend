@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TencentCloud.Es.V20180416.Models;
 using TencentCloud.Tic.V20201117.Models;
 
 namespace Cinema.Controllers
@@ -49,21 +50,21 @@ namespace Cinema.Controllers
             }
         }
 
-        ///// <summary>
-        ///// 获得所有影人信息
-        ///// </summary>
-        ///// <returns>
-        ///// 返回影人json列表
-        ///// </returns>
-        //[HttpGet]
-        //[ProducesDefaultResponseType(typeof(APIDataResponse<List<Staff>>))]
-        //public async Task<IAPIResponse> GetStaffs()
-        //{
-        //    var staffs = await _db.Staffs.ToListAsync();
-        //    staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
-        //    //return new JsonResult(await _db.Staffs.ToListAsync());
-        //    return APIDataResponse<List<Staff>>.Success(staffs);
-        //}
+        /// <summary>
+        /// 获得所有影人的ID和名字
+        /// </summary>
+        /// <returns>
+        /// 返回影人json列表
+        /// </returns>
+        [HttpGet("all")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<eStaff>>))]
+        public async Task<IAPIResponse> GeteStaffs()
+        {
+            var staffs = await _db.Staffs.OrderBy(staff => staff.StaffId).ToArrayAsync();
+            var eStaffs = staffs.Select(s => new eStaff(s)).ToList();
+            //return new JsonResult(await _db.Staffs.ToListAsync());
+            return APIDataResponse<List<eStaff>>.Success(eStaffs);
+        }
 
         /// <summary>
         /// 管理端接口，获取所有影人的信息（分页）
