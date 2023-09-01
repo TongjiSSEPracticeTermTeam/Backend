@@ -45,7 +45,7 @@ namespace Cinema.DTO.CinemaService
         /// <summary>
         /// 电影特点字符串，不同特点用逗号分割
         /// </summary>
-        [JsonPropertyName("_feature")]
+        [JsonPropertyName("feature")]
         public string? Feature { get; set; }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Cinema.Entities
 {
@@ -37,7 +38,7 @@ namespace Cinema.Entities
         /// <summary>
         /// 导航属性 - 演电影（多对多）
         /// </summary>
-        public ICollection<Act> Acts { get; set; } = new HashSet<Act>();
+        [JsonIgnore] public ICollection<Act> Acts { get; set; } = new HashSet<Act>();
 
         /// <summary>
         /// 配置

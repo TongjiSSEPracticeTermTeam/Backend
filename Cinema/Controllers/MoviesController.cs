@@ -54,7 +54,7 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有电影的信息（分页）
+        /// 获取所有电影的信息（分页）
         /// </summary>
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
@@ -75,7 +75,32 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有电影的数量
+        /// 获取特定电影的详细信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("detail/{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Movie>))]
+        public async Task<IAPIResponse> GetMovie([FromRoute] string id)
+        {
+            var movies = await _db.Movies
+                .Include(m=>m.Acts)
+                .ThenInclude(a=>a.Staff)
+                .Include(m=>m.Sessions)
+                .Include(m=>m.Comments.OrderByDescending(c=>c.PublishDate).Take(10))
+                .Where(m=>m.MovieId==id)
+                .FirstAsync();
+            if (movies != null)
+            {
+                return APIDataResponse<Movie>.Success(movies);
+            }
+            else
+            {
+                return APIResponse.Failaure("4001", "未找到此电影");
+            }
+        }
+
+        /// <summary>
+        /// 获取所有电影的数量
         /// </summary>
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
