@@ -82,8 +82,6 @@ namespace Cinema.Controllers
             var movies = await _db.Movies
                 .Include(m=>m.Acts)
                 .ThenInclude(a=>a.Staff)
-                .Include(m=>m.Sessions)
-                .Include(m=>m.Comments.OrderByDescending(c=>c.PublishDate).Take(10))
                 .Where(m=>m.MovieId==id)
                 .FirstAsync();
             if (movies != null)

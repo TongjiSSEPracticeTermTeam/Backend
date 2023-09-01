@@ -38,12 +38,12 @@ namespace Cinema.Entities
         /// <summary>
         /// 导航属性 - 所属影院
         /// </summary>
-        [JsonIgnore] public Cinemas CinemaBelongTo { get; set; } = null!;
+        public Cinemas CinemaBelongTo { get; set; } = null!;
 
         /// <summary>
         /// 导航属性 - 排片
         /// </summary>
-        public ICollection<Session> Sessions { get; set; } = new List<Session>();
+        [JsonIgnore] public ICollection<Session> Sessions { get; set; } = new List<Session>();
 
         /// <summary>
         /// 配置

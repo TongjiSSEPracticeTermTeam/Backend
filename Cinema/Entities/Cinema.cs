@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 
 namespace Cinema.Entities;
@@ -44,7 +45,7 @@ public class Cinemas
     /// <summary>
     /// 导航属性 - 所拥有的影厅
     /// </summary>
-    public ICollection<Hall> Halls { get; set; } = new List<Hall>();
+    [JsonIgnore] public ICollection<Hall> Halls { get; set; } = new List<Hall>();
 
     /// <summary>
     /// 导航属性 - 影厅经理
