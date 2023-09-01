@@ -119,6 +119,28 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
+        /// 根据名字获取影人信息，模糊匹配
+        /// </summary>
+        /// <param name="name">影人名字</param>
+        /// <returns>
+        /// 返回影人json列表
+        /// </returns>
+        [HttpGet("ByName/{name}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<StaffDTO>>))]
+        public async Task<IAPIResponse> GetStaffByName([FromRoute] string name)
+        {
+            var staffs = await _db.Staffs
+                .Where(s => s.Name.Contains(name))
+                .ToListAsync();
+            if(staffs!.Count() == 0)
+            {
+                return APIResponse.Failaure("4001", "影人不存在");
+            }
+            var staffDTOs = staffs.Select(s => new StaffDTO(s)).ToList();
+            return APIDataResponse<List<StaffDTO>>.Success(staffDTOs);
+        }
+
+        /// <summary>
         /// 通过ID删除对应影人
         /// </summary>
         /// <param name="id"></param>
