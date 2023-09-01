@@ -1,5 +1,5 @@
 ﻿using Cinema.DTO;
-using Cinema.DTO.StaffService;
+using Cinema.DTO.CommentService;
 using Cinema.Entities;
 using Cinema.Helpers;
 using Cinema.Services;
@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TencentCloud.Dc.V20180410.Models;
-using TencentCloud.Tic.V20201117.Models;
 
 namespace Cinema.Controllers
 {
@@ -55,11 +53,15 @@ namespace Cinema.Controllers
         /// <param name="movieId"></param>
         /// <returns></returns>
         [HttpGet("byMovieId/{movieId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
         public async Task<IAPIResponse> GetCommentsByMovieId([FromRoute] string movieId)
         {
-            var comments = await _db.Comments.Where(c => c.MovieId == movieId).ToListAsync();
-            return APIDataResponse<List<Comment>>.Success(comments);
+            var comments = await _db.Comments
+                .Where(c => c.MovieId == movieId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
         }
 
         /// <summary>
@@ -68,11 +70,15 @@ namespace Cinema.Controllers
         /// <param name="customerId"></param>
         /// <returns></returns>
         [HttpGet("byCustomerId/{customerId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
         public async Task<IAPIResponse> GetCommentsByCustomerId([FromRoute] string customerId)
         {
-            var comments = await _db.Comments.Where(c => c.CustomerId == customerId).ToListAsync();
-            return APIDataResponse<List<Comment>>.Success(comments);
+            var comments = await _db.Comments
+                .Where(c => c.CustomerId == customerId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
         }
 
         /// <summary>
@@ -80,7 +86,7 @@ namespace Cinema.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost("ban/{id}")]
+        [HttpPut("ban/{id}")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> BanCommentById([FromRoute] string id)
         {
@@ -92,6 +98,28 @@ namespace Cinema.Controllers
             }
 
             comment.Display = false;
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
+        }
+
+        /// <summary>
+        /// 根据评论ID解除屏蔽
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("unban/{id}")]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> UnbanCommentById([FromRoute] string id)
+        {
+            var comment = await _db.Comments.FirstOrDefaultAsync(c => c.CommentId == id);
+
+            if (comment == null)
+            {
+                return APIResponse.Failaure("4001", "评论不存在");
+            }
+
+            comment.Display = true;
             await _db.SaveChangesAsync();
 
             return APIResponse.Success();

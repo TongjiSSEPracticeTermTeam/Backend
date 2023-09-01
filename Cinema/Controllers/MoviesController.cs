@@ -10,9 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using System.IO;
-using TencentCloud.Cme.V20191029.Models;
 
 namespace Cinema.Controllers
 {
