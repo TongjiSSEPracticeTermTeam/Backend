@@ -66,6 +66,11 @@ namespace Cinema.Entities
         public Customer Sender { get; set; } = null!;
 
         /// <summary>
+        /// 导航属性 - 互动
+        /// </summary>
+        [JsonIgnore] public ICollection<Interaction> Interactions { get; set; } = null!;
+
+        /// <summary>
         /// 配置
         /// </summary>
         /// <param name="modelBuilder"></param>

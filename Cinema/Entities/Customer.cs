@@ -52,6 +52,11 @@ public class Customer
     public VipInfo? Vip { get; set; }
 
     /// <summary>
+    /// 导航属性 - 互动
+    /// </summary>
+    [JsonIgnore] public ICollection<Interaction> Interactions { get; set; } = null!;
+
+    /// <summary>
     /// 配置
     /// </summary>
     /// <param name="modelBuilder"></param>
