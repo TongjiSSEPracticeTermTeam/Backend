@@ -1,4 +1,5 @@
 ﻿using Cinema.DTO;
+using Cinema.DTO.CommentService;
 using Cinema.DTO.StaffService;
 using Cinema.Entities;
 using Cinema.Helpers;
@@ -60,6 +61,34 @@ namespace Cinema.Controllers
         {
             var comments = await _db.Comments.Where(c => c.MovieId == movieId).ToListAsync();
             return APIDataResponse<List<Comment>>.Success(comments);
+        }
+
+        /// <summary>
+        /// 在电影详情页中获取评论
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
+        [HttpGet("inMovieDetail/{movieId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<MovieCommentResponse>))]
+        public async Task<IAPIResponse> GetCommentsInMovieDetail([FromRoute] string movieId)
+        {
+            var newComments = await _db.Comments
+                                .Where(c => c.MovieId == movieId)
+                                .Include(c => c.Sender)
+                                .OrderByDescending(c => c.PublishDate)
+                                .Take(5)
+                                .ToListAsync();
+            var hotComments = await _db.Comments
+                                .Where(c => c.MovieId == movieId)
+                                .Include(c => c.Sender)
+                                .OrderByDescending(c => c.LikeCount)
+                                .Take(5)
+                                .ToListAsync();
+            return APIDataResponse<MovieCommentResponse>.Success(new MovieCommentResponse
+            {
+                NewComments = newComments,
+                HotComments = hotComments
+            });
         }
 
         /// <summary>
