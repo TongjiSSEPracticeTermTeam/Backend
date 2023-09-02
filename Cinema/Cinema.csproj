@@ -12,10 +12,16 @@
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'pro' " />
     <ItemGroup>
+      <Compile Remove="DTO\新文件夹1\**" />
+      <Content Remove="DTO\新文件夹1\**" />
+      <EmbeddedResource Remove="DTO\新文件夹1\**" />
+      <None Remove="DTO\新文件夹1\**" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="7.21.9" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="7.23.2-dev" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
         <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
