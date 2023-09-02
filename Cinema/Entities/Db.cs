@@ -52,6 +52,11 @@ public class CinemaDb : DbContext
     public DbSet<Hall> Halls { get; set; } = null!;
 
     /// <summary>
+    /// 评论交互表
+    /// </summary>
+    public DbSet<Interaction> Interactions { get; set; } = null!;
+
+    /// <summary>
     /// 影院经理表
     /// </summary>
     public DbSet<Manager> Managers { get; set; } = null!;
@@ -90,6 +95,7 @@ public class CinemaDb : DbContext
         Act.ConfigureDbContext(modelBuilder);
         Comment.ConfigureDbContext(modelBuilder);
         Hall.ConfigureDbContext(modelBuilder);
+        Interaction.ConfigureDbContext(modelBuilder);
         Manager.ConfigureDbContext(modelBuilder);
         Administrator.ConfigureDbContext(modelBuilder);
         Session.ConfigureDbContext(modelBuilder);
