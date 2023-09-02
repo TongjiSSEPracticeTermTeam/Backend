@@ -69,6 +69,39 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
+        /// 获取评分前n的电影信息,传入参数n
+        /// </summary>
+        /// <param name="num">top n电影</param>
+        [HttpGet("topnmovies")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetTopNMovies([FromQuery] ulong num)
+        {
+            var topNMovies = await _db.Movies.OrderByDescending(m => m.Score).Take((int)num).ToArrayAsync();
+            var topNMoviesDTO = topNMovies.Select(c => new MovieDTO(c)).ToList();
+            return APIDataResponse<List<MovieDTO>>.Success(topNMoviesDTO);
+        }
+
+
+        /// <summary>
+        /// 根据tag筛选电影
+        /// </summary>
+        /// <param name="tags">筛选的tag</param>
+        [HttpGet("tags")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMoviesByTags([FromQuery] List<String> tags)
+        {
+            // 将查询转换为一个集合，然后在集合上执行进一步的操作
+            var movies = await _db.Movies.ToListAsync();
+
+            // 在集合上使用 LINQ 条件进行筛选
+            var filteredMovies = movies
+                .Where(movie => !string.IsNullOrEmpty(movie.Tags) && tags.All(tag => movie.Tags.Contains(tag)))
+                .ToList();
+            var moviesDTO = filteredMovies.Select(c => new MovieDTO(c)).ToList() ;
+            return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
+        }
+
+        /// <summary>
         /// 获取特定电影的详细信息
         /// </summary>
         /// <returns></returns>
