@@ -168,7 +168,7 @@ public class CustomerController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("GetAllTickets/{id}")]
-    [Authorize(Policy = "RegUser")]
+    //[Authorize(Policy = "RegUser")]
     [ProducesDefaultResponseType(typeof(APIDataResponse<List<Ticket>>))]
     public async Task<IAPIResponse> GetAllTicket([FromRoute] string id)
     {
@@ -192,7 +192,7 @@ public class CustomerController : ControllerBase
     /// <param name="endTime"></param>
     /// <returns></returns>
     [HttpPost("updateVIP")]
-    [Authorize(Policy = "RegUser")]
+    //[Authorize(Policy = "RegUser")]
     [ProducesDefaultResponseType(typeof(APIResponse))]
     public async Task<IAPIResponse> UpdateVIP([FromQuery] string customerId, [FromQuery] DateTime endTime)
     {

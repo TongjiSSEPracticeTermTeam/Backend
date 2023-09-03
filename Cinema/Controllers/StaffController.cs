@@ -260,12 +260,13 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("4001", "影人ID不存在");
             }
 
-            var movies = await _db.Acts
+            var acts = await _db.Acts
                 .Where(a => (a.StaffId == id) && (a.Role == "1"))
-                .Include(a => a.Movie)
-                .Select(a => new MovieDTO(a.Movie))
+                .Include(a => a.Movie).ToListAsync();
+
+            var movies = acts.Select(a => new MovieDTO(a.Movie))
                 .OrderBy(m => m.MovieId)
-                .ToListAsync();
+                .ToList();
 
             return APIDataResponse<List<MovieDTO>>.Success(movies);
         }
@@ -286,12 +287,13 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("4001", "影人ID不存在");
             }
 
-            var movies = await _db.Acts
+            var acts = await _db.Acts
                 .Where(a => (a.StaffId == id) && (a.Role == "0"))
-                .Include(a => a.Movie)
-                .Select(a => new MovieDTO(a.Movie))
+                .Include(a => a.Movie).ToListAsync();
+
+            var movies = acts.Select(a => new MovieDTO(a.Movie))
                 .OrderBy(m => m.MovieId)
-                .ToListAsync();
+                .ToList();
 
             return APIDataResponse<List<MovieDTO>>.Success(movies);
         }
