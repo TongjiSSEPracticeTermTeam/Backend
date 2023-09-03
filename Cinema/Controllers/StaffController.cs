@@ -57,13 +57,13 @@ namespace Cinema.Controllers
         /// 返回影人json列表
         /// </returns>
         [HttpGet("all")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<List<eStaff>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<EStaff>>))]
         public async Task<IAPIResponse> GeteStaffs()
         {
             var staffs = await _db.Staffs.OrderBy(staff => staff.StaffId).ToArrayAsync();
-            var eStaffs = staffs.Select(s => new eStaff(s)).ToList();
+            var eStaffs = staffs.Select(s => new EStaff(s)).ToList();
             //return new JsonResult(await _db.Staffs.ToListAsync());
-            return APIDataResponse<List<eStaff>>.Success(eStaffs);
+            return APIDataResponse<List<EStaff>>.Success(eStaffs);
         }
 
         /// <summary>

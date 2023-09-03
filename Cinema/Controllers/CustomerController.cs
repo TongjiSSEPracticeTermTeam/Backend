@@ -168,7 +168,7 @@ public class CustomerController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("GetAllTickets/{id}")]
-    [Authorize(Policy = "Customer")]
+    [Authorize(Policy = "RegUser")]
     [ProducesDefaultResponseType(typeof(APIDataResponse<List<Ticket>>))]
     public async Task<IAPIResponse> GetAllTicket([FromRoute] string id)
     {
@@ -183,5 +183,45 @@ public class CustomerController : ControllerBase
         }
 
         return APIDataResponse<List<Ticket>>.Success(custormer.Tickets.ToList());
+    }
+
+    /// <summary>
+    /// 修改对应ID用户的VIP结束时间
+    /// </summary>
+    /// <param name="customerId"></param>
+    /// <param name="endTime"></param>
+    /// <returns></returns>
+    [HttpPost("updateVIP")]
+    [Authorize(Policy = "RegUser")]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> UpdateVIP([FromQuery] string customerId, [FromQuery] DateTime endTime)
+    {
+        var customer = await _db.Customers.FindAsync(customerId);
+
+        if (customer == null)
+        {
+            return APIResponse.Failaure("10001", "用户不存在");
+        }
+
+        var vipInfo = await _db.VipInfos.FindAsync(customerId);
+
+        //如果未有过vip记录则增加，否则进行修改
+        if (vipInfo == null)
+        {
+            var nVipInfo = new VipInfo
+            {
+                CustomerId = customerId,
+                EndDate = endTime
+            };
+            await _db.VipInfos.AddAsync(nVipInfo);
+        }
+        else
+        {
+            vipInfo.EndDate = endTime;
+            _db.VipInfos.Update(vipInfo);
+        }
+
+        await _db.SaveChangesAsync();
+        return APIResponse.Success();
     }
 }

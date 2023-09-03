@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TencentCloud.Tke.V20180525.Models;
 
 namespace Cinema.Controllers
 {
@@ -175,6 +176,34 @@ namespace Cinema.Controllers
             return APIDataResponse<List<Comment>>.Success(comments);
         }
 
+        /// <summary>
+        /// 返回对应用户和电影间是否存在评论
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
+        [HttpGet("isCommented")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Boolean>))]
+        public async Task<IAPIResponse> IsCommented([FromQuery] string customerId, [FromQuery] string movieId)
+        {
+            var comment = await _db.Comments
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.MovieId == movieId);
+
+            if (comment == null)
+            {
+                return APIDataResponse<Boolean>.Success(false);
+            }
+            else
+            {
+                return APIDataResponse<Boolean>.Success(true);
+            }
+        }   
+
+        /// <summary>
+        /// 添加评论（限制一个用户对一个电影只能有一条评论）
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> AddComment([FromBody] CommentCreator comment)
@@ -191,6 +220,15 @@ namespace Cinema.Controllers
             if (movie == null)
             {
                 return APIResponse.Failaure("4001", "电影不存在");
+            }
+
+            var oComment = _db.Comments
+                .Where(c => c.CustomerId == comment.CustomerId && c.MovieId == comment.MovieId)
+                .FirstOrDefault();
+
+            if (oComment != null)
+            {
+                return APIResponse.Failaure("10001", "该用户已评论过该电影");
             }
 
             var nextId = Interlocked.Increment(ref _commentId);

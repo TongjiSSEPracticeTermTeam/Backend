@@ -64,12 +64,21 @@ namespace Cinema.DTO.StaffService
         }
     }
 
-    public class eStaff
+    /// <summary>
+    /// 影人名字和ID
+    /// </summary>
+    public class EStaff
     {
+        /// <summary>
+        /// 影人ID
+        /// </summary>
         [Required]
         [JsonPropertyName("staffId")]
         public string StaffId { get; set; } = String.Empty;
 
+        /// <summary>
+        /// 影人名字
+        /// </summary>
         [Required]
         [JsonPropertyName("name")]
         public string Name { get; set; } = String.Empty;
@@ -77,7 +86,7 @@ namespace Cinema.DTO.StaffService
         /// <summary>
         /// 默认构造
         /// </summary>
-        public eStaff()
+        public EStaff()
         {
         }
 
@@ -85,7 +94,7 @@ namespace Cinema.DTO.StaffService
         /// 实体构造
         /// </summary>
         /// <param name="entity"></param>
-        public eStaff(Staff entity)
+        public EStaff(Staff entity)
         {
             StaffId = entity.StaffId;
             Name = entity.Name;

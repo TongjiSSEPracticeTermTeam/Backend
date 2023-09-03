@@ -69,13 +69,13 @@ namespace Cinema.DTO.MoviesService
         /// 导演的ID和姓名
         /// </summary>
         [JsonPropertyName("director")]
-        public eStaff? Director { get; set; }
+        public EStaff? Director { get; set; }
 
         /// <summary>
         /// 演员的ID和姓名
         /// </summary>
         [JsonPropertyName("actors")]
-        public List<eStaff>? Actors { get; set; }
+        public List<EStaff>? Actors { get; set; }
 
         /// <summary>
         /// 默认构造
@@ -106,14 +106,14 @@ namespace Cinema.DTO.MoviesService
 
                 if (act.Role == "1")
                 {
-                    Director = new eStaff(act.Staff);
+                    Director = new EStaff(act.Staff);
                 }
                 else if (act.Role == "0")
                 {
                     if (Actors == null)
-                        Actors = new List<eStaff>();
+                        Actors = new List<EStaff>();
 
-                    Actors.Add(new eStaff(act.Staff));
+                    Actors.Add(new EStaff(act.Staff));
                 }
             }
         }

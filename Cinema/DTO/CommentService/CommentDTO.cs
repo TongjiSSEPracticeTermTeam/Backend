@@ -10,22 +10,49 @@ namespace Cinema.DTO.CommentService
     /// </summary>
     public class CommentDTO
     {
+        /// <summary>
+        /// 评论ID
+        /// </summary>
         public string CommentId { get; set; } = String.Empty;
 
+        /// <summary>
+        /// 评论内容
+        /// </summary>
         public string Content { get; set; } = String.Empty;
 
+        /// <summary>
+        /// 评分
+        /// </summary>
         public float Score { get; set; }
 
+        /// <summary>
+        /// 点赞数
+        /// </summary>
         public int LikeCount { get; set; }
 
+        /// <summary>
+        /// 点踩数
+        /// </summary>
         public int DislikeCount { get; set; }
 
+        /// <summary>
+        /// 发布日期
+        /// </summary>
         public DateTime PublishDate { get; set; }
 
+        /// <summary>
+        /// 是否屏蔽
+        /// </summary>
         public bool Display { get; set; }
 
+        /// <summary>
+        /// 评论电影ID
+        /// </summary>
         public string MovieId { get; set; } = String.Empty;
 
+        /// <summary>
+        /// 发布用户ID
+        /// </summary>
         public string CustomerId { get; set; } = String.Empty;
 
         /// <summary>
@@ -64,6 +91,9 @@ namespace Cinema.DTO.CommentService
         }
     }
 
+    /// <summary>
+    /// 评论创建对象
+    /// </summary>
     public class CommentCreator
     {
         /// <summary>
