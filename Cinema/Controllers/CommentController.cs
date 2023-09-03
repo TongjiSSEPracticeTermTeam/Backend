@@ -153,5 +153,66 @@ namespace Cinema.Controllers
 
             return APIResponse.Success();
         }
+
+        /// <summary>
+        /// 根据评论内容获取对应评论
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        [HttpGet("byContent/{keyword}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        public async Task<IAPIResponse> GetCommentByContent([FromRoute] string keyword)
+        {
+            if (keyword == null)
+            {
+                return APIResponse.Failaure("10001", "关键词不能为空");
+            }
+
+            var comments = await _db.Comments
+                .Where(c => c.Content.Contains(keyword))
+                .ToListAsync();
+
+            return APIDataResponse<List<Comment>>.Success(comments);
+        }
+
+        [HttpPut]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> AddComment([FromBody] CommentCreator comment)
+        {
+            var customer = await _db.Customers.FindAsync(comment.CustomerId);
+
+            if (customer == null)
+            {
+                return APIResponse.Failaure("4001", "用户不存在");
+            }
+
+            var movie = await _db.Movies.FindAsync(comment.MovieId);
+
+            if (movie == null)
+            {
+                return APIResponse.Failaure("4001", "电影不存在");
+            }
+
+            var nextId = Interlocked.Increment(ref _commentId);
+            var commentId = String.Format("{0:000000}", nextId);
+
+            var nComment = new Comment
+            {
+                CommentId = commentId,
+                Content = comment.Content,
+                Score = comment.Score,
+                LikeCount = 0,
+                DislikeCount = 0,
+                PublishDate = comment.PublishDate,
+                Display = true,
+                MovieId = comment.MovieId,
+                CustomerId = comment.CustomerId
+            };
+
+            await _db.Comments.AddAsync(nComment);
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
+        }
     }
 }

@@ -161,4 +161,27 @@ public class CustomerController : ControllerBase
             UserData = customer
         };
     }
+
+    /// <summary>
+    /// 根据用户ID获取所有订单
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("GetAllTickets/{id}")]
+    [Authorize(Policy = "Customer")]
+    [ProducesDefaultResponseType(typeof(APIDataResponse<List<Ticket>>))]
+    public async Task<IAPIResponse> GetAllTicket([FromRoute] string id)
+    {
+        var custormer = await _db.Customers
+            .Where(c => c.CustomerId == id)
+            .Include(c => c.Tickets)
+            .FirstOrDefaultAsync();
+
+        if (custormer == null)
+        {
+            return APIResponse.Failaure("4001", "用户不存在");
+        }
+
+        return APIDataResponse<List<Ticket>>.Success(custormer.Tickets.ToList());
+    }
 }

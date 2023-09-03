@@ -1,5 +1,6 @@
 using Cinema.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Text.Json.Serialization;
 
 namespace Cinema.DTO.CommentService
@@ -61,5 +62,42 @@ namespace Cinema.DTO.CommentService
             CustomerName = comment.Sender.Name;
             AvatarUrl = comment.Sender.AvatarUrl;
         }
+    }
+
+    public class CommentCreator
+    {
+        /// <summary>
+        /// 评论内容
+        /// </summary> 
+        [Required]
+        public string Content { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 评分
+        /// </summary>
+        [Required]
+        public float Score { get; set; }
+
+        /// <summary>
+        /// 发布时间
+        /// </summary>
+        public DateTime PublishDate { get; set; } = new DateTime();
+
+        /// <summary>
+        /// 电影ID
+        /// </summary>
+        [Required]
+        public string MovieId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        [Required]
+        public string CustomerId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public CommentCreator() { }
     }
 }

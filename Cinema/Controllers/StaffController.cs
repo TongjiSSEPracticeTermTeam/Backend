@@ -243,5 +243,57 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("10001", "影人修改失败");
             }
         }
+
+        /// <summary>
+        /// 根据演员ID获取其导演的所有电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetMovieAsDirector/{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMovieAsDirector([FromRoute] string id)
+        {
+            var staff = await _db.Staffs.FindAsync(id);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("4001", "影人ID不存在");
+            }
+
+            var movies = await _db.Acts
+                .Where(a => (a.StaffId == id) && (a.Role == "1"))
+                .Include(a => a.Movie)
+                .Select(a => new MovieDTO(a.Movie))
+                .OrderBy(m => m.MovieId)
+                .ToListAsync();
+
+            return APIDataResponse<List<MovieDTO>>.Success(movies);
+        }
+
+        /// <summary>
+        /// 根据演员ID获取其参演的所有电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetMovieAsActor/{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMovieAsActor([FromRoute] string id)
+        {
+            var staff = await _db.Staffs.FindAsync(id);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("4001", "影人ID不存在");
+            }
+
+            var movies = await _db.Acts
+                .Where(a => (a.StaffId == id) && (a.Role == "0"))
+                .Include(a => a.Movie)
+                .Select(a => new MovieDTO(a.Movie))
+                .OrderBy(m => m.MovieId)
+                .ToListAsync();
+
+            return APIDataResponse<List<MovieDTO>>.Success(movies);
+        }
     }
 }
