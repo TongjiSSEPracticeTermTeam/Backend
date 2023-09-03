@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using TencentCloud.Tcss.V20201101.Models;
 
 namespace Cinema.Controllers
 {
@@ -99,6 +100,32 @@ namespace Cinema.Controllers
                 .ToList();
             var moviesDTO = filteredMovies.Select(c => new MovieDTO(c)).ToList() ;
             return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
+        }
+
+        ///<summary>
+        ///获取所有电影的所有tag
+        ///</summary>
+        [HttpGet("tags/getAllTags")]
+        [ProducesDefaultResponseType(typeof(List<String>))]
+        public async Task<IAPIResponse> GetAllTags()
+        {
+            var movieTags = new List<string>();
+            var movies= await _db.Movies.ToListAsync();
+            foreach(var movie in movies)
+            {
+                if (movie.Tags!=null)
+                {
+                    var tags = movie.Tags.Split(',');
+                    foreach(var tag in tags)
+                    {
+                        if (!movieTags.Contains(tag))
+                        {
+                            movieTags.Add(tag);
+                        }
+                    }
+                }
+            }
+            return APIDataResponse<List<string>>.Success(movieTags);
         }
 
         /// <summary>
