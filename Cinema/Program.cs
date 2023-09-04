@@ -133,9 +133,6 @@ app.UseSwaggerUI(c =>
     c.OAuthUsePkce();
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
@@ -164,5 +161,8 @@ else
         FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/dist"))
     });
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

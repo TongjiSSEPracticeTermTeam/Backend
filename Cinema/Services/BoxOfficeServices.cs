@@ -49,7 +49,11 @@ namespace Cinema.Services
                     new KeyValuePair<string, string>("sdate",date),
                     new KeyValuePair<string, string>("edate",date),
                     new KeyValuePair<string, string>("bserviceprice","1"),
+                    new KeyValuePair<string, string>("columnslist","100,102,103,119,105,107,109,106,112,129,142,143,163,164,165"),
+                    new KeyValuePair<string, string>("pageindex","1"),
+                    new KeyValuePair<string, string>("pagesize","20"),
                     new KeyValuePair<string, string>("order","103"),
+                    new KeyValuePair<string, string>("ordertype","desc"),
                 });
 
                 var response = await httpClient.PostAsync("https://ys.endata.cn/enlib-api/api/movie/getMovie_BoxOffice_Day_List.do", formData);
