@@ -121,8 +121,8 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> BanCommentById([FromRoute] string id)
         {
             var comment = await _db.Comments.FirstOrDefaultAsync(c => c.CommentId == id);
-            
-            if(comment == null)
+
+            if (comment == null)
             {
                 return APIResponse.Failaure("4001", "评论不存在");
             }
@@ -247,7 +247,14 @@ namespace Cinema.Controllers
                 CustomerId = comment.CustomerId
             };
 
+            //更新对应电影评分
+            var totalScore = _db.Comments
+                .Where(c => c.MovieId == comment.MovieId)
+                .Select(c => c.Score).ToList();
+            movie.Score = totalScore.Average();
+
             await _db.Comments.AddAsync(nComment);
+            _db.Movies.Update(movie);
             await _db.SaveChangesAsync();
 
             return APIResponse.Success();

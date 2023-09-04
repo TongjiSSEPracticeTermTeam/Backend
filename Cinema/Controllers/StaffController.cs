@@ -51,12 +51,13 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 获得所有影人的ID和名字
+        /// 获得所有影人的ID和名字，管理员接口
         /// </summary>
         /// <returns>
         /// 返回影人json列表
         /// </returns>
         [HttpGet("all")]
+        //[Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<EStaff>>))]
         public async Task<IAPIResponse> GeteStaffs()
         {
@@ -67,7 +68,7 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有影人的信息（分页）
+        /// 获取所有影人的信息（分页）
         /// </summary>
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
@@ -85,12 +86,12 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有影人的数量
+        /// 获取所有影人的数量
         /// </summary>
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
         [HttpGet("length")]
-        [Authorize(Policy = "CinemaAdmin")]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
         public async Task<IAPIResponse> GetStaffsLength()
         {
