@@ -11,3 +11,5 @@ riderModule.iml
 /.vs
 /Cinema/cinema.xml
 .env
+GPUCache
+debug.log
