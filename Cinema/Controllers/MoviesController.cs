@@ -2,6 +2,7 @@
 using Cinema.DTO.AvatarService;
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.MoviesService;
+using Cinema.DTO.StaffService;
 using Cinema.Entities;
 using Cinema.Helpers;
 using Cinema.Services;
@@ -63,8 +64,11 @@ namespace Cinema.Controllers
             var movies = await _db.Movies
                     .Skip((int)((page_number - 1ul) * page_size))
                     .Take((int)page_size)
+                    .Include(m => m.Acts)
+                    .ThenInclude(a => a.Staff)
                     .OrderBy(m => m.MovieId)
                     .ToArrayAsync();
+
             var moviesDTO = movies.Select(c => new MovieDTO(c)).ToList();
             return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
         }
@@ -189,8 +193,35 @@ namespace Cinema.Controllers
                 Tags = movie.Tags
             };
 
+            var acts = new List<Act>();
+            if (movie.Director != null) 
+            {
+                var act = new Act
+                {
+                    StaffId = movie.Director.StaffId,
+                    MovieId = movie.MovieId,
+                    Role = "1"
+                };
+                acts.Add(act);
+            }
+            if (movie.Actors != null && movie.Actors.Count > 0)
+            {
+                foreach (var actor in movie.Actors)
+                {
+                    var act = new Act
+                    {
+                        StaffId = actor.StaffId,
+                        MovieId = movie.MovieId,
+                        Role = "0"
+                    };
+                    acts.Add(act);
+                }
+            }
+
+            await _db.Acts.AddRangeAsync(acts);
             await _db.Movies.AddAsync(movieEntity);
             await _db.SaveChangesAsync();
+
             return APIResponse.Success();
         }
 
@@ -200,11 +231,16 @@ namespace Cinema.Controllers
         /// <param name="movie"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = "CinemaAdmin")]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> EditMovie([FromBody] MovieDTO movie)
         {
-            var movieEntity = await _db.Movies.FindAsync(movie.MovieId);
+            var movieEntity = await _db.Movies
+                .Where(m => m.MovieId == movie.MovieId)
+                .Include(m => m.Acts)
+                .FirstOrDefaultAsync();
+
+
             if(movieEntity==null)
             {
                 return APIResponse.Failaure("4000", "电影不存在");
@@ -219,6 +255,36 @@ namespace Cinema.Controllers
             movieEntity.ReleaseDate = movie.ReleaseDate;
             movieEntity.RemovalDate = movie.RemovalDate;
 
+            //删除所有旧的Acts
+            _db.Acts.RemoveRange(movieEntity.Acts);
+            //先保存数据库，否则此时追踪的Acts和新添加的Acts可能发生冲突
+            _db.SaveChanges();
+            var acts = new List<Act>();
+            if (movie.Director != null)
+            {
+                var act = new Act
+                {
+                    StaffId = movie.Director.StaffId,
+                    MovieId = movie.MovieId,
+                    Role = "1"
+                };
+                acts.Add(act);
+            }
+            if (movie.Actors != null && movie.Actors.Count > 0)
+            {
+                foreach (var actor in movie.Actors)
+                {
+                    var act = new Act
+                    {
+                        StaffId = actor.StaffId,
+                        MovieId = movie.MovieId,
+                        Role = "0"
+                    };
+                    acts.Add(act);
+                }
+            }
+            await _db.Acts.AddRangeAsync(acts);
+
             try
             {
                 await _db.SaveChangesAsync();
@@ -228,8 +294,8 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("5000", "服务器内部错误");
             }
 
-            _db.Movies.Update(movieEntity);
-            await _db.SaveChangesAsync();
+            //_db.Movies.Update(movieEntity);
+            //await _db.SaveChangesAsync();
             return APIResponse.Success();
         }
 
@@ -291,11 +357,17 @@ namespace Cinema.Controllers
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
         public async Task<IAPIResponse> GetMoviesByName([FromRoute]string name)
         {
-            var movies = await _db.Movies.Where(m => m.Name.Contains(name)).ToListAsync();
+            var movies = await _db.Movies
+                .Where(m => m.Name.Contains(name))
+                .Include(m => m.Acts)
+                .ThenInclude(a => a.Staff)
+                .ToListAsync();
+
             if (movies!.Count() == 0)
             {
                 return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
             }
+
             var movieDTOs = movies.Select(m => new MovieDTO(m)).ToList();
             return APIDataResponse<List<MovieDTO>>.Success(movieDTOs);
         }
@@ -309,12 +381,18 @@ namespace Cinema.Controllers
         [ProducesDefaultResponseType(typeof(APIDataResponse<MovieDTO>))]
         public async Task<IAPIResponse> GetMovieById([FromRoute]string id)
         {
-            var movie = await _db.Movies.Where(m => m.MovieId == id).FirstOrDefaultAsync();
+            var movie = await _db.Movies
+                .Where(m => m.MovieId == id)
+                .Include(m => m.Acts)
+                .ThenInclude(a => a.Staff)
+                .FirstOrDefaultAsync();
             if(movie == null)
             {
                 return APIDataResponse<Movie>.Failaure("4001", "电影不存在");
             }
+
             var movieDTO = new MovieDTO(movie);
+
             return APIDataResponse<MovieDTO>.Success(movieDTO);
         }
 

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Cinema.Entities;
+using Cinema.DTO.ManagerService;
 
 namespace Cinema.DTO.CinemaService
 {
@@ -66,5 +67,32 @@ namespace Cinema.DTO.CinemaService
             CinemaImageUrl = entity.CinemaImageUrl;
             Feature = entity.Feature;
         }
+    }
+
+    /// <summary>
+    /// 影院添加用接口
+    /// </summary>
+    public class CinemaCreator : CinemaDTO
+    {
+        /// <summary>
+        /// 管理员名称
+        /// </summary>
+        [Required]
+        [JsonPropertyName("managerName")]
+        public string ManagerName { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 管理员密码
+        /// </summary>
+        [Required]
+        [JsonPropertyName("managerPassword")]
+        public string ManagerPassword { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 管理员邮箱
+        /// </summary>
+        [Required]
+        [JsonPropertyName("managerEmail")]
+        public string ManagerEmail { get; set; } = String.Empty;
     }
 }

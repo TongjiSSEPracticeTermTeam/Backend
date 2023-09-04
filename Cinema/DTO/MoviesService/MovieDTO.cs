@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Cinema.Entities;
+using Cinema.DTO.StaffService;
 
 namespace Cinema.DTO.MoviesService
 {
@@ -65,6 +66,18 @@ namespace Cinema.DTO.MoviesService
         public DateTime RemovalDate { get; set; }
 
         /// <summary>
+        /// 导演的ID和姓名
+        /// </summary>
+        [JsonPropertyName("director")]
+        public EStaff? Director { get; set; }
+
+        /// <summary>
+        /// 演员的ID和姓名
+        /// </summary>
+        [JsonPropertyName("actors")]
+        public List<EStaff>? Actors { get; set; }
+
+        /// <summary>
         /// 默认构造
         /// </summary>
         public MovieDTO()
@@ -86,6 +99,23 @@ namespace Cinema.DTO.MoviesService
             Tags = entity.Tags;
             ReleaseDate = entity.ReleaseDate;
             RemovalDate = entity.RemovalDate;
+
+            foreach (var act in entity.Acts)
+            {
+                //Console.WriteLine(act.StaffId + " " + act.MovieId + " " + act.Role);
+
+                if (act.Role == "1")
+                {
+                    Director = new EStaff(act.Staff);
+                }
+                else if (act.Role == "0")
+                {
+                    if (Actors == null)
+                        Actors = new List<EStaff>();
+
+                    Actors.Add(new EStaff(act.Staff));
+                }
+            }
         }
 
     }

@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TencentCloud.Dc.V20180410.Models;
-using TencentCloud.Tic.V20201117.Models;
+using TencentCloud.Tke.V20180525.Models;
 
 namespace Cinema.Controllers
 {
@@ -56,11 +55,15 @@ namespace Cinema.Controllers
         /// <param name="movieId"></param>
         /// <returns></returns>
         [HttpGet("byMovieId/{movieId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
         public async Task<IAPIResponse> GetCommentsByMovieId([FromRoute] string movieId)
         {
-            var comments = await _db.Comments.Where(c => c.MovieId == movieId).ToListAsync();
-            return APIDataResponse<List<Comment>>.Success(comments);
+            var comments = await _db.Comments
+                .Where(c => c.MovieId == movieId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
         }
 
         /// <summary>
@@ -97,11 +100,15 @@ namespace Cinema.Controllers
         /// <param name="customerId"></param>
         /// <returns></returns>
         [HttpGet("byCustomerId/{customerId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
         public async Task<IAPIResponse> GetCommentsByCustomerId([FromRoute] string customerId)
         {
-            var comments = await _db.Comments.Where(c => c.CustomerId == customerId).ToListAsync();
-            return APIDataResponse<List<Comment>>.Success(comments);
+            var comments = await _db.Comments
+                .Where(c => c.CustomerId == customerId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
         }
 
         /// <summary>
@@ -125,5 +132,125 @@ namespace Cinema.Controllers
 
             return APIResponse.Success();
         }
+
+        /// <summary>
+        /// 根据评论ID解除屏蔽
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost("unban/{id}")]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> UnbanCommentById([FromRoute] string id)
+        {
+            var comment = await _db.Comments.FirstOrDefaultAsync(c => c.CommentId == id);
+
+            if (comment == null)
+            {
+                return APIResponse.Failaure("4001", "评论不存在");
+            }
+
+            comment.Display = true;
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
+        }
+
+        /// <summary>
+        /// 根据评论内容获取对应评论
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        [HttpGet("byContent/{keyword}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<Comment>>))]
+        public async Task<IAPIResponse> GetCommentByContent([FromRoute] string keyword)
+        {
+            if (keyword == null)
+            {
+                return APIResponse.Failaure("10001", "关键词不能为空");
+            }
+
+            var comments = await _db.Comments
+                .Where(c => c.Content.Contains(keyword))
+                .ToListAsync();
+
+            return APIDataResponse<List<Comment>>.Success(comments);
+        }
+
+        /// <summary>
+        /// 返回对应用户和电影间是否存在评论
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
+        [HttpGet("isCommented")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Boolean>))]
+        public async Task<IAPIResponse> IsCommented([FromQuery] string customerId, [FromQuery] string movieId)
+        {
+            var comment = await _db.Comments
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.MovieId == movieId);
+
+            if (comment == null)
+            {
+                return APIDataResponse<Boolean>.Success(false);
+            }
+            else
+            {
+                return APIDataResponse<Boolean>.Success(true);
+            }
+        }
+
+        ///// <summary>
+        ///// 添加评论（限制一个用户对一个电影只能有一条评论）有BUG，插入出错
+        ///// </summary>
+        ///// <param name="comment"></param>
+        ///// <returns></returns>
+        //[HttpPut]
+        //[ProducesDefaultResponseType(typeof(APIResponse))]
+        //public async Task<IAPIResponse> AddComment([FromBody] CommentCreator comment)
+        //{
+        //    var customer = await _db.Customers.FindAsync(comment.CustomerId);
+
+        //    if (customer == null)
+        //    {
+        //        return APIResponse.Failaure("4001", "用户不存在");
+        //    }
+
+        //    var movie = await _db.Movies.FindAsync(comment.MovieId);
+
+        //    if (movie == null)
+        //    {
+        //        return APIResponse.Failaure("4001", "电影不存在");
+        //    }
+
+        //    var oComment = _db.Comments
+        //        .Where(c => c.CustomerId == comment.CustomerId && c.MovieId == comment.MovieId)
+        //        .FirstOrDefault();
+
+        //    if (oComment != null)
+        //    {
+        //        return APIResponse.Failaure("10001", "该用户已评论过该电影");
+        //    }
+
+        //    var nextId = Interlocked.Increment(ref _commentId);
+        //    var commentId = String.Format("{0:000000000}", nextId);
+
+        //    var nComment = new Comment
+        //    {
+        //        CommentId = commentId,
+        //        Content = comment.Content,
+        //        Score = comment.Score,
+        //        LikeCount = 0,
+        //        DislikeCount = 0,
+        //        PublishDate = comment.PublishDate,
+        //        Display = true,
+        //        MovieId = comment.MovieId,
+        //        CustomerId = comment.CustomerId
+        //    };
+
+        //    await _db.Comments.AddAsync(nComment);
+        //    await _db.SaveChangesAsync();
+
+        //    return APIResponse.Success();
+        //}
     }
 }
