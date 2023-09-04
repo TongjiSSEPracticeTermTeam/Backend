@@ -101,15 +101,15 @@ namespace Cinema.Controllers
         /// <summary>
         /// 根据id获得指定影人信息
         /// </summary>
-        /// <param name="id">影人id</param>
+        /// <param name="staffId">影人id</param>
         /// <returns>
         /// 返回对应影人json
         /// </returns>
         [HttpGet("{id}")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
-        public async Task<IAPIResponse> GetStaffById([FromRoute] string id)
+        public async Task<IAPIResponse> GetStaffById([FromRoute] string staffId)
         {
-            var staff = await _db.Staffs.FindAsync(id);
+            var staff = await _db.Staffs.FindAsync(staffId);
             if (staff == null)
             {
                 return APIResponse.Failaure("4001", "该影人不存在");
@@ -143,14 +143,14 @@ namespace Cinema.Controllers
         /// <summary>
         /// 通过ID删除对应影人
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="staffId"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{staffId}")]
         [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
-        public async Task<IAPIResponse> DeleteStaffById([FromRoute] string id)
+        public async Task<IAPIResponse> DeleteStaffById([FromRoute] string staffId)
         {
-            var staff = await _db.Staffs.FindAsync(id);
+            var staff = await _db.Staffs.FindAsync(staffId);
 
             if (staff == null)
             {
@@ -242,6 +242,29 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("10001", "影人修改失败");
             }
+        }
+
+        /// <summary>
+        /// 获得影人详情（含出演电影）
+        /// </summary>
+        /// <param name="staffId"></param>
+        /// <returns></returns>
+        [HttpGet("detail/{staffId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<StaffDetail>))]
+        public async Task<IAPIResponse> GetStaffDetail([FromRoute] string staffId)
+        {
+            var staff = await _db.Staffs
+                .Include(s => s.Acts)
+                .ThenInclude(a => a.Movie)
+                .FirstOrDefaultAsync(s => s.StaffId == staffId);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("10001", "影人不存在");
+            }
+
+            var staffDetail = new StaffDetail(staff);
+            return APIDataResponse<StaffDetail>.Success(staffDetail);
         }
 
         /// <summary>

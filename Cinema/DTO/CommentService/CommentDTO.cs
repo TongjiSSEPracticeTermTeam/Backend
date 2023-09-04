@@ -43,7 +43,7 @@ namespace Cinema.DTO.CommentService
         /// <summary>
         /// 是否屏蔽
         /// </summary>
-        public bool Display { get; set; }
+        public string Display { get; set; } = String.Empty;
 
         /// <summary>
         /// 评论电影ID
