@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Cinema.DTO.MoviesService;
 using TencentCloud.Bda.V20200324.Models;
 using TencentCloud.Ecm.V20190719.Models;
 
@@ -98,6 +99,54 @@ namespace Cinema.DTO.StaffService
         {
             StaffId = entity.StaffId;
             Name = entity.Name;
+        }
+    }
+
+    /// <summary>
+    /// 影人详细信息（含出演电影）
+    /// </summary>
+    public class StaffDetail : StaffDTO
+    {
+        /// <summary>
+        /// 导演电影
+        /// </summary>
+        public List<EMovie>? directMovies { get; set; }
+
+        /// <summary>
+        /// 参演电影
+        /// </summary>
+        public List<EMovie>? starMovies { get; set; }
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public StaffDetail() { }
+
+        /// <summary>
+        /// 实体构造
+        /// </summary>
+        /// <param name="entity"></param>
+        public StaffDetail(Staff entity) : base(entity)
+        {
+            if (directMovies == null)
+            {
+                directMovies = new List<EMovie>();
+            }
+
+            if (starMovies == null)
+            {
+                starMovies = new List<EMovie>();
+            }
+
+            directMovies = entity.Acts
+                .Where(a => a.Role == "1")
+                .Select(a => new EMovie(a.Movie))
+                .ToList();
+
+            starMovies = entity.Acts
+                .Where(a => a.Role == "0")
+                .Select(a => new EMovie(a.Movie))
+                .ToList();
         }
     }
 }
