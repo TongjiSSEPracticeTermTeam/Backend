@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TencentCloud.Es.V20180416.Models;
 using TencentCloud.Tic.V20201117.Models;
 
 namespace Cinema.Controllers
@@ -49,21 +50,21 @@ namespace Cinema.Controllers
             }
         }
 
-        ///// <summary>
-        ///// 获得所有影人信息
-        ///// </summary>
-        ///// <returns>
-        ///// 返回影人json列表
-        ///// </returns>
-        //[HttpGet]
-        //[ProducesDefaultResponseType(typeof(APIDataResponse<List<Staff>>))]
-        //public async Task<IAPIResponse> GetStaffs()
-        //{
-        //    var staffs = await _db.Staffs.ToListAsync();
-        //    staffs = staffs.OrderBy(staff => staff.StaffId).ToList();
-        //    //return new JsonResult(await _db.Staffs.ToListAsync());
-        //    return APIDataResponse<List<Staff>>.Success(staffs);
-        //}
+        /// <summary>
+        /// 获得所有影人的ID和名字
+        /// </summary>
+        /// <returns>
+        /// 返回影人json列表
+        /// </returns>
+        [HttpGet("all")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<EStaff>>))]
+        public async Task<IAPIResponse> GeteStaffs()
+        {
+            var staffs = await _db.Staffs.OrderBy(staff => staff.StaffId).ToArrayAsync();
+            var eStaffs = staffs.Select(s => new EStaff(s)).ToList();
+            //return new JsonResult(await _db.Staffs.ToListAsync());
+            return APIDataResponse<List<EStaff>>.Success(eStaffs);
+        }
 
         /// <summary>
         /// 管理端接口，获取所有影人的信息（分页）
@@ -115,6 +116,28 @@ namespace Cinema.Controllers
             }
 
             return APIDataResponse<Staff>.Success(staff);
+        }
+
+        /// <summary>
+        /// 根据名字获取影人信息，模糊匹配
+        /// </summary>
+        /// <param name="name">影人名字</param>
+        /// <returns>
+        /// 返回影人json列表
+        /// </returns>
+        [HttpGet("ByName/{name}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<StaffDTO>>))]
+        public async Task<IAPIResponse> GetStaffByName([FromRoute] string name)
+        {
+            var staffs = await _db.Staffs
+                .Where(s => s.Name.Contains(name))
+                .ToListAsync();
+            if(staffs!.Count() == 0)
+            {
+                return APIResponse.Failaure("4001", "影人不存在");
+            }
+            var staffDTOs = staffs.Select(s => new StaffDTO(s)).ToList();
+            return APIDataResponse<List<StaffDTO>>.Success(staffDTOs);
         }
 
         /// <summary>
@@ -219,6 +242,60 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("10001", "影人修改失败");
             }
+        }
+
+        /// <summary>
+        /// 根据演员ID获取其导演的所有电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetMovieAsDirector/{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMovieAsDirector([FromRoute] string id)
+        {
+            var staff = await _db.Staffs.FindAsync(id);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("4001", "影人ID不存在");
+            }
+
+            var acts = await _db.Acts
+                .Where(a => (a.StaffId == id) && (a.Role == "1"))
+                .Include(a => a.Movie).ToListAsync();
+
+            var movies = acts.Select(a => new MovieDTO(a.Movie))
+                .OrderBy(m => m.MovieId)
+                .ToList();
+
+            return APIDataResponse<List<MovieDTO>>.Success(movies);
+        }
+
+        /// <summary>
+        /// 根据演员ID获取其参演的所有电影
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetMovieAsActor/{id}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieDTO>>))]
+        public async Task<IAPIResponse> GetMovieAsActor([FromRoute] string id)
+        {
+            var staff = await _db.Staffs.FindAsync(id);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("4001", "影人ID不存在");
+            }
+
+            var acts = await _db.Acts
+                .Where(a => (a.StaffId == id) && (a.Role == "0"))
+                .Include(a => a.Movie).ToListAsync();
+
+            var movies = acts.Select(a => new MovieDTO(a.Movie))
+                .OrderBy(m => m.MovieId)
+                .ToList();
+
+            return APIDataResponse<List<MovieDTO>>.Success(movies);
         }
     }
 }
