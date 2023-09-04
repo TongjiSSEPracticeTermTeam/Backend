@@ -79,6 +79,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 // 配置票房服务
 builder.Services.AddScoped<BoxOfficeServices>();
 
+// 配置AES加密
+builder.Services.AddSingleton(new AesEncryptionervice());
+
 // 配置腾讯云QCOS
 if (Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY") == null)
     throw new InvalidOperationException("请配置腾讯云密钥");
