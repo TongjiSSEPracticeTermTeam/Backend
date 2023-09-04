@@ -106,7 +106,7 @@ namespace Cinema.Controllers
         /// <returns>
         /// 返回对应影人json
         /// </returns>
-        [HttpGet("{id}")]
+        [HttpGet("{staffId}")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
         public async Task<IAPIResponse> GetStaffById([FromRoute] string staffId)
         {
