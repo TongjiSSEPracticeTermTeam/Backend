@@ -51,12 +51,13 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 获得所有影人的ID和名字
+        /// 获得所有影人的ID和名字，管理员接口
         /// </summary>
         /// <returns>
         /// 返回影人json列表
         /// </returns>
         [HttpGet("all")]
+        //[Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<EStaff>>))]
         public async Task<IAPIResponse> GeteStaffs()
         {
@@ -67,7 +68,7 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有影人的信息（分页）
+        /// 获取所有影人的信息（分页）
         /// </summary>
         /// <returns></returns>
         /// <remarks>提醒，要分页！分页从1开始，小于1出现未定义行为</remarks>
@@ -85,12 +86,12 @@ namespace Cinema.Controllers
         }
 
         /// <summary>
-        /// 管理端接口，获取所有影人的数量
+        /// 获取所有影人的数量
         /// </summary>
         /// <returns></returns>
         /// <remarks>用于分页</remarks>
         [HttpGet("length")]
-        [Authorize(Policy = "CinemaAdmin")]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<int>))]
         public async Task<IAPIResponse> GetStaffsLength()
         {
@@ -101,15 +102,15 @@ namespace Cinema.Controllers
         /// <summary>
         /// 根据id获得指定影人信息
         /// </summary>
-        /// <param name="id">影人id</param>
+        /// <param name="staffId">影人id</param>
         /// <returns>
         /// 返回对应影人json
         /// </returns>
         [HttpGet("{id}")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
-        public async Task<IAPIResponse> GetStaffById([FromRoute] string id)
+        public async Task<IAPIResponse> GetStaffById([FromRoute] string staffId)
         {
-            var staff = await _db.Staffs.FindAsync(id);
+            var staff = await _db.Staffs.FindAsync(staffId);
             if (staff == null)
             {
                 return APIResponse.Failaure("4001", "该影人不存在");
@@ -143,14 +144,14 @@ namespace Cinema.Controllers
         /// <summary>
         /// 通过ID删除对应影人
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="staffId"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{staffId}")]
         [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
-        public async Task<IAPIResponse> DeleteStaffById([FromRoute] string id)
+        public async Task<IAPIResponse> DeleteStaffById([FromRoute] string staffId)
         {
-            var staff = await _db.Staffs.FindAsync(id);
+            var staff = await _db.Staffs.FindAsync(staffId);
 
             if (staff == null)
             {
@@ -242,6 +243,29 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("10001", "影人修改失败");
             }
+        }
+
+        /// <summary>
+        /// 获得影人详情（含出演电影）
+        /// </summary>
+        /// <param name="staffId"></param>
+        /// <returns></returns>
+        [HttpGet("detail/{staffId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<StaffDetail>))]
+        public async Task<IAPIResponse> GetStaffDetail([FromRoute] string staffId)
+        {
+            var staff = await _db.Staffs
+                .Include(s => s.Acts)
+                .ThenInclude(a => a.Movie)
+                .FirstOrDefaultAsync(s => s.StaffId == staffId);
+
+            if (staff == null)
+            {
+                return APIResponse.Failaure("10001", "影人不存在");
+            }
+
+            var staffDetail = new StaffDetail(staff);
+            return APIDataResponse<StaffDetail>.Success(staffDetail);
         }
 
         /// <summary>

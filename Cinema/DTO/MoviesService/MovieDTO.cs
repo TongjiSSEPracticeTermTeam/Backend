@@ -119,4 +119,41 @@ namespace Cinema.DTO.MoviesService
         }
 
     }
+
+    /// <summary>
+    /// 电影名字，ID和海报URL
+    /// </summary>
+    public class EMovie
+    {
+        /// <summary>
+        /// 电影ID
+        /// </summary>
+        public string MovieId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 电影名
+        /// </summary>
+        public string Name { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 电影海报
+        /// </summary>
+        public string? PostUrl { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public EMovie() { }
+
+        /// <summary>
+        /// 实体构造
+        /// </summary>
+        /// <param name="entity"></param>
+        public EMovie(Movie entity)
+        {
+            MovieId = entity.MovieId;
+            Name = entity.Name;
+            PostUrl = entity.PostUrl;
+        }
+    }
 }
