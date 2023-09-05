@@ -152,4 +152,158 @@ namespace Cinema.DTO.ManagerService
             
         }
     }
+
+    /// <summary>
+    /// 电影票DTO
+    /// </summary>
+    public class TicketDTO
+    {
+        /// <summary>
+        /// 影票ID
+        /// </summary>
+        [Required]
+        [JsonPropertyName("ticketId")]
+        public string Id { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 影票状态
+        /// </summary>
+        [JsonPropertyName("state")]
+        public TicketState State { get; set; } = TicketState.normal;
+
+        /// <summary>
+        /// 票价
+        /// </summary>
+        [JsonPropertyName("price")]
+        public float Price { get; set; }
+
+        /// <summary>
+        /// 电影编号
+        /// </summary>
+        [JsonPropertyName("movieId")]
+        public string MovieId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 开始时间
+        /// </summary>
+        [JsonPropertyName("startTime")]
+        public DateTime StartTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 影院编号
+        /// </summary>
+        [JsonPropertyName("cinemaId")]
+        public string CinemaId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 影厅
+        /// </summary>
+        [JsonPropertyName("hallId")]
+        public string HallId { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 导航属性 - 所属排片
+        /// </summary>
+        [JsonPropertyName("sessionId")]
+        public Session SessionAt { get; set; } = null!;
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public TicketDTO() { }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="entity"></param>
+        public TicketDTO(Ticket entity)
+        {
+            Id = entity.Id;
+            State = entity.State;
+            Price = entity.Price;
+            MovieId = entity.MovieId;
+            StartTime = entity.StartTime;
+            CinemaId = entity.CinemaId;
+            HallId = entity.HallId;
+            SessionAt = entity.SessionAt;
+        }
+    }
+
+    /// <summary>
+    /// 影厅数据总览DTO
+    /// </summary>
+    public class OverviewDTO
+    {
+        /// <summary>
+        /// 总体数据
+        /// </summary>
+        public GlobalData GlobalData { get; set; } = new GlobalData();
+
+        /// <summary>
+        /// 电影数据
+        /// </summary>
+        public List<CinemaMovieData> MovieDatas { get; set; } = new List<CinemaMovieData>();
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public OverviewDTO() { }
+    }
+
+    /// <summary>
+    /// 总体数据
+    /// </summary>
+    public class GlobalData
+    {
+        /// <summary>
+        /// 今日影院总票房
+        /// </summary>
+        public double TotalBoxOfficeToday { get; set; }
+
+        /// <summary>
+        /// 今日影院总观影人次
+        /// </summary>
+        public int AudienceNumberToday { get; set; }
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public GlobalData() { }
+    }
+
+    /// <summary>
+    /// 电影数据
+    /// </summary>
+    public class CinemaMovieData
+    {
+        /// <summary>
+        /// 电影名
+        /// </summary>
+        public string? MovieName { get; set; }
+
+        /// <summary>
+        /// 总票房
+        /// </summary>
+        public double TotalBoxOffice { get; set; }
+
+        /// <summary>
+        /// 上座率
+        /// </summary>
+        public float Attendance { get; set; }
+
+        /// <summary>
+        /// 观影人次
+        /// </summary>
+        public int AudienceNumber { get; set; }
+
+        /// <summary>
+        /// 首映日期
+        /// </summary>
+        public DateTime PremiereDate { get; set; }
+
+        /// <summary>
+        /// 默认构造
+        /// </summary>
+        public CinemaMovieData() { }
+    }
 }
