@@ -75,6 +75,19 @@ public class CinemaController
     }
 
     /// <summary>
+    /// 管理端接口，获取所有电影院信息
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("all")]
+    [ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
+    public async Task<IAPIResponse> GetAllCinemas()
+    {
+        var cinemas = await _db.Cinemas.OrderBy(c => c.CinemaId).ToArrayAsync();
+        var cinemaDTOs = cinemas.Select(c => new CinemaDTO(c)).ToList();
+        return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
+    }
+
+    /// <summary>
     /// 管理端接口，获取所有电影院的数量
     /// </summary>
     /// <returns></returns>
@@ -307,4 +320,32 @@ public class CinemaController
 
         return APIResponse.Success();
     }
+
+
+    ///<summary>
+    ///获取所有影院的所有feature
+    ///</summary>
+    [HttpGet("features")]
+    [ProducesDefaultResponseType(typeof(List<String>))]
+    public async Task<IAPIResponse> GetAllfeatures()
+    {
+        var cinemaFeatures = new List<string>();
+        var cinemas = await _db.Cinemas.ToListAsync();
+        foreach (var cinema in cinemas)
+        {
+            if (cinema.Feature != null)
+            {
+                var features = cinema.Feature.Split(',');
+                foreach (var feature in features)
+                {
+                    if (!cinemaFeatures.Contains(feature))
+                    {
+                        cinemaFeatures.Add(feature);
+                    }
+                }
+            }
+        }
+        return APIDataResponse<List<string>>.Success(cinemaFeatures);
+    }
+
 }
