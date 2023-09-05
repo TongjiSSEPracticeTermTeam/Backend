@@ -53,6 +53,7 @@ public class ManagerController : ControllerBase
     /// 登录
     /// </summary>
     [HttpPost("login")]
+    [ProducesDefaultResponseType(typeof(ManagerLoginResponse))]
     public async Task<ManagerLoginResponse> ManagerLogin([FromBody] ManagerLoginRequest request)
     {
         if (request.Password == "" || request.UserName == "")
