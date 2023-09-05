@@ -1,10 +1,12 @@
 ﻿using Cinema.DTO;
+using Cinema.DTO.CinemaService;
 using Cinema.DTO.ManagerService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 using TencentCloud.Kms.V20190118.Models;
+using TencentCloud.Mna.V20210119.Models;
 
 namespace Cinema.Controllers
 {
@@ -33,13 +35,14 @@ namespace Cinema.Controllers
             }*/
 
         }
+
         /// <summary>
         /// 管理端接口，获取某个影院编号下的所有影厅
         /// </summary> 
-        /// <param name=“cinemaId”>影院编号</param>
+        /// <param name="cinemaId">影院编号</param>
         /// <returns></returns>
         [HttpGet("{cinemaId}")]
-        //[Authorize(Policy = “CinemaAdmin”)]
+        //[Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<HallDTO>>))]
         public async Task<IAPIResponse> GetHallsByCinemaId([FromRoute] string cinemaId)
         {
@@ -59,5 +62,50 @@ namespace Cinema.Controllers
             return APIDataResponse<List<HallDTO>>.Success(hallDTOs);
         }
 
+        /// <summary>
+        /// 管理端接口，查询某个Managers管理的所有Cinema
+        /// </summary> 
+        /// <param name="managerId">Managers编号</param>
+        /// <returns></returns>
+        [HttpGet("manager/{managerId}/cinemas")]
+        //[Authorize(Policy = "CinemaAdmin")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
+        public async Task<IAPIResponse> GetCinemasByManagerId([FromRoute] string managerId)
+        {
+            var manager = await _db.Managers
+                                 .Include(m => m.ManagedCinema)
+                                 .FirstOrDefaultAsync(m => m.Id == managerId);
+            if (manager == null)
+            {
+                return APIResponse.Failaure("4004", "没有该用户");
+            }
+            var cinemaDTOs = new List<CinemaDTO>();
+
+            if (manager.ManagedCinema != null)
+            {
+                cinemaDTOs.Add(new CinemaDTO(manager.ManagedCinema));
+                return APIDataResponse<List<CinemaDTO>>.Success(cinemaDTOs);
+            }
+            else
+            {
+                return APIResponse.Failaure("4001", "用户下无影厅");
+            }
+        }
+
+        /// <summary>
+        /// 管理端接口，查询所有Managers的信息
+        /// </summary> 
+        /// <param></param>
+        /// <returns></returns>
+        [HttpGet("managers")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<ManagerDTO>>))]
+        public async Task<IAPIResponse> GetAllManager()
+        {
+            var managers = await _db.Managers
+                               .Include(m => m.ManagedCinema)
+                               .Select(m => new ManagerDTO(m))
+                               .ToListAsync();
+            return APIDataResponse<List<ManagerDTO>>.Success(managers);
+        }
     }
 }
