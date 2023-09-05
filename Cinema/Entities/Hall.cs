@@ -27,7 +27,7 @@ namespace Cinema.Entities
         [Column("HALL_TYPE")] public string? HallType { get; set; }
 
         /// <summary>
-        /// 影厅类型
+        /// 座位信息
         /// </summary>
         [Column("SEAT")] public Seat? Seat { get; set; }
 
