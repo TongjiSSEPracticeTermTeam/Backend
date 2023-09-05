@@ -88,6 +88,7 @@ namespace Cinema.DTO.CommentService
             CustomerId = comment.CustomerId;
             CustomerName = comment.Sender.Name;
             AvatarUrl = comment.Sender.AvatarUrl;
+            PublishDate = comment.PublishDate;
         }
     }
 
