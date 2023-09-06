@@ -24,8 +24,6 @@ public class CustomerController : ControllerBase
     private readonly CinemaDb _db;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
-    private readonly ILogger _logger;
-    private readonly QCosSrvice _qCosSrvice;
 
 
     private static int _customerId;
