@@ -1,6 +1,7 @@
 ﻿using Cinema.DTO;
 using Cinema.DTO.AvatarService;
 using Cinema.DTO.CinemaService;
+using Cinema.DTO.MoviesInHallService;
 using Cinema.DTO.MoviesService;
 using Cinema.DTO.StaffService;
 using Cinema.Entities;
@@ -70,6 +71,37 @@ namespace Cinema.Controllers
             var moviesDTO = movies.Select(c => new MovieDTO(c)).ToList();
             return APIDataResponse<List<MovieDTO>>.Success(moviesDTO);
         }
+
+        /// <summary>
+        /// 获取所有未下映电影的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("noremoval")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<MovieInHallDTO>>))]
+        public async Task<IAPIResponse> GetNoRemovalMovies()
+        {
+            // 查询未下映电影
+            var movies = await _db.Movies
+              .Where(m => m.RemovalDate > DateTime.Now)
+              .ToListAsync();
+            if (movies == null)
+            {
+                return APIResponse.Failaure("4000", "电影不存在");
+            }
+            // 映射实体到DTO 
+            var movieDTOs = movies.Select(m => new MovieInHallDTO()
+            {
+                MovieId = m.MovieId,
+                Name = m.Name,
+                Duration = m.Duration,
+                PostUrl = m.PostUrl,
+                Tags = m.Tags
+            }).ToList();
+
+            return APIDataResponse<List<MovieInHallDTO>>
+              .Success(movieDTOs);
+        }
+
 
         /// <summary>
         /// 获取特定电影的详细信息

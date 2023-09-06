@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.Controllers
 {
@@ -90,5 +91,16 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("4001", "未找到此电影");
             }
         }
+        /// <summary>
+        /// 尝试在某个影厅的某个时间点排片
+        /// </summary>
+        /// <returns></returns>
+        /*[HttpPut]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> PutSession([FromBody] )
+        {
+
+        }*/
+
     }
 }
