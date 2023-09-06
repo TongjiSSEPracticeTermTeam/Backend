@@ -30,7 +30,7 @@ namespace Cinema.DTO.StaffService
         /// 性别
         /// </summary>
         [JsonPropertyName("gender")]
-        public string Gender { get; set; } = "0";
+        public Gender_ Gender { get; set; } = 0;
 
         /// <summary>
         /// 介绍
@@ -59,7 +59,7 @@ namespace Cinema.DTO.StaffService
         {
             StaffId = entity.StaffId;
             Name = entity.Name;
-            Gender = entity.Gender.ToString();
+            Gender = entity.Gender;
             Introduction = entity.Introduction;
             ImageUrl = entity.ImageUrl;
         }
