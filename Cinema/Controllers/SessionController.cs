@@ -99,10 +99,12 @@ namespace Namespace
                 StartTime = data.StartTime,
                 Price = data.Price,
                 Attendence=0,
-                Language= movie.Language,
-
+                Language= data.Language,
+                Dimesion=data.Dimesion,
             };
-
+            await _db.Sessions.AddAsync(session);
+            await _db.SaveChangesAsync();
+            return APIResponse.Success();
         }
     }
 }
