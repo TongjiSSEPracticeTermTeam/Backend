@@ -64,16 +64,19 @@ namespace Cinema.Controllers
 
             var sessions = await _db.Sessions.Where(s => s.CinemaId == cinemaId)
                            .OrderBy(s => s.MovieId).ToArrayAsync();
+            if (sessions.Length == 0)
+            {
+                return APIResponse.Failaure("4003", "影院没有排片");
+            }
+            var SessionGyMovie = sessions.GroupBy(s => s.MovieId);
 
-            var movieSession = sessions.GroupBy(s => s.MovieId);
-
-            foreach (var movie in movieSession)
+            foreach (var movie in SessionGyMovie)
             {
                 CinemaMovieData movieData = new CinemaMovieData();
                 var movieEntity = await _db.Movies.FindAsync(movie.Key);
                 if (movieEntity == null)
                 {
-                    return APIResponse.Failaure("4003", "电影不存在");
+                    return APIResponse.Failaure("4002", "电影不存在");
                 }
                 movieData.MovieName = movieEntity.Name;
                 movieData.PremiereDate = movieEntity.ReleaseDate;
@@ -87,13 +90,9 @@ namespace Cinema.Controllers
                 {
                     TotalBoxOffice += ticket.Price;
                     var hall = await _db.Halls.FindAsync(ticket.HallId);
-                    if (hall == null)
+                    if (hall == null || hall.Seat == null)
                     {
-                        return APIResponse.Failaure("4002", "影厅不存在");
-                    }
-                    if (hall.Seat == null)
-                    {
-                        return APIResponse.Failaure("4001", "座位不存在");
+                        return APIResponse.Failaure("4001", "影厅或座位不存在");
                     }
                     foreach (var col in hall.Seat.Cols)
                     {
