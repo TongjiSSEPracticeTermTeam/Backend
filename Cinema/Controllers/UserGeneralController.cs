@@ -78,6 +78,7 @@ namespace Cinema.Controllers
                         DisplayName = user.Name,
                         Avatar = user.AvatarUrl,
                         Vip = user.Vip != null && user.Vip.EndDate > DateTime.Now,
+                        Email = user.Email,
                     };
                 case UserRole.CinemaAdmin:
                     var cinemaAdmin = await _db.Managers.FindAsync(name);

@@ -1,10 +1,13 @@
 using Cinema.DTO;
 using Cinema.DTO.CustomerService;
+using Cinema.DTO.MoviesService;
 using Cinema.Entities;
 using Cinema.Helpers;
+using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TencentCloud.Tcss.V20201101.Models;
@@ -21,6 +24,9 @@ public class CustomerController : ControllerBase
     private readonly CinemaDb _db;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
+    private readonly ILogger _logger;
+    private readonly QCosSrvice _qCosSrvice;
+
 
     private static int _customerId;
 
@@ -35,8 +41,11 @@ public class CustomerController : ControllerBase
         _db = db;
         _httpContextAccessor = httpContextAccessor;
         _jwtHelper = jwtHelper;
+        //_logger = logger;
+        //_qCosSrvice = qCosSrvice;
 
-        if(_customerId==0)
+
+        if (_customerId==0)
         {
             _customerId = int.Parse(_db.Customers.Max(m => m.CustomerId) ?? "0");
         }
@@ -162,4 +171,55 @@ public class CustomerController : ControllerBase
             UserData = customer
         };
     }
+
+
+    /// <summary>
+    /// 用户端接口，修改个人信息
+    /// </summary>
+    /// <param name="customer"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> EditCustomer([FromBody] CustomerDTO customer)
+    {
+        var customerEntity = await _db.Customers
+            .Where(m => m.CustomerId == customer.CustomerId)
+            .FirstOrDefaultAsync();
+
+
+        if (customerEntity == null)
+        {
+            return APIResponse.Failaure("4000", "用户不存在");
+        }
+
+        
+        if (customerEntity.Email != customer.Email && await _db.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email) != null)
+        {
+            return new APIResponse
+            {
+                Status = "4002",
+                Message = "邮箱已存在"
+            };
+        }
+
+        customerEntity.Name = customer.Name;
+        customerEntity.Email = customer.Email;
+        customerEntity.AvatarUrl= customer.AvatarUrl;
+
+        _db.SaveChanges();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch
+        {
+            return APIResponse.Failaure("5000", "服务器内部错误");
+        }
+
+        //_db.Movies.Update(movieEntity);
+        //await _db.SaveChangesAsync();
+        return APIResponse.Success();
+    }
+
 }
