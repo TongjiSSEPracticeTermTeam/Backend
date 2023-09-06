@@ -148,7 +148,8 @@ public class CustomerController : ControllerBase
             CustomerId = String.Format("{0:000000}",customerId),
             Password = Md5Helper.CalculateMd5Hash(request.Password),
             Name = request.Username,
-            Email = request.Email
+            Email = request.Email,
+            AvatarUrl="/img/default_avatar.jpg"
         };
 
         await _db.Customers.AddAsync(customer);
