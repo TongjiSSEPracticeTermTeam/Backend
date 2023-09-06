@@ -179,24 +179,21 @@ namespace Cinema.Controllers
         /// <summary>
         /// 返回对应用户和电影间是否存在评论
         /// </summary>
-        /// <param name="customerId"></param>
-        /// <param name="movieId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("isCommented")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<Boolean>))]
-        public async Task<IAPIResponse> IsCommented([FromQuery] string customerId, [FromQuery] string movieId)
+        [HttpGet("commented")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<string>>))]
+        public async Task<IAPIResponse> Commented([FromQuery] List<string> id)
         {
-            var comment = await _db.Comments
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.MovieId == movieId);
+            var role = JwtHelper.SolveRole(_httpContextAccessor);
+            Enum.TryParse(typeof(UserRole), role, out object? userRole);
+            if (userRole==null || (UserRole)userRole != UserRole.User)
+                return APIDataResponse<List<Boolean>>.Success(new List<bool>());
 
-            if (comment == null)
-            {
-                return APIDataResponse<Boolean>.Success(false);
-            }
-            else
-            {
-                return APIDataResponse<Boolean>.Success(true);
-            }
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+
+            var movies = await _db.Comments.Where(c => c.CustomerId == customerId && id.Contains(c.MovieId)).Select(c => c.MovieId).ToListAsync();
+            return APIDataResponse<List<string>>.Success(movies);
         }
 
         /// <summary>
@@ -205,14 +202,14 @@ namespace Cinema.Controllers
         /// <param name="comment"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "Customer")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> AddComment([FromBody] CommentCreator comment)
         {
-            var customer = await _db.Customers.FindAsync(comment.CustomerId);
-
-            if (customer == null)
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+            if (customerId == null)
             {
-                return APIResponse.Failaure("4001", "用户不存在");
+                return APIResponse.Failaure("4001", "系统错误");
             }
 
             var movie = await _db.Movies.FindAsync(comment.MovieId);
@@ -223,7 +220,7 @@ namespace Cinema.Controllers
             }
 
             var oComment = _db.Comments
-                .Where(c => c.CustomerId == comment.CustomerId && c.MovieId == comment.MovieId)
+                .Where(c => c.CustomerId == customerId && c.MovieId == comment.MovieId)
                 .FirstOrDefault();
 
             if (oComment != null)
@@ -244,7 +241,7 @@ namespace Cinema.Controllers
                 PublishDate = comment.PublishDate,
                 Display = "1",
                 MovieId = comment.MovieId,
-                CustomerId = comment.CustomerId
+                CustomerId = customerId
             };
 
             //更新对应电影评分
@@ -254,6 +251,53 @@ namespace Cinema.Controllers
             movie.Score = totalScore.Average();
 
             await _db.Comments.AddAsync(nComment);
+            _db.Movies.Update(movie);
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
+        }
+
+        /// <summary>
+        /// 修改评论
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Policy = "Customer")]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> EditComment([FromBody] CommentCreator comment)
+        {
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+            if (customerId == null)
+            {
+                return APIResponse.Failaure("4001", "系统错误");
+            }
+
+            var movie = await _db.Movies.FindAsync(comment.MovieId);
+
+            if (movie == null)
+            {
+                return APIResponse.Failaure("4001", "电影不存在");
+            }
+
+            var commentEntity = _db.Comments
+                .Where(c => c.CustomerId == customerId && c.MovieId == comment.MovieId)
+                .FirstOrDefault();
+
+            if (commentEntity == null)
+            {
+                return APIResponse.Failaure("10001", "该用户未评论过该电影");
+            }
+
+            commentEntity.Content = comment.Content;
+            commentEntity.Score = comment.Score;
+
+            //更新对应电影评分
+            var totalScore = _db.Comments
+                .Where(c => c.MovieId == comment.MovieId)
+                .Select(c => c.Score).ToList();
+            movie.Score = totalScore.Average();
+
             _db.Movies.Update(movie);
             await _db.SaveChangesAsync();
 

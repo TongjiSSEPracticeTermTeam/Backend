@@ -78,6 +78,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 
 // 配置票房服务
 builder.Services.AddScoped<BoxOfficeServices>();
+// 配置售票服务
+builder.Services.AddScoped<TicketServices>();
 
 // 配置AES加密
 builder.Services.AddSingleton(new AesEncryptionervice());

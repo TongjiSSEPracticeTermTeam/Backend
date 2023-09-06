@@ -32,6 +32,7 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="DTO\CommentService\" />
+      <Folder Include="DTO\HallService\" />
     </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Cinema.Entities;
 using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers;
 
@@ -45,8 +46,7 @@ public class ManagerController : ControllerBase
         {
             return new UnauthorizedResult();
         }
-
-        return new JsonResult(await _db.Managers.FindAsync(name));
+        return new JsonResult(await _db.Managers.Include(m => m.ManagedCinema).FirstOrDefaultAsync(m => m.Id == name));
     }
 
     /// <summary>
