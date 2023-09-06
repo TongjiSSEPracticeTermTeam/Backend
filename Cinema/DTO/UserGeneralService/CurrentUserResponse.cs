@@ -31,5 +31,11 @@ namespace Cinema.DTO.UserGeneralService
         [JsonPropertyName("avatar")]
         public string? Avatar { get; set; }
 
+        /// <summary>
+        /// 是否是VIP
+        /// </summary>
+        [JsonPropertyName("vip")]
+        public bool Vip { get; set; } = false;
+
     }
 }
