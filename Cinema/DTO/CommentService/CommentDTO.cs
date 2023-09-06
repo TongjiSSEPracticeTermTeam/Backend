@@ -6,74 +6,74 @@ using System.Text.Json.Serialization;
 namespace Cinema.DTO.CommentService
 {
     /// <summary>
-    /// ÆÀÂÛDTO£¨¹ÜÀíÔ±ÊÓÍ¼£©
+    /// è¯„è®ºDTOï¼ˆç®¡ç†å‘˜è§†å›¾ï¼‰
     /// </summary>
     public class CommentDTO
     {
         /// <summary>
-        /// ÆÀÂÛID
+        /// è¯„è®ºID
         /// </summary>
         public string CommentId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÆÀÂÛÄÚÈİ
+        /// è¯„è®ºå†…å®¹
         /// </summary>
         public string Content { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÆÀ·Ö
+        /// è¯„åˆ†
         /// </summary>
         public float Score { get; set; }
 
         /// <summary>
-        /// µãÔŞÊı
+        /// ç‚¹èµæ•°
         /// </summary>
         public int LikeCount { get; set; }
 
         /// <summary>
-        /// µã²ÈÊı
+        /// ç‚¹è¸©æ•°
         /// </summary>
         public int DislikeCount { get; set; }
 
         /// <summary>
-        /// ·¢²¼ÈÕÆÚ
+        /// å‘å¸ƒæ—¥æœŸ
         /// </summary>
         public DateTime PublishDate { get; set; }
 
         /// <summary>
-        /// ÊÇ·ñÆÁ±Î
+        /// æ˜¯å¦å±è”½
         /// </summary>
-        public bool Display { get; set; }
+        public string Display { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÆÀÂÛµçÓ°ID
+        /// è¯„è®ºç”µå½±ID
         /// </summary>
         public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ·¢²¼ÓÃ»§ID
+        /// å‘å¸ƒç”¨æˆ·ID
         /// </summary>
         public string CustomerId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÓÃ»§Ãû³Æ
+        /// ç”¨æˆ·åç§°
         /// </summary>
         public string? CustomerName { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÓÃ»§Í·Ïñ
+        /// ç”¨æˆ·å¤´åƒ
         /// </summary>
         public string? AvatarUrl { get; set; } = String.Empty;
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public CommentDTO()
         {
         }
 
         /// <summary>
-        /// ÓÉCommentÊµÌå¹¹Ôì
+        /// ç”±Commentå®ä½“æ„é€ 
         /// </summary>
         /// <param name="comment"></param>
         public CommentDTO(Comment comment)
@@ -92,41 +92,35 @@ namespace Cinema.DTO.CommentService
     }
 
     /// <summary>
-    /// ÆÀÂÛ´´½¨¶ÔÏó
+    /// è¯„è®ºåˆ›å»ºå¯¹è±¡
     /// </summary>
     public class CommentCreator
     {
         /// <summary>
-        /// ÆÀÂÛÄÚÈİ
+        /// è¯„è®ºå†…å®¹
         /// </summary> 
         [Required]
         public string Content { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÆÀ·Ö
+        /// è¯„åˆ†
         /// </summary>
         [Required]
         public float Score { get; set; }
 
         /// <summary>
-        /// ·¢²¼Ê±¼ä
+        /// å‘å¸ƒæ—¶é—´
         /// </summary>
         public DateTime PublishDate { get; set; } = new DateTime();
 
         /// <summary>
-        /// µçÓ°ID
+        /// ç”µå½±ID
         /// </summary>
         [Required]
         public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÓÃ»§ID
-        /// </summary>
-        [Required]
-        public string CustomerId { get; set; } = String.Empty;
-
-        /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public CommentCreator() { }
     }

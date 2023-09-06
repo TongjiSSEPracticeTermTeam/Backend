@@ -43,7 +43,7 @@ namespace Cinema.Entities
         /// <summary>
         /// 是否展示
         /// </summary>
-        [Required][Column("DISPLAY")] public bool Display { get; set; }
+        [Required][Column("DISPLAY")] public string Display { get; set; } = "1";
 
         /// <summary>
         /// 所属电影id

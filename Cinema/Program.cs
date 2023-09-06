@@ -78,9 +78,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 
 // 配置票房服务
 builder.Services.AddScoped<BoxOfficeServices>();
-
 // 配置售票服务
 builder.Services.AddScoped<TicketServices>();
+
+// 配置AES加密
+builder.Services.AddSingleton(new AesEncryptionervice());
 
 // 配置腾讯云QCOS
 if (Environment.GetEnvironmentVariable("TCCLOUD_SECRETKEY") == null)
@@ -133,9 +135,6 @@ app.UseSwaggerUI(c =>
     c.OAuthUsePkce();
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
@@ -164,5 +163,8 @@ else
         FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/dist"))
     });
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
