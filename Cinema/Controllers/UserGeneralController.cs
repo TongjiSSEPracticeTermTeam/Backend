@@ -5,6 +5,7 @@ using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers
 {
@@ -59,7 +60,7 @@ namespace Cinema.Controllers
             switch (role)
             {
                 case UserRole.User:
-                    var user = await _db.Customers.FindAsync(name);
+                    var user = await _db.Customers.Include(c => c.Vip).Where(c=>c.CustomerId == name).FirstOrDefaultAsync();
                     if (user == null)
                     {
                         return new APIResponse
@@ -75,7 +76,8 @@ namespace Cinema.Controllers
                         Type = "Customer",
                         Username = user.CustomerId,
                         DisplayName = user.Name,
-                        Avatar = user.AvatarUrl
+                        Avatar = user.AvatarUrl,
+                        Vip = user.Vip != null && user.Vip.EndDate > DateTime.Now,
                     };
                 case UserRole.CinemaAdmin:
                     var cinemaAdmin = await _db.Managers.FindAsync(name);
