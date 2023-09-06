@@ -1,14 +1,10 @@
 ﻿using Cinema.DTO;
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.ManagerService;
-using Cinema.DTO.MoviesService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-using TencentCloud.Kms.V20190118.Models;
-using TencentCloud.Mna.V20210119.Models;
 
 namespace Cinema.Controllers
 {

@@ -7,45 +7,45 @@ using Cinema.DTO.CinemaService;
 namespace Cinema.DTO.ManagerService
 {
     /// <summary>
-    /// Ó°Ìü¹ÜÀíDTO
+    /// å½±å…ç®¡ç†DTO
     /// </summary>
     public class HallDTO
     {
         /// <summary>
-        /// hall_id Ö÷¼ü
+        /// hall_id ä¸»é”®
         /// </summary>
         [Required]
         [JsonPropertyName("hallID")]
         public string Id { get; set; } = String.Empty;
 
         /// <summary>
-        /// cinema_id ËùÊôÓ°Ôº
+        /// cinema_id æ‰€å±å½±é™¢
         /// </summary>
         [Required]
         [JsonPropertyName("cinemaId")]
         public string CinemaId { get; set; } = String.Empty;
 
         /// <summary>
-        /// hall_type Ó°ÌüÀàĞÍ
+        /// hall_type å½±å…ç±»å‹
         /// </summary>
         [JsonPropertyName("hallType")]
         public string? HallType { get; set; } = String.Empty;
 
         /// <summary>
-        /// seat ×ùÎ»ĞÅÏ¢
+        /// seat åº§ä½ä¿¡æ¯
         /// </summary>
         [JsonPropertyName("seat")]
         public Seat? Seat { get; set; } = new Seat();
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public HallDTO()
         {
         }
 
         /// <summary>
-        /// ÓÉHallÊµÌå¹¹Ôì
+        /// ç”±Hallå®ä½“æ„é€ 
         /// </summary>
         /// <param name="entity"></param>
         public HallDTO(Hall entity)
@@ -57,26 +57,26 @@ namespace Cinema.DTO.ManagerService
         }
     }
     /// <summary>
-    /// Ó°ÌüÌí¼ÓÓÃ½Ó¿Ú
+    /// å½±å…æ·»åŠ ç”¨æ¥å£
     /// </summary>
     public class HallCreator: HallDTO
     {
         /// <summary>
-        /// ¹ÜÀíÔ±Ãû³Æ
+        /// ç®¡ç†å‘˜åç§°
         /// </summary>
         [Required]
         [JsonPropertyName("managerName")]
         public string ManagerName { get; set; } = String.Empty;
 
         /// <summary>
-        /// ¹ÜÀíÔ±ÃÜÂë
+        /// ç®¡ç†å‘˜å¯†ç 
         /// </summary>
         [Required]
         [JsonPropertyName("managerPassword")]
         public string ManagerPassword { get; set; } = String.Empty;
 
         /// <summary>
-        /// ¹ÜÀíÔ±ÓÊÏä
+        /// ç®¡ç†å‘˜é‚®ç®±
         /// </summary>
         [Required]
         [JsonPropertyName("managerEmail")]
@@ -84,58 +84,58 @@ namespace Cinema.DTO.ManagerService
     }
 
     /// <summary>
-    /// Ó°Ôº¾­ÀíDTO
+    /// å½±é™¢ç»ç†DTO
     /// </summary>
     public class ManagerDTO
     {
         /// <summary>
-        /// manager_id Ö÷¼ü
+        /// manager_id ä¸»é”®
         /// </summary>
         [Required]
         [JsonPropertyName("managerID")]
         public string Id { get; set; } = String.Empty;
 
         /// <summary>
-        /// name ĞÕÃû
+        /// name å§“å
         /// </summary>
         [Required]
         [JsonPropertyName("name")]
         public string Name { get; set; } = String.Empty;
 
         /// <summary>
-        /// password ÃÜÂë
+        /// password å¯†ç 
         /// </summary>
         [Required]
         [JsonPropertyName("password")]
         public string Password { get; set; } = String.Empty;
 
         /// <summary>
-        /// email ÓÊÏä
+        /// email é‚®ç®±
         /// </summary>
         [JsonPropertyName("email")]
         public string? Email { get; set; } = String.Empty;
 
         /// <summary>
-        /// avatarUrl Í·ÏñµØÖ·
+        /// avatarUrl å¤´åƒåœ°å€
         /// </summary>
         [JsonPropertyName("avatarUrl")]
         public string? AvatarUrl { get; set; } = String.Empty;
 
         /// <summary>
-        /// ¹ÜÀíµÄÓ°Ôº 
+        /// ç®¡ç†çš„å½±é™¢ 
         /// </summary>
         [JsonPropertyName("managedCinema")]
         public CinemaDTO? ManagedCinema { get; set; }
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public ManagerDTO()
         {
         }
 
         /// <summary>
-        /// ÓÉManagerÊµÌå¹¹Ôì
+        /// ç”±Managerå®ä½“æ„é€ 
         /// </summary>
         /// <param name="entity"></param>
         public ManagerDTO(Manager entity)
@@ -154,66 +154,66 @@ namespace Cinema.DTO.ManagerService
     }
 
     /// <summary>
-    /// µçÓ°Æ±DTO
+    /// ç”µå½±ç¥¨DTO
     /// </summary>
     public class TicketDTO
     {
         /// <summary>
-        /// Ó°Æ±ID
+        /// å½±ç¥¨ID
         /// </summary>
         [Required]
         [JsonPropertyName("ticketId")]
         public string Id { get; set; } = String.Empty;
 
         /// <summary>
-        /// Ó°Æ±×´Ì¬
+        /// å½±ç¥¨çŠ¶æ€
         /// </summary>
         [JsonPropertyName("state")]
         public TicketState State { get; set; } = TicketState.normal;
 
         /// <summary>
-        /// Æ±¼Û
+        /// ç¥¨ä»·
         /// </summary>
         [JsonPropertyName("price")]
         public float Price { get; set; }
 
         /// <summary>
-        /// µçÓ°±àºÅ
+        /// ç”µå½±ç¼–å·
         /// </summary>
         [JsonPropertyName("movieId")]
         public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ¿ªÊ¼Ê±¼ä
+        /// å¼€å§‹æ—¶é—´
         /// </summary>
         [JsonPropertyName("startTime")]
         public DateTime StartTime { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Ó°Ôº±àºÅ
+        /// å½±é™¢ç¼–å·
         /// </summary>
         [JsonPropertyName("cinemaId")]
         public string CinemaId { get; set; } = String.Empty;
 
         /// <summary>
-        /// Ó°Ìü
+        /// å½±å…
         /// </summary>
         [JsonPropertyName("hallId")]
         public string HallId { get; set; } = String.Empty;
 
         /// <summary>
-        /// µ¼º½ÊôĞÔ - ËùÊôÅÅÆ¬
+        /// å¯¼èˆªå±æ€§ - æ‰€å±æ’ç‰‡
         /// </summary>
         [JsonPropertyName("sessionId")]
         public Session SessionAt { get; set; } = null!;
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public TicketDTO() { }
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
         /// <param name="entity"></param>
         public TicketDTO(Ticket entity)
@@ -230,79 +230,79 @@ namespace Cinema.DTO.ManagerService
     }
 
     /// <summary>
-    /// Ó°ÌüÊı¾İ×ÜÀÀDTO
+    /// å½±å…æ•°æ®æ€»è§ˆDTO
     /// </summary>
     public class OverviewDTO
     {
         /// <summary>
-        /// ×ÜÌåÊı¾İ
+        /// æ€»ä½“æ•°æ®
         /// </summary>
         public GlobalData GlobalData { get; set; } = new GlobalData();
 
         /// <summary>
-        /// µçÓ°Êı¾İ
+        /// ç”µå½±æ•°æ®
         /// </summary>
         public List<CinemaMovieData> MovieDatas { get; set; } = new List<CinemaMovieData>();
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public OverviewDTO() { }
     }
 
     /// <summary>
-    /// ×ÜÌåÊı¾İ
+    /// æ€»ä½“æ•°æ®
     /// </summary>
     public class GlobalData
     {
         /// <summary>
-        /// ½ñÈÕÓ°Ôº×ÜÆ±·¿
+        /// ä»Šæ—¥å½±é™¢æ€»ç¥¨æˆ¿
         /// </summary>
         public double TotalBoxOfficeToday { get; set; }
 
         /// <summary>
-        /// ½ñÈÕÓ°Ôº×Ü¹ÛÓ°ÈË´Î
+        /// ä»Šæ—¥å½±é™¢æ€»è§‚å½±äººæ¬¡
         /// </summary>
         public int AudienceNumberToday { get; set; }
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public GlobalData() { }
     }
 
     /// <summary>
-    /// µçÓ°Êı¾İ
+    /// ç”µå½±æ•°æ®
     /// </summary>
     public class CinemaMovieData
     {
         /// <summary>
-        /// µçÓ°Ãû
+        /// ç”µå½±å
         /// </summary>
         public string? MovieName { get; set; }
 
         /// <summary>
-        /// ×ÜÆ±·¿
+        /// æ€»ç¥¨æˆ¿
         /// </summary>
         public double TotalBoxOffice { get; set; }
 
         /// <summary>
-        /// ÉÏ×ùÂÊ
+        /// ä¸Šåº§ç‡
         /// </summary>
         public float Attendance { get; set; }
 
         /// <summary>
-        /// ¹ÛÓ°ÈË´Î
+        /// è§‚å½±äººæ¬¡
         /// </summary>
         public int AudienceNumber { get; set; }
 
         /// <summary>
-        /// Ê×Ó³ÈÕÆÚ
+        /// é¦–æ˜ æ—¥æœŸ
         /// </summary>
         public DateTime PremiereDate { get; set; }
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public CinemaMovieData() { }
     }

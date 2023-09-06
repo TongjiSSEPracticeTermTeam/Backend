@@ -72,7 +72,7 @@ namespace Cinema.Controllers
 
             foreach (var movie in SessionGyMovie)
             {
-                CinemaMovieData movieData = new CinemaMovieData();
+                CinemaMovieData movieData = new();
                 var movieEntity = await _db.Movies.FindAsync(movie.Key);
                 if (movieEntity == null)
                 {

@@ -7,8 +7,6 @@ using Cinema.DTO.SessionService;
 using Cinema.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TencentCloud.Common.Profile;
-using TencentCloud.Mna.V20210119.Models;
 
 namespace Namespace
 {
