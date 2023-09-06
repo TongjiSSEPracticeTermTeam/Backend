@@ -2,6 +2,7 @@ using Cinema.DTO;
 using Cinema.DTO.CustomerService;
 using Cinema.Entities;
 using Cinema.Helpers;
+using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,9 @@ public class CustomerController : ControllerBase
     private readonly CinemaDb _db;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
+    private readonly ILogger _logger;
+    private readonly QCosSrvice _qCosSrvice;
+
 
     private static int _customerId;
 
@@ -161,4 +165,53 @@ public class CustomerController : ControllerBase
             UserData = customer
         };
     }
+
+
+    /// <summary>
+    /// 上传头像
+    /// </summary>
+    /// <returns>头像的URL</returns>
+    /// <remarks>文件从请求体中上传</remarks>
+    [HttpPut("poster")]
+    [Authorize(Policy = "RegUser")]
+    [ProducesDefaultResponseType(typeof(APIDataResponse<string>))]
+    public async Task<IAPIResponse> ChangeProfilePicture(IFormFile file)
+    {
+        _logger.LogInformation("Poster upload request received.");
+
+        if (file == null || file.Length == 0)
+        {
+            return APIResponse.Failaure("4002", "未上传文件");
+        }
+
+        // Save to temp file
+        var tempFileName = Path.GetTempFileName();
+        await using (var tempFile = new FileStream(tempFileName, FileMode.Create))
+        {
+            await file.CopyToAsync(tempFile);
+        }
+
+        var isValidImage = ImageService.PreprocessUploadedImage(tempFileName);
+        if (!isValidImage)
+        {
+            return APIResponse.Failaure("4000", "不是有效的图片");
+        }
+
+        var posterPath = String.Format("userdata/poster/{0}.jpg", Guid.NewGuid().ToString("N"));
+        string? posterUrl;
+        try
+        {
+            posterUrl = await _qCosSrvice.UploadFile(posterPath, tempFileName);
+        }
+        catch
+        {
+            System.IO.File.Delete(tempFileName);
+            return APIResponse.Failaure("4000", "上传图像失败（内部错误）");
+        }
+        System.IO.File.Delete(tempFileName);
+
+        _logger.LogInformation("Poster upload request succesfully completed.");
+        return APIDataResponse<string>.Success(posterUrl);
+    }
+
 }
