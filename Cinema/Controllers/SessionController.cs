@@ -56,6 +56,29 @@ namespace Namespace
         }
 
         /// <summary>
+        /// 根据影厅ID获取排片
+        /// </summary>
+        /// <param name="cinema_id"></param>
+        /// <param name="hall_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<SessionDTO>>))]
+        public async Task<IAPIResponse> GetByHallId([FromQuery] string cinema_id, [FromQuery] string hall_id)
+        {
+            var sessions = await _db.Sessions
+                                .Where(s => s.CinemaId == cinema_id && s.HallId == hall_id)
+                                .OrderBy(s => s.StartTime)
+                                .ToListAsync();
+            if (sessions == null|| sessions.Count==0)
+            {
+                return APIResponse.Failaure("40004", "当前影厅下无排片");
+            }
+
+            var sessionsDTO = sessions.Select(c => new SessionDTO(c)).ToList();
+            return APIDataResponse<List<SessionDTO>>.Success(sessionsDTO);
+        } 
+
+        /// <summary>
         /// 尝试在某个影厅的某个时间点排片
         /// </summary>
         /// <returns></returns>
@@ -76,18 +99,32 @@ namespace Namespace
                 return APIResponse.Failaure("40003", "排片时间不在电影上映时间内");
             //最后判断拍片时间是否已经被占用
 
-
-            var duration = double.Parse(movie.Duration);
+            
+            var duration = int.Parse(movie.Duration);
+            
             var endTime = data.StartTime.AddMinutes(duration);
+            Console.Write(endTime);
+            var sessions = await _db.Sessions.Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
+     .ToListAsync();
 
-            var existed = await _db.Sessions.Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
-                     .AnyAsync(sm => !
-                     ((sm.Session.StartTime >= data.StartTime && sm.Session.StartTime <= endTime)
-                     ||
-                     (sm.Session.StartTime.AddMinutes(double.Parse(sm.Movie.Duration)) >= data.StartTime && sm.Session.StartTime.AddMinutes(double.Parse(sm.Movie.Duration)) <= endTime)
-                     ||
-                     (sm.Session.StartTime<= data.StartTime&& sm.Session.StartTime.AddMinutes(double.Parse(sm.Movie.Duration))>=endTime)
-                    ));
+            bool existed = false;
+
+            foreach (var sm in sessions)
+            {
+                var sessionStartTime = sm.Session.StartTime;
+                var movieDuration = int.Parse(sm.Movie.Duration);
+                var sessionEndTime = sessionStartTime.AddMinutes(movieDuration);
+
+                if ((sessionStartTime >= data.StartTime && sessionStartTime <= endTime)
+                    || (sessionEndTime >= data.StartTime && sessionEndTime <= endTime)
+                    || (sessionStartTime <= data.StartTime && sessionEndTime >= endTime))
+                {
+                    existed = true;
+                    break;
+                }
+            }
+
+
             if (existed)
                 return APIResponse.Failaure("40004", "该时间段已被排片");
             // 如果都没有问题，就创建排片
