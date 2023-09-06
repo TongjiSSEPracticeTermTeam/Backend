@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Cinema.Entities;
+using TencentCloud.Common.Profile;
 
 namespace Cinema.DTO.SessionService
 {
@@ -42,6 +43,15 @@ namespace Cinema.DTO.SessionService
         [Required][Column("PRICE")]public float Price { get; set; }
 
         /// <summary>
+        /// 语言
+        /// </summary>
+        [Required][Column("LANGUAGE")]public string Language { get; set; } = String.Empty;
+
+        /// <summary>
+        /// 播放维数（3d、2d）
+        /// </summary>
+        [Required][Column("DIMENSION")]public string Dimesion { get; set; } = String.Empty;
+        /// <summary>
         /// 默认构造
         /// </summary>
         public SessionDTO()
@@ -60,6 +70,8 @@ namespace Cinema.DTO.SessionService
             StartTime=entity.StartTime;
             Attendence=entity.Attendence;
             Price=entity.Price;
+            Language=entity.Language;
+            Dimesion=entity.Dimesion;
         }
     }
 }
