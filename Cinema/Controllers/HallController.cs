@@ -21,7 +21,7 @@ namespace Cinema.Controllers
     {
         private readonly CinemaDb _db;
         private readonly ILogger _logger;
-        private static int _cinemaId;
+        private static int _hallId;
         /// <summary>
         /// 控制器构造函数
         /// </summary>
@@ -31,10 +31,10 @@ namespace Cinema.Controllers
         {
             _db = db;
             _logger = logger;
-/*            if (_cinemaId == 0)
+            if (_hallId == 0)
             {
-                _cinemaId = int.Parse(_db.Cinemas.Max(m => m.CinemaId) ?? "0");
-            }*/
+                _hallId = int.Parse(_db.Halls.Max(m => m.Id) ?? "0");
+            }
 
         }
 
@@ -149,13 +149,17 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("4004", "影院不存在");
             }
+
+            var maxId = int.Parse(_db.Halls.Max(m => m.Id) ?? "0");
+            var _Id = maxId+1;
             var hall = new Hall
             {
                 CinemaId = data.CinemaId,
-                Id= data.Id,
-                HallType= data.HallType,
-                Seat=data.Seat,
+                HallType = data.HallType,
+                Seat = data.Seat,
+                Id = $"{_Id:000000}"
             };
+            
             await _db.Halls.AddAsync(hall);
             await _db.SaveChangesAsync();
             return APIDataResponse<HallDTO>.Success(new HallDTO(hall));
