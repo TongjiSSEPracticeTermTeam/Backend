@@ -1,11 +1,13 @@
 using Cinema.DTO;
 using Cinema.DTO.CustomerService;
+using Cinema.DTO.MoviesService;
 using Cinema.Entities;
 using Cinema.Helpers;
 using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TencentCloud.Tcss.V20201101.Models;
@@ -39,8 +41,11 @@ public class CustomerController : ControllerBase
         _db = db;
         _httpContextAccessor = httpContextAccessor;
         _jwtHelper = jwtHelper;
+        //_logger = logger;
+        //_qCosSrvice = qCosSrvice;
 
-        if(_customerId==0)
+
+        if (_customerId==0)
         {
             _customerId = int.Parse(_db.Customers.Max(m => m.CustomerId) ?? "0");
         }
@@ -168,50 +173,52 @@ public class CustomerController : ControllerBase
 
 
     /// <summary>
-    /// 上传头像
+    /// 用户端接口，修改个人信息
     /// </summary>
-    /// <returns>头像的URL</returns>
-    /// <remarks>文件从请求体中上传</remarks>
-    [HttpPut("poster")]
-    [Authorize(Policy = "RegUser")]
-    [ProducesDefaultResponseType(typeof(APIDataResponse<string>))]
-    public async Task<IAPIResponse> ChangeProfilePicture(IFormFile file)
+    /// <param name="customer"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> EditCustomer([FromBody] CustomerDTO customer)
     {
-        _logger.LogInformation("Poster upload request received.");
+        var customerEntity = await _db.Customers
+            .Where(m => m.CustomerId == customer.CustomerId)
+            .FirstOrDefaultAsync();
 
-        if (file == null || file.Length == 0)
+
+        if (customerEntity == null)
         {
-            return APIResponse.Failaure("4002", "未上传文件");
+            return APIResponse.Failaure("4000", "用户不存在");
         }
 
-        // Save to temp file
-        var tempFileName = Path.GetTempFileName();
-        await using (var tempFile = new FileStream(tempFileName, FileMode.Create))
+        
+        if (customerEntity.Email != customer.Email && await _db.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email) != null)
         {
-            await file.CopyToAsync(tempFile);
+            return new APIResponse
+            {
+                Status = "4002",
+                Message = "邮箱已存在"
+            };
         }
 
-        var isValidImage = ImageService.PreprocessUploadedImage(tempFileName);
-        if (!isValidImage)
-        {
-            return APIResponse.Failaure("4000", "不是有效的图片");
-        }
+        customerEntity.Name = customer.Name;
+        customerEntity.Email = customer.Email;
+        customerEntity.AvatarUrl= customer.AvatarUrl;
 
-        var posterPath = String.Format("userdata/poster/{0}.jpg", Guid.NewGuid().ToString("N"));
-        string? posterUrl;
+        _db.SaveChanges();
+
         try
         {
-            posterUrl = await _qCosSrvice.UploadFile(posterPath, tempFileName);
+            await _db.SaveChangesAsync();
         }
         catch
         {
-            System.IO.File.Delete(tempFileName);
-            return APIResponse.Failaure("4000", "上传图像失败（内部错误）");
+            return APIResponse.Failaure("5000", "服务器内部错误");
         }
-        System.IO.File.Delete(tempFileName);
 
-        _logger.LogInformation("Poster upload request succesfully completed.");
-        return APIDataResponse<string>.Success(posterUrl);
+        //_db.Movies.Update(movieEntity);
+        //await _db.SaveChangesAsync();
+        return APIResponse.Success();
     }
 
 }
