@@ -51,7 +51,9 @@ namespace Cinema.Controllers
 
             var OverviewData = new OverviewDTO();
 
-            var ticketsToday = tickets.Where(t => t.StartTime == DateTime.Today && t.State != TicketState.refunded).ToList();
+            var ticketsToday = tickets.Where(t => t.StartTime.Date == DateTime.Today && 
+                                             t.StartTime > DateTime.Now.AddMinutes(-30) && 
+                                             t.State != TicketState.refunded).ToList();
 
             OverviewData.GlobalData.AudienceNumberToday = ticketsToday.Count;
             double TotalBoxOfficeToday = 0.0;
@@ -61,8 +63,7 @@ namespace Cinema.Controllers
             }
             OverviewData.GlobalData.TotalBoxOfficeToday = TotalBoxOfficeToday;
 
-            var sessions = await _db.Sessions.Where(s => s.CinemaId == cinemaId)
-                           .OrderBy(s => s.MovieId).ToArrayAsync();
+            var sessions = await _db.Sessions.Where(s => s.CinemaId == cinemaId).ToArrayAsync();
             if (sessions.Length == 0)
             {
                 return APIResponse.Failaure("4003", "影院没有排片");
@@ -80,7 +81,9 @@ namespace Cinema.Controllers
                 movieData.MovieName = movieEntity.Name;
                 movieData.PremiereDate = movieEntity.ReleaseDate;
 
-                var movieTickets = tickets.Where(t => t.MovieId == movie.Key && t.State != TicketState.refunded).ToList();
+                var movieTickets = tickets.Where(t => t.MovieId == movie.Key &&
+                                                 t.StartTime > DateTime.Now.AddMinutes(-30) &&
+                                                 t.State != TicketState.refunded).ToList();
                 movieData.AudienceNumber = movieTickets.Count;
 
                 double TotalBoxOffice = 0.0;
@@ -99,7 +102,7 @@ namespace Cinema.Controllers
                     }
                 }
                 movieData.TotalBoxOffice = TotalBoxOffice;
-                movieData.Attendance = (totalSeat == 0 ? 0 : movieData.AudienceNumber / totalSeat);
+                movieData.Attendance = (totalSeat == 0 ? 0 : movieData.AudienceNumber / (float)totalSeat);
 
                 OverviewData.MovieDatas.Add(movieData);
             }
