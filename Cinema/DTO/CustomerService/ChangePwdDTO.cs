@@ -43,7 +43,7 @@ namespace Cinema.DTO.CustomerService
         /// <summary>
         /// 实体构造
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="input"></param>
         public ChangePwdDTO(ChangePwdInput input)
         {
             CustomerId = input.customerId;
@@ -53,10 +53,24 @@ namespace Cinema.DTO.CustomerService
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public struct ChangePwdInput
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string customerId { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string oldPwd { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string newPwd { get; set; }
     }
 }

@@ -10,8 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using TencentCloud.Tcss.V20201101.Models;
-using TencentCloud.Tione.V20191022.Models;
 
 namespace Cinema.Controllers;
 
@@ -225,7 +223,7 @@ public class CustomerController : ControllerBase
     /// <summary>
     /// 用户端接口，修改密码
     /// </summary>
-    /// <param name="customer"></param>
+    /// <param name="data"></param>
     /// <returns></returns>
     [HttpPost("changePwd")]
     [ProducesDefaultResponseType(typeof(APIResponse))]
