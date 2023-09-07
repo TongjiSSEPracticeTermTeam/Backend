@@ -121,12 +121,6 @@ namespace Cinema.DTO.CommentService
         public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
-        /// 用户ID
-        /// </summary>
-        [Required]
-        public string CustomerId { get; set; } = String.Empty;
-
-        /// <summary>
         /// 默认构造
         /// </summary>
         public CommentCreator() { }

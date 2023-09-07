@@ -36,7 +36,7 @@ namespace Cinema.Entities
         [Column("AVATAR_URL")] public string? AvatarUrl { get; set; }
 
         /// <summary>
-        /// 导航属性 - 管理的影厅
+        /// 导航属性 - 管理的影院
         /// </summary>
         [JsonIgnore] public Cinemas ManagedCinema { get; set; } = null!;
 

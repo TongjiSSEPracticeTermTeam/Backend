@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TencentCloud.Tke.V20180525.Models;
 
 namespace Cinema.Controllers
 {
@@ -179,40 +178,67 @@ namespace Cinema.Controllers
         /// <summary>
         /// 返回对应用户和电影间是否存在评论
         /// </summary>
-        /// <param name="customerId"></param>
-        /// <param name="movieId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("isCommented")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<Boolean>))]
-        public async Task<IAPIResponse> IsCommented([FromQuery] string customerId, [FromQuery] string movieId)
+        [HttpGet("commented")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<string>>))]
+        public async Task<IAPIResponse> Commented([FromQuery] List<string> id)
         {
-            var comment = await _db.Comments
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.MovieId == movieId);
+            var role = JwtHelper.SolveRole(_httpContextAccessor);
+            Enum.TryParse(typeof(UserRole), role, out object? userRole);
+            if (userRole==null || (UserRole)userRole != UserRole.User)
+                return APIDataResponse<List<Boolean>>.Success(new List<bool>());
 
-            if (comment == null)
-            {
-                return APIDataResponse<Boolean>.Success(false);
-            }
-            else
-            {
-                return APIDataResponse<Boolean>.Success(true);
-            }
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+
+            var movies = await _db.Comments.Where(c => c.CustomerId == customerId && id.Contains(c.MovieId)).Select(c => c.MovieId).ToListAsync();
+            return APIDataResponse<List<string>>.Success(movies);
         }
 
         /// <summary>
-        /// 添加评论（限制一个用户对一个电影只能有一条评论）
+        /// 用户编辑前获取评论内容
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
+        [HttpGet("edit")]
+        [Authorize(Policy = "Customer")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<CommentCreator>))]
+        public async Task<IAPIResponse> GetComment([FromQuery] string movieId)
+        {
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+            var commentEntity = await _db.Comments
+                .Where(c => c.CustomerId == customerId && c.MovieId == movieId)
+                .FirstOrDefaultAsync();
+
+            if (commentEntity == null)
+                return APIDataResponse<CommentCreator>.Success(new CommentCreator
+                {
+                    MovieId = movieId,
+                });
+            else
+                return APIDataResponse<CommentCreator>.Success(new CommentCreator
+                {
+                    MovieId = movieId,
+                    PublishDate = commentEntity.PublishDate,
+                    Content = commentEntity.Content,
+                    Score = commentEntity.Score,
+                });
+        }
+
+        /// <summary>
+        /// 添加或修改评论（限制一个用户对一个电影只能有一条评论）
         /// </summary>
         /// <param name="comment"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
+        [Authorize(Policy = "Customer")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> AddComment([FromBody] CommentCreator comment)
         {
-            var customer = await _db.Customers.FindAsync(comment.CustomerId);
-
-            if (customer == null)
+            var customerId = JwtHelper.SolveName(_httpContextAccessor);
+            if (customerId == null)
             {
-                return APIResponse.Failaure("4001", "用户不存在");
+                return APIResponse.Failaure("4001", "系统错误");
             }
 
             var movie = await _db.Movies.FindAsync(comment.MovieId);
@@ -223,29 +249,35 @@ namespace Cinema.Controllers
             }
 
             var oComment = _db.Comments
-                .Where(c => c.CustomerId == comment.CustomerId && c.MovieId == comment.MovieId)
+                .Where(c => c.CustomerId == customerId && c.MovieId == comment.MovieId)
                 .FirstOrDefault();
 
             if (oComment != null)
             {
-                return APIResponse.Failaure("10001", "该用户已评论过该电影");
+                oComment.Content = comment.Content;
+                oComment.Score = comment.Score;
+                oComment.PublishDate = DateTime.Now;
             }
-
-            var nextId = Interlocked.Increment(ref _commentId);
-            var commentId = String.Format("{0:000000000}", nextId);
-
-            var nComment = new Comment
+            else
             {
-                CommentId = commentId,
-                Content = comment.Content,
-                Score = comment.Score,
-                LikeCount = 0,
-                DislikeCount = 0,
-                PublishDate = comment.PublishDate,
-                Display = "1",
-                MovieId = comment.MovieId,
-                CustomerId = comment.CustomerId
-            };
+                var nextId = Interlocked.Increment(ref _commentId);
+                var commentId = String.Format("{0:000000000}", nextId);
+
+                var nComment = new Comment
+                {
+                    CommentId = commentId,
+                    Content = comment.Content,
+                    Score = comment.Score,
+                    LikeCount = 0,
+                    DislikeCount = 0,
+                    PublishDate = DateTime.Now,
+                    Display = "1",
+                    MovieId = comment.MovieId,
+                    CustomerId = customerId
+                };
+                await _db.Comments.AddAsync(nComment);
+            }
+            
 
             //更新对应电影评分
             var totalScore = _db.Comments
@@ -253,8 +285,6 @@ namespace Cinema.Controllers
                 .Select(c => c.Score).ToList();
             movie.Score = totalScore.Average();
 
-            await _db.Comments.AddAsync(nComment);
-            _db.Movies.Update(movie);
             await _db.SaveChangesAsync();
 
             return APIResponse.Success();

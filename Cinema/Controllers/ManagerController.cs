@@ -1,8 +1,10 @@
+using Cinema.DTO;
 using Cinema.DTO.ManagerService;
 using Cinema.Entities;
 using Cinema.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers;
 
@@ -45,8 +47,7 @@ public class ManagerController : ControllerBase
         {
             return new UnauthorizedResult();
         }
-
-        return new JsonResult(await _db.Managers.FindAsync(name));
+        return new JsonResult(await _db.Managers.Include(m => m.ManagedCinema).FirstOrDefaultAsync(m => m.Id == name));
     }
 
     /// <summary>
@@ -84,5 +85,21 @@ public class ManagerController : ControllerBase
             Status = "4002",
             Message = "用户名或密码错误"
         };
+    }
+
+    /// <summary>
+    /// 检查是否有正在管理的影院
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("check")]
+    [Authorize(Policy = "CinemaAdmin")]
+    public async Task<IAPIResponse> CheckManagingCinemas()
+    {
+        var managerId = JwtHelper.SolveName(_httpContextAccessor);
+        if (managerId == null)
+            return APIDataResponse<bool>.Success(false);
+
+        var managedCinema = await _db.Managers.Where(m=>m.Id==managerId).Select(m=>m.ManagedCinema).FirstOrDefaultAsync();
+        return APIDataResponse<bool>.Success(managedCinema != null);
     }
 }
