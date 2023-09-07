@@ -53,7 +53,8 @@ namespace Cinema.Entities
             modelBuilder.Entity<Hall>()
                 .HasOne(h => h.CinemaBelongTo)
                 .WithMany(c => c.Halls)
-                .HasForeignKey(h => h.CinemaId);
+                .HasForeignKey(h => h.CinemaId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Hall>().Property(h => h.Seat).HasConversion(
                 v => JsonSerializer.Serialize(v, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull }),

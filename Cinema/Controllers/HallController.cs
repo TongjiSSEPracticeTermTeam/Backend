@@ -150,7 +150,9 @@ namespace Cinema.Controllers
                 return APIResponse.Failaure("4004", "影院不存在");
             }
 
-            var maxId = int.Parse(_db.Halls.Max(m => m.Id) ?? "0");
+            var halls = _db.Halls.Where(h => h.CinemaId == data.CinemaId);
+            //var maxId = int.Parse(_db.Halls.Max(m => m.Id) ?? "0");
+            var maxId = int.Parse(halls.Max(m => m.Id) ?? "0");
             var _Id = maxId+1;
             var hall = new Hall
             {
