@@ -58,7 +58,7 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetCommentsByMovieId([FromRoute] string movieId)
         {
             var comments = await _db.Comments
-                .Where(c => c.MovieId == movieId)
+                .Where(c => (c.MovieId == movieId && c.Display=="1"))
                 .Include(c => c.Sender)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
@@ -75,13 +75,13 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetCommentsInMovieDetail([FromRoute] string movieId)
         {
             var newComments = await _db.Comments
-                                .Where(c => c.MovieId == movieId)
+                                .Where(c => (c.MovieId == movieId && c.Display == "1"))
                                 .Include(c => c.Sender)
                                 .OrderByDescending(c => c.PublishDate)
                                 .Take(5)
                                 .ToListAsync();
             var hotComments = await _db.Comments
-                                .Where(c => c.MovieId == movieId)
+                                .Where(c => (c.MovieId == movieId && c.Display == "1"))
                                 .Include(c => c.Sender)
                                 .OrderByDescending(c => c.LikeCount)
                                 .Take(5)
