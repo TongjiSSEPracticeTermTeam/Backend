@@ -277,6 +277,8 @@ namespace Cinema.Controllers
                 };
                 await _db.Comments.AddAsync(nComment);
             }
+
+            await _db.SaveChangesAsync();
             
 
             //更新对应电影评分
