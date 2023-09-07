@@ -74,12 +74,6 @@ namespace Cinema.DTO.CinemaService
     /// </summary>
     public class CinemaCreator : CinemaDTO
     {
-        /// <summary>
-        /// 管理员名称
-        /// </summary>
-        [Required]
-        [JsonPropertyName("managerName")]
-        public string ManagerName { get; set; } = String.Empty;
 
         /// <summary>
         /// 管理员密码
@@ -88,11 +82,5 @@ namespace Cinema.DTO.CinemaService
         [JsonPropertyName("managerPassword")]
         public string ManagerPassword { get; set; } = String.Empty;
 
-        /// <summary>
-        /// 管理员邮箱
-        /// </summary>
-        [Required]
-        [JsonPropertyName("managerEmail")]
-        public string ManagerEmail { get; set; } = String.Empty;
     }
 }

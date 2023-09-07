@@ -52,6 +52,11 @@ public class CinemaDb : DbContext
     public DbSet<Hall> Halls { get; set; } = null!;
 
     /// <summary>
+    /// 头图表
+    /// </summary>
+    public DbSet<HeaderImage> HeaderImages { get; set; } = null!;
+
+    /// <summary>
     /// 评论交互表
     /// </summary>
     public DbSet<Interaction> Interactions { get; set; } = null!;
@@ -95,6 +100,7 @@ public class CinemaDb : DbContext
         Act.ConfigureDbContext(modelBuilder);
         Comment.ConfigureDbContext(modelBuilder);
         Hall.ConfigureDbContext(modelBuilder);
+        HeaderImage.ConfigureDbContext(modelBuilder);
         Interaction.ConfigureDbContext(modelBuilder);
         Manager.ConfigureDbContext(modelBuilder);
         Administrator.ConfigureDbContext(modelBuilder);
