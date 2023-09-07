@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TencentCloud.Tcss.V20201101.Models;
+using TencentCloud.Tione.V20191022.Models;
 
 namespace Cinema.Controllers;
 
@@ -220,4 +221,46 @@ public class CustomerController : ControllerBase
         return APIResponse.Success();
     }
 
+
+    /// <summary>
+    /// 用户端接口，修改密码
+    /// </summary>
+    /// <param name="customer"></param>
+    /// <returns></returns>
+    [HttpPost("changePwd")]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> EditPassword([FromBody] ChangePwdDTO data)
+    {
+        var customerEntity = await _db.Customers
+            .Where(m => m.CustomerId == data.CustomerId)
+            .FirstOrDefaultAsync();
+
+        if (customerEntity == null) { 
+            return APIResponse.Failaure("4000", "用户不存在"); 
+        }
+
+        if (customerEntity.Password != Md5Helper.CalculateMd5Hash(data.OldPwd))
+        {
+            return APIResponse.Failaure("4001", "原密码错误");
+        }
+        
+        if(customerEntity.Password == Md5Helper.CalculateMd5Hash(data.NewPwd))
+        {
+            return APIResponse.Failaure("4002", "新密码不能与原密码相同");
+        }
+
+        customerEntity.Password = Md5Helper.CalculateMd5Hash(data.NewPwd);
+
+        _db.SaveChanges();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch
+        {
+            return APIResponse.Failaure("5000", "服务器内部错误");
+        }
+        return APIResponse.Success();
+    }
 }
