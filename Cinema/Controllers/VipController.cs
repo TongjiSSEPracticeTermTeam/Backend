@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 namespace Cinema.Controllers;
 
 /// <summary>
-/// ÓÃ»§»áÔ±VIPÏà¹Ø½Ó¿Ú
+/// ç”¨æˆ·ä¼šå‘˜VIPç›¸å…³æ¥å£
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
@@ -21,7 +21,7 @@ public class VipController : ControllerBase
     private readonly JwtHelper _jwtHelper;
 
     /// <summary>
-    /// ³õÊ¼»¯
+    /// åˆå§‹åŒ–
     /// </summary>
     /// <param name="db"></param>
     /// <param name="httpContextAccessor"></param>
@@ -34,7 +34,7 @@ public class VipController : ControllerBase
     }
 
     /// <summary>
-    /// ·µ»Ø¶ÔÓ¦ÓÃ»§µÄVIPĞÅÏ¢
+    /// è¿”å›å¯¹åº”ç”¨æˆ·çš„VIPä¿¡æ¯
     /// </summary>
     /// <param name="customerId"></param>
     /// <returns></returns>
@@ -49,14 +49,14 @@ public class VipController : ControllerBase
 
         if (customer == null)
         {
-            return APIResponse.Failaure("4001", "ÓÃ»§²»´æÔÚ");
+            return APIResponse.Failaure("4001", "ç”¨æˆ·ä¸å­˜åœ¨");
         }
 
         return APIDataResponse<VipInfo?>.Success(customer.Vip);
     }
 
     /// <summary>
-    /// ĞŞ¸Ä¶ÔÓ¦IDÓÃ»§µÄVIP½áÊøÊ±¼ä
+    /// ä¿®æ”¹å¯¹åº”IDç”¨æˆ·çš„VIPç»“æŸæ—¶é—´
     /// </summary>
     /// <param name="customerId"></param>
     /// <param name="endTime"></param>
@@ -70,12 +70,12 @@ public class VipController : ControllerBase
 
         if (customer == null)
         {
-            return APIResponse.Failaure("10001", "ÓÃ»§²»´æÔÚ");
+            return APIResponse.Failaure("10001", "ç”¨æˆ·ä¸å­˜åœ¨");
         }
 
         var vipInfo = await _db.VipInfos.FindAsync(customerId);
 
-        //Èç¹ûÎ´ÓĞ¹ıvip¼ÇÂ¼ÔòÔö¼Ó£¬·ñÔò½øĞĞĞŞ¸Ä
+        //å¦‚æœæœªæœ‰è¿‡vipè®°å½•åˆ™å¢åŠ ï¼Œå¦åˆ™è¿›è¡Œä¿®æ”¹
         if (vipInfo == null)
         {
             var nVipInfo = new VipInfo
@@ -96,7 +96,7 @@ public class VipController : ControllerBase
     }
 
     /// <summary>
-    /// ¸ù¾İÄ£Ê½ĞŞ¸Ä¶ÔÓ¦ÓÃ»§µÄ»áÔ±µ½ÆÚÊ±¼ä
+    /// æ ¹æ®æ¨¡å¼ä¿®æ”¹å¯¹åº”ç”¨æˆ·çš„ä¼šå‘˜åˆ°æœŸæ—¶é—´
     /// </summary>
     /// <param name="customerId"></param>
     /// <param name="mode"></param>
@@ -110,7 +110,7 @@ public class VipController : ControllerBase
 
         if (customer == null)
         {
-            return APIResponse.Failaure("10001", "ÓÃ»§²»´æÔÚ");
+            return APIResponse.Failaure("10001", "ç”¨æˆ·ä¸å­˜åœ¨");
         }
 
         DateTime endTime = DateTime.Now;
@@ -118,10 +118,10 @@ public class VipController : ControllerBase
         
         if (vipInfo != null)
         {
-            //ÒÑ¾­¹ıÆÚÔòÊÇĞø·Ñ
+            //å·²ç»è¿‡æœŸåˆ™æ˜¯ç»­è´¹
             if (vipInfo.EndDate.CompareTo(DateTime.Now) < 0)
                 endTime = DateTime.Now;
-            //·ñÔòÎª¿ªÍ¨
+            //å¦åˆ™ä¸ºå¼€é€š
             else
                 endTime = vipInfo.EndDate;
         }
@@ -138,11 +138,11 @@ public class VipController : ControllerBase
                 endTime = endTime.AddYears(1);
                 break;
             default :
-                return APIResponse.Failaure("4001", "Ä£Ê½´íÎó");
+                return APIResponse.Failaure("4001", "æ¨¡å¼é”™è¯¯");
         }
 
 
-        //Èç¹ûÎ´ÓĞ¹ıvip¼ÇÂ¼ÔòÔö¼Ó£¬·ñÔò½øĞĞĞŞ¸Ä
+        //å¦‚æœæœªæœ‰è¿‡vipè®°å½•åˆ™å¢åŠ ï¼Œå¦åˆ™è¿›è¡Œä¿®æ”¹
         if (vipInfo == null)
         {
             var nVipInfo = new VipInfo
