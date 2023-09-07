@@ -12,17 +12,10 @@
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'pro' " />
     <ItemGroup>
-      <Compile Remove="DTO\HallService\**" />
       <Compile Remove="DTO\新文件夹1\**" />
-      <Content Remove="DTO\HallService\**" />
       <Content Remove="DTO\新文件夹1\**" />
-      <EmbeddedResource Remove="DTO\HallService\**" />
       <EmbeddedResource Remove="DTO\新文件夹1\**" />
-      <None Remove="DTO\HallService\**" />
       <None Remove="DTO\新文件夹1\**" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="DTO\ManagerService\ManagerDTO.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />

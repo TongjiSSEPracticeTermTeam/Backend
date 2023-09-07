@@ -37,7 +37,7 @@ namespace Namespace
             var sessions = await _db.Sessions
                                 .Include(s => s.HallLocatedAt)
                                 .ThenInclude(s => s.CinemaBelongTo)
-                                .Where(s => s.StartTime > DateTime.Now)
+                                .Where(s => s.StartTime > DateTime.Now && s.MovieId == movieId)
                                 .ToListAsync();
 
             // 根据session.StartTime对sessions分类

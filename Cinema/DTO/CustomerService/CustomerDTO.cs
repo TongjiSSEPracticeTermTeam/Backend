@@ -53,9 +53,9 @@ namespace Cinema.DTO.CustomerService
         public CustomerDTO(Customer entity)
         {
             CustomerId = entity.CustomerId;
-            Name = entity.Name;
-            Email = entity.Email;
-            AvatarUrl = entity.AvatarUrl;
+            Name = entity.Name ?? "";
+            Email = entity.Email ?? "";
+            AvatarUrl = entity.AvatarUrl ?? "";
         }
 
     }
