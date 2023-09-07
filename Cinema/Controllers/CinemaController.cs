@@ -156,9 +156,9 @@ public class CinemaController
         var managerEntity = new Manager
         {
             Id = data.CinemaId,
-            Name = data.ManagerName,
+            Name = "m-"+data.CinemaId,
             Password = Md5Helper.CalculateMd5Hash(data.ManagerPassword),
-            Email = data.ManagerEmail,
+            Email = "m-"+data.CinemaId+"@cinema.com",
             AvatarUrl = String.Empty
         };
 
