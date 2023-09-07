@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Cinema.Entities
 {
@@ -69,6 +70,11 @@ namespace Cinema.Entities
         /// 导航属性 - 拍片
         /// </summary>
         public ICollection<Session> Sessions { get; set; } = new List<Session>();
+
+        /// <summary>
+        /// 导航属性 - 头图
+        /// </summary>
+        [JsonIgnore] public ICollection<HeaderImage> HeaderImages { get; set; } = new List<HeaderImage>();
 
         /// <summary>
         /// 配置

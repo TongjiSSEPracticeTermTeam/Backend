@@ -58,7 +58,7 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetCommentsByMovieId([FromRoute] string movieId)
         {
             var comments = await _db.Comments
-                .Where(c => c.MovieId == movieId)
+                .Where(c => (c.MovieId == movieId && c.Display == "1"))
                 .Include(c => c.Sender)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
@@ -75,13 +75,13 @@ namespace Cinema.Controllers
         public async Task<IAPIResponse> GetCommentsInMovieDetail([FromRoute] string movieId)
         {
             var newComments = await _db.Comments
-                                .Where(c => c.MovieId == movieId)
+                                .Where(c => (c.MovieId == movieId && c.Display == "1"))
                                 .Include(c => c.Sender)
                                 .OrderByDescending(c => c.PublishDate)
                                 .Take(5)
                                 .ToListAsync();
             var hotComments = await _db.Comments
-                                .Where(c => c.MovieId == movieId)
+                                .Where(c => (c.MovieId == movieId && c.Display == "1"))
                                 .Include(c => c.Sender)
                                 .OrderByDescending(c => c.LikeCount)
                                 .Take(5)
@@ -104,6 +104,59 @@ namespace Cinema.Controllers
         {
             var comments = await _db.Comments
                 .Where(c => c.CustomerId == customerId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
+        }
+
+        /// <summary>
+        /// 管理员根据用户ID获取对应评论,包括被屏蔽的
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        [HttpGet("byCustomerId(Admin)/{customerId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
+        public async Task<IAPIResponse> AdminGetCommentsByCustomerId([FromRoute] string customerId)
+        {
+            var comments = await _db.Comments
+                .Where(c => c.CustomerId == customerId)
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
+        }
+
+
+        /// <summary>
+        /// 管理员根据电影ID获取所有评论(包括被屏蔽的)
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
+        [HttpGet("byMovieId(Admin)/{movieId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
+        public async Task<IAPIResponse> AdminGetCommentsByMovieId([FromRoute] string movieId)
+        {
+            var comments = await _db.Comments
+                .Where(c => (c.MovieId == movieId))
+                .Include(c => c.Sender)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
+        }
+
+
+        /// <summary>
+        /// 管理员根据评论ID获取对应评论
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        [HttpGet("byCommentId(Admin)/{commentId}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<CommentDTO>))]
+        public async Task<IAPIResponse> AdminGetCommentByCommentId([FromRoute] string commentId)
+        {
+            var comments = await _db.Comments
+                .Where(c => (c.CommentId == commentId))
                 .Include(c => c.Sender)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
@@ -186,7 +239,7 @@ namespace Cinema.Controllers
         {
             var role = JwtHelper.SolveRole(_httpContextAccessor);
             Enum.TryParse(typeof(UserRole), role, out object? userRole);
-            if (userRole==null || (UserRole)userRole != UserRole.User)
+            if (userRole == null || (UserRole)userRole != UserRole.User)
                 return APIDataResponse<List<Boolean>>.Success(new List<bool>());
 
             var customerId = JwtHelper.SolveName(_httpContextAccessor);
