@@ -3,7 +3,7 @@ using Cinema.DTO.AvatarService;
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.MoviesInHallService;
 using Cinema.DTO.MoviesService;
-using Cinema.DTO.StaffService;
+using Cinema.DTO.ManagerService;
 using Cinema.Entities;
 using Cinema.Helpers;
 using Cinema.Services;
