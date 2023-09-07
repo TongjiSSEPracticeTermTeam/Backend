@@ -271,8 +271,17 @@ namespace Cinema
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> GetTicket([FromForm] string code)
         {
-            var getTicketInfoJson = _aes.Decrypt(code);
+            string? getTicketInfoJson;
             GetTicketInfo? getTicketInfo;
+
+            try
+            {
+                getTicketInfoJson = _aes.Decrypt(code);
+            }
+            catch
+            {
+                return APIResponse.Failaure("4001", "取票码已损坏");
+            }
 
             try
             {

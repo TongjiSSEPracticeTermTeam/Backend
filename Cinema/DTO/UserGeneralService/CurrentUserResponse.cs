@@ -37,5 +37,12 @@ namespace Cinema.DTO.UserGeneralService
         [JsonPropertyName("vip")]
         public bool Vip { get; set; } = false;
 
+
+        /// <summary>
+        /// 邮箱
+        /// </summary>
+        [JsonPropertyName("email")]
+        public string? Email { get; set; }
+
     }
 }

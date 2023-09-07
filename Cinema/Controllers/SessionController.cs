@@ -37,7 +37,7 @@ namespace Namespace
             var sessions = await _db.Sessions
                                 .Include(s => s.HallLocatedAt)
                                 .ThenInclude(s => s.CinemaBelongTo)
-                                .Where(s => s.StartTime > DateTime.Now)
+                                .Where(s => s.StartTime > DateTime.Now && s.MovieId == movieId)
                                 .ToListAsync();
 
             // 根据session.StartTime对sessions分类
@@ -90,8 +90,8 @@ namespace Namespace
             if (movie == null)
                 return APIResponse.Failaure("40002", "电影不存在");
             // 再判断拍片时间是否在电影上下映之间
-            if (data.StartTime < movie.ReleaseDate || data.StartTime > movie.RemovalDate)
-                return APIResponse.Failaure("40003", "排片时间不在电影上映时间内");
+            if (data.StartTime < DateTime.Now || data.StartTime > movie.RemovalDate)
+                return APIResponse.Failaure("40003", "排片时间不在电影上映时间内或在过去时间段内");
             //最后判断拍片时间是否已经被占用
 
 
@@ -99,7 +99,7 @@ namespace Namespace
 
             var endTime = data.StartTime.AddMinutes(duration);
             Console.Write(endTime);
-            var sessions = await _db.Sessions.Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
+            var sessions = await _db.Sessions.Where(s=>s.HallId==data.HallId).Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
      .ToListAsync();
 
             bool existed = false;

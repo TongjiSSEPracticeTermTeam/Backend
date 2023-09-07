@@ -106,7 +106,7 @@ namespace Cinema.Controllers
         /// <returns>
         /// 返回对应影人json
         /// </returns>
-        [HttpGet("{id}")]
+        [HttpGet("{staffId}")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
         public async Task<IAPIResponse> GetStaffById([FromRoute] string staffId)
         {
@@ -133,7 +133,7 @@ namespace Cinema.Controllers
             var staffs = await _db.Staffs
                 .Where(s => s.Name.Contains(name))
                 .ToListAsync();
-            if(staffs!.Count() == 0)
+            if (staffs!.Count() == 0)
             {
                 return APIResponse.Failaure("4001", "影人不存在");
             }
@@ -186,14 +186,15 @@ namespace Cinema.Controllers
                     Introduction = staff.Introduction,
                     ImageUrl = staff.ImageUrl,
                 };
-                if (staff.Gender == "0")
-                {
-                    staffEntity.Gender = Gender_.male;
-                }
-                else
-                {
-                    staffEntity.Gender = Gender_.female;
-                }
+                //if (staff.Gender == Gender_.male)
+                //{
+                //    staffEntity.Gender = Gender_.male;
+                //}
+                //else
+                //{
+                //    staffEntity.Gender = Gender_.female;
+                //}
+                staffEntity.Gender = staff.Gender;
                 await _db.Staffs.AddAsync(staffEntity);
                 await _db.SaveChangesAsync();
                 return APIDataResponse<Staff>.Success(staffEntity);
@@ -224,14 +225,15 @@ namespace Cinema.Controllers
 
                 staffEntity.StaffId = staff.StaffId;
                 staffEntity.Name = staff.Name;
-                if (staff.Gender == "0")
-                {
-                    staffEntity.Gender = Gender_.male;
-                }
-                else
-                {
-                    staffEntity.Gender = Gender_.female;
-                }
+                //if (staff.Gender == 0)
+                //{
+                //    staffEntity.Gender = Gender_.male;
+                //}
+                //else
+                //{
+                //    staffEntity.Gender = Gender_.female;
+                //}\
+                staffEntity.Gender = staff.Gender;
                 staffEntity.Introduction = staff.Introduction;
                 staffEntity.ImageUrl = staff.ImageUrl;
 

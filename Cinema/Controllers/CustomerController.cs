@@ -1,10 +1,13 @@
 using Cinema.DTO;
 using Cinema.DTO.CustomerService;
+using Cinema.DTO.MoviesService;
 using Cinema.Entities;
 using Cinema.Helpers;
+using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations.Rules;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TencentCloud.Tcss.V20201101.Models;
@@ -22,6 +25,7 @@ public class CustomerController : ControllerBase
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly JwtHelper _jwtHelper;
 
+
     private static int _customerId;
 
     /// <summary>
@@ -35,8 +39,11 @@ public class CustomerController : ControllerBase
         _db = db;
         _httpContextAccessor = httpContextAccessor;
         _jwtHelper = jwtHelper;
+        //_logger = logger;
+        //_qCosSrvice = qCosSrvice;
 
-        if(_customerId==0)
+
+        if (_customerId==0)
         {
             _customerId = int.Parse(_db.Customers.Max(m => m.CustomerId) ?? "0");
         }
@@ -148,7 +155,8 @@ public class CustomerController : ControllerBase
             CustomerId = String.Format("{0:000000}",customerId),
             Password = Md5Helper.CalculateMd5Hash(request.Password),
             Name = request.Username,
-            Email = request.Email
+            Email = request.Email,
+            AvatarUrl="/img/default_avatar.jpg"
         };
 
         await _db.Customers.AddAsync(customer);
@@ -162,66 +170,54 @@ public class CustomerController : ControllerBase
         };
     }
 
+
     /// <summary>
-    /// 根据用户ID获取所有订单
+    /// 用户端接口，修改个人信息
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="customer"></param>
     /// <returns></returns>
-    [HttpGet("GetAllTickets/{id}")]
-    //[Authorize(Policy = "RegUser")]
-    [ProducesDefaultResponseType(typeof(APIDataResponse<List<Ticket>>))]
-    public async Task<IAPIResponse> GetAllTicket([FromRoute] string id)
+    [HttpPost]
+    [ProducesDefaultResponseType(typeof(APIResponse))]
+    public async Task<IAPIResponse> EditCustomer([FromBody] CustomerDTO customer)
     {
-        var custormer = await _db.Customers
-            .Where(c => c.CustomerId == id)
-            .Include(c => c.Tickets)
+        var customerEntity = await _db.Customers
+            .Where(m => m.CustomerId == customer.CustomerId)
             .FirstOrDefaultAsync();
 
-        if (custormer == null)
+
+        if (customerEntity == null)
         {
-            return APIResponse.Failaure("4001", "用户不存在");
+            return APIResponse.Failaure("4000", "用户不存在");
         }
 
-        return APIDataResponse<List<Ticket>>.Success(custormer.Tickets.ToList());
-    }
-
-    /// <summary>
-    /// 修改对应ID用户的VIP结束时间
-    /// </summary>
-    /// <param name="customerId"></param>
-    /// <param name="endTime"></param>
-    /// <returns></returns>
-    [HttpPost("updateVIP")]
-    //[Authorize(Policy = "RegUser")]
-    [ProducesDefaultResponseType(typeof(APIResponse))]
-    public async Task<IAPIResponse> UpdateVIP([FromQuery] string customerId, [FromQuery] DateTime endTime)
-    {
-        var customer = await _db.Customers.FindAsync(customerId);
-
-        if (customer == null)
+        
+        if (customerEntity.Email != customer.Email && await _db.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email) != null)
         {
-            return APIResponse.Failaure("10001", "用户不存在");
-        }
-
-        var vipInfo = await _db.VipInfos.FindAsync(customerId);
-
-        //如果未有过vip记录则增加，否则进行修改
-        if (vipInfo == null)
-        {
-            var nVipInfo = new VipInfo
+            return new APIResponse
             {
-                CustomerId = customerId,
-                EndDate = endTime
+                Status = "4002",
+                Message = "邮箱已存在"
             };
-            await _db.VipInfos.AddAsync(nVipInfo);
-        }
-        else
-        {
-            vipInfo.EndDate = endTime;
-            _db.VipInfos.Update(vipInfo);
         }
 
-        await _db.SaveChangesAsync();
+        customerEntity.Name = customer.Name;
+        customerEntity.Email = customer.Email;
+        customerEntity.AvatarUrl= customer.AvatarUrl;
+
+        _db.SaveChanges();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch
+        {
+            return APIResponse.Failaure("5000", "服务器内部错误");
+        }
+
+        //_db.Movies.Update(movieEntity);
+        //await _db.SaveChangesAsync();
         return APIResponse.Success();
     }
+
 }
