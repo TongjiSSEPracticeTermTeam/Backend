@@ -88,7 +88,7 @@ namespace Cinema.Controllers
                 foreach (var ticket in movieTickets)
                 {
                     TotalBoxOffice += ticket.Price;
-                    var hall = await _db.Halls.FindAsync(ticket.HallId);
+                    var hall = await _db.Halls.FirstAsync(h => h.Id == ticket.HallId && h.CinemaId == cinemaId);
                     if (hall == null || hall.Seat == null)
                     {
                         return APIResponse.Failaure("4001", "影厅或座位不存在");
