@@ -24,7 +24,7 @@ namespace Cinema.Entities
         /// <summary>
         /// 所属电影
         /// </summary>
-        [Column("MOVIE_ID")] public string MovieId { get; set; } = String.Empty;
+        [Required][Column("MOVIE_ID")] public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
         /// 导航属性：所属电影

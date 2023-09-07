@@ -41,7 +41,7 @@ namespace Cinema.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesDefaultResponseType(typeof(APIDataResponse<HeaderImage>))]
-        public async Task<IAPIResponse> Add(HeaderImage headerImage)
+        public async Task<IAPIResponse> Add(HeaderImageDTO headerImage)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Cinema.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesDefaultResponseType(typeof(APIResponse))]
-        public async Task<IAPIResponse> Delete(HeaderImage headerImage)
+        public async Task<IAPIResponse> Delete(HeaderImageDTO headerImage)
         {
             try
             {
@@ -79,6 +79,17 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("4000", "电影头图不存在或出现系统错误");
             }
+        }
+
+        /// <summary>
+        /// 获取包含电影信息的返回数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("detail")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<List<HeaderImage>>))]
+        public async Task<IAPIResponse> GetWithDetail()
+        {
+            return APIDataResponse<List<HeaderImage>>.Success(await _db.HeaderImages.Include(h=>h.Movie).ToListAsync());
         }
     }
 }
