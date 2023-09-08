@@ -31,23 +31,26 @@ namespace Namespace
         /// <param name="movieId"></param>
         /// <returns></returns>
         [HttpGet("movie/{movieId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<Dictionary<DateTime, List<Session>>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Dictionary<DateTime, List<SessionDisplay>>>))]
         public async Task<IAPIResponse> GetByMovieId([FromRoute] string movieId)
         {
             var sessions = await _db.Sessions
+                                .Include(s => s.MovieBelongsTo)
                                 .Include(s => s.HallLocatedAt)
                                 .ThenInclude(s => s.CinemaBelongTo)
                                 .Where(s => s.StartTime > DateTime.Now && s.MovieId == movieId)
                                 .ToListAsync();
 
+            var sessionsDisplay = sessions.Select(s => new SessionDisplay(s)).ToList();
+
             // 根据session.StartTime对sessions分类
             var groupedSessions =
-                from session in sessions
+                from session in sessionsDisplay
                 group session by session.StartTime.Date into g
                 orderby g.Key ascending
                 select g;
 
-            return APIDataResponse<Dictionary<DateTime, List<Session>>>.Success(groupedSessions.ToDictionary(g => g.Key, g => g.ToList()));
+            return APIDataResponse<Dictionary<DateTime, List<SessionDisplay>>>.Success(groupedSessions.ToDictionary(g => g.Key, g => g.ToList()));
         }
 
         /// <summary>
@@ -193,23 +196,25 @@ namespace Namespace
         /// <returns></returns>
         [HttpGet("movieInCinema")]
         [HttpGet("cinema/{cinemaId}")]
-        [ProducesDefaultResponseType(typeof(APIDataResponse<Dictionary<DateTime, List<Session>>>))]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<Dictionary<DateTime, List<SessionDisplay>>>))]
         public async Task<IAPIResponse> GetByCinemaId([FromRoute] string cinemaId)
         {
             var sessions = await _db.Sessions
                     .Include(s => s.HallLocatedAt)
-                    .ThenInclude(s => s.CinemaBelongTo)
+                    .Include(s => s.MovieBelongsTo)
                     .Where(s => s.StartTime > DateTime.Now && s.CinemaId == cinemaId)
                     .ToListAsync();
 
+            var sessionsDisplay = sessions.Select(s => new SessionDisplay(s)).ToList();
+
             // 根据session.StartTime对sessions分类
             var groupedSessions =
-                from session in sessions
+                from session in sessionsDisplay
                 group session by session.StartTime.Date into g
                 orderby g.Key ascending
                 select g;
 
-            return APIDataResponse<Dictionary<DateTime, List<Session>>>.Success(groupedSessions.ToDictionary(g => g.Key, g => g.ToList()));
+            return APIDataResponse<Dictionary<DateTime, List<SessionDisplay>>>.Success(groupedSessions.ToDictionary(g => g.Key, g => g.ToList()));
         }
     }
 }
