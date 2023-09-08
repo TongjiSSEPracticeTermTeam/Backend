@@ -7,81 +7,81 @@ using Cinema.DTO.MoviesService;
 namespace Cinema.DTO.SessionService
 {
     /// <summary>
-    /// ¿Í»§¶ËÕ¹Ê¾ÓÃÅÅÆ¬
+    /// å®¢æˆ·ç«¯å±•ç¤ºç”¨æ’ç‰‡
     /// </summary>
     public class SessionDisplay
     {
         /// <summary>
-        /// µçÓ°ID
+        /// ç”µå½±ID
         /// </summary>
         [Required]
         public string MovieId { get; set; } = String.Empty;
 
         /// <summary>
-        /// µçÓ°Ãû
+        /// ç”µå½±å
         /// </summary>
         [Required]
         public string MovieName{ get; set; } = String.Empty;
 
         /// <summary>
-        /// Ó°ÔºID
+        /// å½±é™¢ID
         /// </summary>
         [Required]
         public string CinemaId { get; set; } = String.Empty;
 
         /// <summary>
-        /// Ó°ÌüID
+        /// å½±å…ID
         /// </summary>
         [Required]
         public string HallId { get; set; } = String.Empty;
 
         /// <summary>
-        /// ÆğÊ¼Ê±¼ä
+        /// èµ·å§‹æ—¶é—´
         /// </summary>
         [Required]
         public DateTime StartTime { get; set; } = new DateTime();
 
         /// <summary>
-        /// ½áÊøÊ±¼ä
+        /// ç»“æŸæ—¶é—´
         /// </summary>
         [Required]
         public DateTime EndTime { get; set; } = new DateTime();
 
         /// <summary>
-        /// ÉÏ×ùÂÊ
+        /// ä¸Šåº§ç‡
         /// </summary>
         public float? Attendence { get; set; }
 
         /// <summary>
-        /// Æ±¼Û
+        /// ç¥¨ä»·
         /// </summary>
         [Required]
         public float Price { get; set; }
 
         /// <summary>
-        /// ÓïÑÔ
+        /// è¯­è¨€
         /// </summary>
         [Required]
         public string Language { get; set; } = String.Empty;
 
         /// <summary>
-        /// ²¥·ÅÎ¬Êı£¨3d¡¢2d£©
+        /// æ’­æ”¾ç»´æ•°ï¼ˆ3dã€2dï¼‰
         /// </summary>
         [Required]
         public string Dimesion { get; set; } = String.Empty;
 
         /// <summary>
-        /// µ¼º½ÊôĞÔ - ËùÎ»ÓÚÓ°Ìü
+        /// å¯¼èˆªå±æ€§ - æ‰€ä½äºå½±å…
         /// </summary>
         public Hall HallLocatedAt { get; set; } = null!;
 
         /// <summary>
-        /// Ä¬ÈÏ¹¹Ôì
+        /// é»˜è®¤æ„é€ 
         /// </summary>
         public SessionDisplay() { }
 
         /// <summary>
-        /// Ê¬Ìå¹¹Ôì
+        /// å°¸ä½“æ„é€ 
         /// </summary>
         /// <param name="entity"></param>
         public SessionDisplay(Session entity)
