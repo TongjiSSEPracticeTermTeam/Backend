@@ -51,7 +51,8 @@ namespace Cinema.Services
                 var ticketDTOs = tickets.Select(t => new TicketDTO(t)).ToList();
 
                 var ticketDTOsJSON = JsonSerializer.Serialize(ticketDTOs);
-                db.StringSet("tickets", ticketDTOsJSON, TimeSpan.FromHours(1));
+                //db.StringSet("tickets", ticketDTOsJSON, TimeSpan.FromHours(1));
+                db.StringSet("tickets", ticketDTOsJSON, TimeSpan.FromMinutes(1));
                 return ticketDTOs;
             }
         }
