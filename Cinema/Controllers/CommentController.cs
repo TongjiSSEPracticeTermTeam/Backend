@@ -60,6 +60,7 @@ namespace Cinema.Controllers
             var comments = await _db.Comments
                 .Where(c => (c.MovieId == movieId && c.Display == "1"))
                 .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
             return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
@@ -105,6 +106,7 @@ namespace Cinema.Controllers
             var comments = await _db.Comments
                 .Where(c => c.CustomerId == customerId)
                 .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
             return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
@@ -122,6 +124,7 @@ namespace Cinema.Controllers
             var comments = await _db.Comments
                 .Where(c => c.CustomerId == customerId)
                 .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
             return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
@@ -140,6 +143,7 @@ namespace Cinema.Controllers
             var comments = await _db.Comments
                 .Where(c => (c.MovieId == movieId))
                 .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
             return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
@@ -158,10 +162,44 @@ namespace Cinema.Controllers
             var comments = await _db.Comments
                 .Where(c => (c.CommentId == commentId))
                 .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
                 .ToListAsync();
             var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
             return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
         }
+
+        /// <summary>
+        /// 管理员根据电影名称获取对应评论
+        /// </summary>
+        /// <param name="movieName"></param>
+        /// <returns></returns>
+        [HttpGet("byMovieName(Admin)/{movieName}")]
+        [ProducesDefaultResponseType(typeof(APIDataResponse<CommentDTO>))]
+        public async Task<IAPIResponse> AdminGetCommentByMovieName([FromRoute] string movieName)
+        {
+            var comments = await _db.Comments.Where(c => c.MovieBelongTo.Name == movieName)
+                .Include(c => c.Sender)
+                .Include(c => c.MovieBelongTo)
+                .ToListAsync();
+            var commentDTOs = comments.Select(c => new CommentDTO(c)).ToList();
+            return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
+        }
+
+        //[HttpGet("byMovieName(Admin)/{movieName}")]
+        //[ProducesDefaultResponseType(typeof(APIDataResponse<List<CommentDTO>>))]
+        //public async Task<IActionResult> AdminGetCommentByMovieName([FromRoute] string movieName)
+        //{
+        //    var movieComments = await _db.Movies
+        //        .Where(m => m.Name == movieName)
+        //        .SelectMany(m => m.Comments) // 使用SelectMany来联接评论
+        //        .Include(c => c.Sender)
+        //        .Include(c => c.MovieBelongTo)
+        //        .ToListAsync();
+
+        //    var commentDTOs = movieComments.Select(c => new CommentDTO(c)).ToList();
+        //    return APIDataResponse<List<CommentDTO>>.Success(commentDTOs);
+        //}
+
 
         /// <summary>
         /// 根据评论ID屏蔽评论
@@ -332,7 +370,7 @@ namespace Cinema.Controllers
             }
 
             await _db.SaveChangesAsync();
-            
+
 
             //更新对应电影评分
             var totalScore = _db.Comments

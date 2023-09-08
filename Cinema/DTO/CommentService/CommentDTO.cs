@@ -66,6 +66,11 @@ namespace Cinema.DTO.CommentService
         public string? AvatarUrl { get; set; } = String.Empty;
 
         /// <summary>
+        /// 电影名称
+        /// </summary>
+        public string MovieName { get; set; } = String.Empty;
+
+        /// <summary>
         /// 默认构造
         /// </summary>
         public CommentDTO()
@@ -89,6 +94,7 @@ namespace Cinema.DTO.CommentService
             CustomerName = comment.Sender.Name;
             AvatarUrl = comment.Sender.AvatarUrl;
             PublishDate = comment.PublishDate;
+            MovieName = comment.MovieBelongTo.Name;
         }
     }
 
