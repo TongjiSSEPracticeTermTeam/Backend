@@ -140,7 +140,7 @@ namespace Cinema
                 return APIResponse.Failaure("4001", "找不到对应排片");
 
             var tickets = await _db.Tickets
-                .Where(t => t.SessionAt == session)
+                .Where(t => t.SessionAt == session && t.State == 0)
                 .ToListAsync();
             return APIDataResponse<List<Ticket>>.Success(tickets);
         }
@@ -324,6 +324,39 @@ namespace Cinema
             await _db.SaveChangesAsync();
             await transcation.CommitAsync();
 
+            return APIResponse.Success();
+        }
+
+        /// <summary>
+        /// 退票
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost("cancel")]
+        [Authorize(Policy = "Customer")]
+        [ProducesDefaultResponseType(typeof(APIResponse))]
+        public async Task<IAPIResponse> CancelTicket([FromForm] List<string> ids)
+        {
+            string userId = JwtHelper.SolveName(_contextAccessor) ?? "";
+
+            var tickets = await _db.Tickets.Where(t=>ids.Contains(t.Id)).ToListAsync();
+            if (tickets == null || tickets.Count == 0)
+                return APIResponse.Failaure("4000", "票不存在");
+
+            using var transcation = _db.Database.BeginTransaction();
+            foreach (var ticket in tickets)
+            {
+                if(ticket.CustomerId != userId)
+                {
+                    await transcation.RollbackAsync();
+                    return APIResponse.Failaure("4001", "部分票无权限操作");
+                }
+
+                ticket.State = TicketState.refunded;
+            }
+
+            await _db.SaveChangesAsync();
+            await transcation.CommitAsync();
             return APIResponse.Success();
         }
     }
