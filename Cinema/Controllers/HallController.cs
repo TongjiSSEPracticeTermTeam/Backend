@@ -2,6 +2,7 @@
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.ManagerService;
 using Cinema.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -40,7 +41,7 @@ namespace Cinema.Controllers
         /// <param name="cinemaId">影院编号</param>
         /// <returns></returns>
         [HttpGet("{cinemaId}")]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<HallDTO>>))]
         public async Task<IAPIResponse> GetHallsByCinemaId([FromRoute] string cinemaId)
         {
@@ -66,7 +67,7 @@ namespace Cinema.Controllers
         /// <param name="managerId">经理编号</param>
         /// <returns></returns>
         [HttpGet("manager/{managerId}/halls")]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<HallDTO>>))]
         public async Task<IAPIResponse> GetHallsByManagerId([FromRoute] string managerId)
         {
@@ -90,7 +91,7 @@ namespace Cinema.Controllers
         /// <param name="managerId">Managers编号</param>
         /// <returns></returns>
         [HttpGet("manager/{managerId}/cinemas")]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<List<CinemaDTO>>))]
         public async Task<IAPIResponse> GetCinemasByManagerId([FromRoute] string managerId)
         {
@@ -136,7 +137,7 @@ namespace Cinema.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPut]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<HallDTO>))]
         public async Task<IAPIResponse> AddHall([FromBody] HallDTO data)
         {
@@ -170,7 +171,7 @@ namespace Cinema.Controllers
         /// <param name="cinemaId"></param>
         /// <returns></returns>
         [HttpDelete("{hallId}")]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> DeleteHall([FromRoute] string hallId, [FromQuery][Required]string cinemaId)
         {
@@ -178,6 +179,11 @@ namespace Cinema.Controllers
             if (hall == null)
             {
                 return APIResponse.Failaure("4004", "影厅不存在");
+            }
+            var sessionInHall= await _db.Sessions.Include(s => s.HallLocatedAt).FirstOrDefaultAsync(s => s.HallId== hallId);
+            if (sessionInHall!=null)
+            {
+                 return APIResponse.Failaure("4005", "该影厅已被排片，无法删除");
             }
             _db.Halls.Remove(hall);
             await _db.SaveChangesAsync();
@@ -190,7 +196,7 @@ namespace Cinema.Controllers
         /// <param name="hall"></param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> EditHall([FromBody] HallDTO hall)
         {

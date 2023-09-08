@@ -2,6 +2,7 @@ using Cinema.DTO;
 using Cinema.DTO.CinemaService;
 using Cinema.DTO.SessionService;
 using Cinema.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -77,10 +78,11 @@ namespace Namespace
         }
 
         /// <summary>
-        /// 尝试在某个影厅的某个时间点排片
+        /// 在某个影厅的某个时间点排片
         /// </summary>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "CinemaAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> PutSession([FromBody] SessionDTO data)
         {
