@@ -180,7 +180,7 @@ namespace Cinema.Controllers
             {
                 return APIResponse.Failaure("4004", "影厅不存在");
             }
-            var sessionInHall= await _db.Sessions.Include(s => s.HallLocatedAt).FirstOrDefaultAsync(s => s.HallId== hallId);
+            var sessionInHall= await _db.Sessions.Include(s => s.HallLocatedAt).FirstOrDefaultAsync(s => s.HallId== hallId&& s.CinemaId == cinemaId);
             if (sessionInHall!=null)
             {
                  return APIResponse.Failaure("4005", "该影厅已被排片，无法删除");
