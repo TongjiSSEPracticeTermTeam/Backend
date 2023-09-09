@@ -11,6 +11,7 @@ using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Cinema
 {
@@ -23,7 +24,8 @@ namespace Cinema
     {
         private readonly CinemaDb _db;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly AesEncryptionervice _aes;
+        private readonly AesEncryptionervice _aes; 
+        private readonly IConnectionMultiplexer _redis;
 
         private static int _ticketId;
 
@@ -33,11 +35,13 @@ namespace Cinema
         /// <param name="db"></param>
         /// <param name="contextAccessor"></param>
         /// <param name="aes"></param>
-        public TicketController(CinemaDb db, IHttpContextAccessor contextAccessor, AesEncryptionervice aes)
+        /// <param name="redis"></param>
+        public TicketController(CinemaDb db, IHttpContextAccessor contextAccessor, AesEncryptionervice aes, IConnectionMultiplexer redis)
         {
             _db = db;
             _contextAccessor = contextAccessor;
             _aes = aes;
+            _redis = redis;
 
             if (_ticketId == 0)
             {
@@ -256,9 +260,30 @@ namespace Cinema
 
             var responseJson = JsonSerializer.Serialize(responseRaw);
             var response = _aes.Encrypt(responseJson);
+
+            await _redis.GetDatabase(1).StringSetAsync(response, "no", TimeSpan.FromMinutes(10));
+
             return APIDataResponse<string>.Success(response);
         }
 
+        /// <summary>
+        /// 客户端查询取票状态
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet("getTicket")]
+        [Authorize(Policy = "Customer")]
+        public async Task<IAPIResponse> FetchTicket([FromQuery] string code)
+        {
+            string? status = await _redis.GetDatabase(1).StringGetAsync(code);
+            if (status == null)
+                return APIDataResponse<int>.Success(410);  // Http 410 Gone
+
+            if (status == "yes") 
+                return APIDataResponse<int>.Success(200);  // Http 200 	OK 
+            else
+                return APIDataResponse<int>.Success(202);  // Http 202  Accept
+        }
 
 
         /// <summary>
@@ -323,6 +348,8 @@ namespace Cinema
 
             await _db.SaveChangesAsync();
             await transcation.CommitAsync();
+
+            await _redis.GetDatabase(1).StringSetAsync(code, "yes", TimeSpan.FromMinutes(10));
 
             return APIResponse.Success();
         }
