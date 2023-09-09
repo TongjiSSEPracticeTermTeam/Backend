@@ -11,6 +11,7 @@ using Cinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Cinema
 {
@@ -23,7 +24,8 @@ namespace Cinema
     {
         private readonly CinemaDb _db;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly AesEncryptionervice _aes;
+        private readonly AesEncryptionervice _aes; 
+        private readonly IConnectionMultiplexer _redis;
 
         private static int _ticketId;
 
@@ -33,11 +35,13 @@ namespace Cinema
         /// <param name="db"></param>
         /// <param name="contextAccessor"></param>
         /// <param name="aes"></param>
-        public TicketController(CinemaDb db, IHttpContextAccessor contextAccessor, AesEncryptionervice aes)
+        /// <param name="redis"></param>
+        public TicketController(CinemaDb db, IHttpContextAccessor contextAccessor, AesEncryptionervice aes, IConnectionMultiplexer redis)
         {
             _db = db;
             _contextAccessor = contextAccessor;
             _aes = aes;
+            _redis = redis;
 
             if (_ticketId == 0)
             {
@@ -184,7 +188,7 @@ namespace Cinema
                     int col = seat & 127;
 
                     // 用Any会出现bug，Oracle有bug。退求其次，用Count
-                    if (await _db.Tickets.CountAsync(t => t.SessionAt == session && t.Row == row && t.Col == col) > 0)
+                    if (await _db.Tickets.CountAsync(t => t.SessionAt == session && t.Row == row && t.Col == col && t.State == TicketState.normal) > 0)
                     {
                         await transcation.RollbackAsync();
                         return APIResponse.Failaure("4000", $"座位{row}行{col}列已不可售");
@@ -256,9 +260,30 @@ namespace Cinema
 
             var responseJson = JsonSerializer.Serialize(responseRaw);
             var response = _aes.Encrypt(responseJson);
+
+            await _redis.GetDatabase(1).StringSetAsync(response, "no", TimeSpan.FromMinutes(10));
+
             return APIDataResponse<string>.Success(response);
         }
 
+        /// <summary>
+        /// 客户端查询取票状态
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet("getTicket")]
+        [Authorize(Policy = "Customer")]
+        public async Task<IAPIResponse> FetchTicket([FromQuery] string code)
+        {
+            string? status = await _redis.GetDatabase(1).StringGetAsync(code);
+            if (status == null)
+                return APIDataResponse<int>.Success(410);  // Http 410 Gone
+
+            if (status == "yes") 
+                return APIDataResponse<int>.Success(200);  // Http 200 	OK 
+            else
+                return APIDataResponse<int>.Success(202);  // Http 202  Accept
+        }
 
 
         /// <summary>
@@ -324,6 +349,8 @@ namespace Cinema
             await _db.SaveChangesAsync();
             await transcation.CommitAsync();
 
+            await _redis.GetDatabase(1).StringSetAsync(code, "yes", TimeSpan.FromMinutes(10));
+
             return APIResponse.Success();
         }
 
@@ -351,6 +378,9 @@ namespace Cinema
                     await transcation.RollbackAsync();
                     return APIResponse.Failaure("4001", "部分票无权限操作");
                 }
+
+                if (ticket.StartTime.AddMinutes(-30) < DateTime.Now)
+                    return APIResponse.Failaure("4001", "部分票已不可退（开场前半小时不可退）");
 
                 ticket.State = TicketState.refunded;
             }

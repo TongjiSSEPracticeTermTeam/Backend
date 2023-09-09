@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 
-namespace Cinema.Controllers;
 
 /// <summary>
 /// 用户会员VIP相关接口
