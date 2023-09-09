@@ -66,11 +66,11 @@ namespace Cinema.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesDefaultResponseType(typeof(APIResponse))]
-        public async Task<IAPIResponse> Delete(HeaderImageDTO headerImage)
+        public async Task<IAPIResponse> Delete([FromQuery] int headerImageId)
         {
             try
             {
-                var headerImageEntity = await _db.HeaderImages.FindAsync(headerImage.Id) ?? throw new NullReferenceException();
+                var headerImageEntity = await _db.HeaderImages.FindAsync(headerImageId) ?? throw new NullReferenceException();
                 _db.HeaderImages.Remove(headerImageEntity);
                 await _db.SaveChangesAsync();
                 return APIResponse.Success();
