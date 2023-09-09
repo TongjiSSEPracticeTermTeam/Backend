@@ -95,7 +95,7 @@ namespace Namespace
             if (movie == null)
                 return APIResponse.Failaure("40002", "电影不存在");
             // 再判断拍片时间是否在电影上下映之间
-            if (data.StartTime < DateTime.Now || data.StartTime > movie.RemovalDate)
+            if (data.StartTime < DateTime.Now || data.StartTime > movie.RemovalDate|| data.StartTime< movie.ReleaseDate)
                 return APIResponse.Failaure("40003", "排片时间不在电影上映时间内或在过去时间段内");
             //最后判断拍片时间是否已经被占用
 
