@@ -104,7 +104,7 @@ namespace Namespace
 
             var endTime = data.StartTime.AddMinutes(duration);
             Console.Write(endTime);
-            var sessions = await _db.Sessions.Where(s=>s.HallId==data.HallId).Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
+            var sessions = await _db.Sessions.Where(s=>s.HallId==data.HallId&&s.CinemaId==data.CinemaId).Join(_db.Movies, s => s.MovieId, m => m.MovieId, (s, m) => new { Session = s, Movie = m })
      .ToListAsync();
 
             bool existed = false;
