@@ -316,9 +316,18 @@ public class CinemaController
         }
 
         _db.Cinemas.Remove(cinema);
-        await _db.SaveChangesAsync();
 
-        return APIResponse.Success();
+        try
+        {
+            await _db.SaveChangesAsync();
+
+            return APIResponse.Success();
+        }
+        catch
+        {
+            return APIResponse.Failaure("10001", "删除失败");
+        }
+
     }
 
 
