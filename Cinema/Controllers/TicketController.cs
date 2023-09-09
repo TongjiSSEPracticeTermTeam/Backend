@@ -184,7 +184,7 @@ namespace Cinema
                     int col = seat & 127;
 
                     // 用Any会出现bug，Oracle有bug。退求其次，用Count
-                    if (await _db.Tickets.CountAsync(t => t.SessionAt == session && t.Row == row && t.Col == col) > 0)
+                    if (await _db.Tickets.CountAsync(t => t.SessionAt == session && t.Row == row && t.Col == col && t.State == TicketState.normal) > 0)
                     {
                         await transcation.RollbackAsync();
                         return APIResponse.Failaure("4000", $"座位{row}行{col}列已不可售");
@@ -351,6 +351,9 @@ namespace Cinema
                     await transcation.RollbackAsync();
                     return APIResponse.Failaure("4001", "部分票无权限操作");
                 }
+
+                if (ticket.StartTime.AddMinutes(-30) < DateTime.Now)
+                    return APIResponse.Failaure("4001", "部分票已不可退（开场前半小时不可退）");
 
                 ticket.State = TicketState.refunded;
             }
