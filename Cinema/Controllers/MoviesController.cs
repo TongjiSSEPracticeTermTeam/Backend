@@ -206,7 +206,7 @@ namespace Cinema.Controllers
         /// <param name="movie"></param>
         /// <returns></returns>
         [HttpPut]
-        [Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> AddMovie([FromBody] MovieDTO movie)
         {
@@ -434,7 +434,7 @@ namespace Cinema.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        [Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> DeleteMovie([FromRoute] string id)
         {
@@ -445,8 +445,17 @@ namespace Cinema.Controllers
             }
 
             _db.Movies.Remove(movie);
-            await _db.SaveChangesAsync();
-            return APIResponse.Success();
+
+            try
+            {
+                await _db.SaveChangesAsync();
+                return APIResponse.Success();
+            }
+            catch
+            {
+                return APIResponse.Failaure("10001", "删除失败");
+            }
+
         }
     }
 }

@@ -147,7 +147,7 @@ namespace Cinema.Controllers
         /// <param name="staffId"></param>
         /// <returns></returns>
         [HttpDelete("{staffId}")]
-        [Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIResponse))]
         public async Task<IAPIResponse> DeleteStaffById([FromRoute] string staffId)
         {
@@ -159,9 +159,17 @@ namespace Cinema.Controllers
             }
 
             _db.Staffs.Remove(staff);
-            await _db.SaveChangesAsync();
 
-            return APIResponse.Success();
+            try
+            {
+                await _db.SaveChangesAsync();
+
+                return APIResponse.Success();
+            }
+            catch
+            {
+                return APIResponse.Failaure("10001", "删除失败");
+            }
         }
 
         /// <summary>
@@ -170,7 +178,7 @@ namespace Cinema.Controllers
         /// <param name="staff"></param>
         /// <returns>响应信息</returns>
         [HttpPut]
-        [Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
         public async Task<IAPIResponse> AddStaff([FromBody] StaffDTO staff)
         {
@@ -211,7 +219,7 @@ namespace Cinema.Controllers
         /// <param name="staff"></param>
         /// <returns>响应信息</returns>
         [HttpPost]
-        [Authorize(Policy = "CinemaAdmin")]
+        [Authorize(Policy = "SysAdmin")]
         [ProducesDefaultResponseType(typeof(APIDataResponse<Staff>))]
         public async Task<IAPIResponse> UpdateStaff([FromBody] StaffDTO staff)
         {
